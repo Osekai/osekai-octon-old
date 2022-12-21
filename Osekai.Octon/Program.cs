@@ -1,12 +1,16 @@
 
 using Microsoft.EntityFrameworkCore;
 using Osekai.Octon.Database.EntityFramework;
+using Osekai.Octon.Database.EntityFramework.Repositories;
+using Osekai.Octon.Database.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<MySqlOsekaiDbContext>(options => 
     options.UseMySql(builder.Configuration.GetConnectionString("MySql")!, MySqlServerVersion.LatestSupportedServerVersion, 
-        sqlOptions => sqlOptions.MigrationsAssembly("Osekai.Octon.EntityFramework.MySql.Migrations")));
+        sqlOptions => sqlOptions.MigrationsAssembly("Osekai.Octon.Database.EntityFramework.MySql.Migrations")));
+
+builder.Services.AddScoped<IAppRepository, MySqlEntityFrameworkAppRepository>();
 
 builder.Services.AddMemoryCache();
 

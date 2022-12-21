@@ -15,8 +15,8 @@ namespace Osekai.Octon.Database.EntityFramework
         public int Order { get; set; }
         public string Name { get; set; } = null!;
         public string SimpleName { get; set; } = null!;
-        public sbyte Visible { get; set; }
-        public sbyte Experimental { get; set; }
+        public bool Visible { get; set; }
+        public bool Experimental { get; set; }
 
         public ICollection<AppTheme> AppThemes { get; set; }
     }

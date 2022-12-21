@@ -15,7 +15,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Osekai.Octon.Database.EntityFramework.MySql\Osekai.Octon.Database.EntityFramework.MySql.csproj" />
       <ProjectReference Include="..\Osekai.Octon.Database\Osekai.Octon.Database.csproj" />
-      <ProjectReference Include="..\Osekai.Octon.EntityFramework.MySql.Migrations\Osekai.Octon.EntityFramework.MySql.Migrations.csproj" />
+      <ProjectReference Include="..\Osekai.Octon.Database.EntityFramework.MySql.Migrations\Osekai.Octon.Database.EntityFramework.MySql.Migrations.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -24,6 +24,11 @@
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Pages\Components\Metadata\Default.cshtml" />
+      <_ContentIncludedByDefault Remove="Pages\Components\Style\Default.cshtml" />
     </ItemGroup>
 
 </Project>

@@ -6,7 +6,7 @@ using Osekai.Octon.Database.EntityFramework;
 
 #nullable disable
 
-namespace Osekai.Octon.EntityFramework.MySql.Migrations.Migrations
+namespace Osekai.Octon.Database.EntityFramework.MySql.Migrations
 {
     [DbContext(typeof(MySqlOsekaiDbContext))]
     partial class MySqlOsekaiDbContextModelSnapshot : ModelSnapshot

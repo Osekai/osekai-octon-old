@@ -17,10 +17,9 @@
     <meta name="keywords" content="@string.Join(',', Model.MetadataKeywords)">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta property="og:url" content="@Model.MetadataUrl" />
-</head> 
-<body>
-<div>
-    @RenderBody()
-</div>
-</body>
+    @await Html.PartialAsync("Partials/Fonts")
+    @await Html.PartialAsync("Partials/Stylesheets")
+    @if (IsSectionDefined("HeadExtension")) {@await RenderSectionAsync("HeadExtension")}
+</head>
+@RenderBody()
 </html>

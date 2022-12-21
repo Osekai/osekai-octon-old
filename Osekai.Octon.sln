@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Database", "Os
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Database.EntityFramework.MySql", "Osekai.Octon.Database.EntityFramework.MySql\Osekai.Octon.Database.EntityFramework.MySql.csproj", "{41573ED2-FC36-4D89-A99F-42B740F3D4A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.EntityFramework.MySql.Migrations", "Osekai.Octon.EntityFramework.MySql.Migrations\Osekai.Octon.EntityFramework.MySql.Migrations.csproj", "{C1B14FB9-CBBE-4B41-805A-A85AE4A200B2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Database.EntityFramework.MySql.Migrations", "Osekai.Octon.Database.EntityFramework.MySql.Migrations\Osekai.Octon.Database.EntityFramework.MySql.Migrations.csproj", "{C1B14FB9-CBBE-4B41-805A-A85AE4A200B2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
