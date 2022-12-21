@@ -2,6 +2,10 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon", "Osekai.Octon\Osekai.Octon.csproj", "{42358FAB-20DC-40DB-806D-BF21650CB7D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Database", "Osekai.Octon.Database\Osekai.Octon.Database.csproj", "{0C0E50EC-C16A-4214-BBE1-25FAA295DD29}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Database.EntityFramework.MySql", "Osekai.Octon.Database.EntityFramework.MySql\Osekai.Octon.Database.EntityFramework.MySql.csproj", "{41573ED2-FC36-4D89-A99F-42B740F3D4A4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +16,13 @@ Global
 		{42358FAB-20DC-40DB-806D-BF21650CB7D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42358FAB-20DC-40DB-806D-BF21650CB7D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42358FAB-20DC-40DB-806D-BF21650CB7D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C0E50EC-C16A-4214-BBE1-25FAA295DD29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C0E50EC-C16A-4214-BBE1-25FAA295DD29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C0E50EC-C16A-4214-BBE1-25FAA295DD29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C0E50EC-C16A-4214-BBE1-25FAA295DD29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41573ED2-FC36-4D89-A99F-42B740F3D4A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41573ED2-FC36-4D89-A99F-42B740F3D4A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41573ED2-FC36-4D89-A99F-42B740F3D4A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41573ED2-FC36-4D89-A99F-42B740F3D4A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
