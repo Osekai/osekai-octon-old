@@ -23,7 +23,7 @@ namespace Osekai.Octon.Database.EntityFramework
             {
                 entity.ToTable("Apps");
 
-                entity.UseCollation("utf8mb4_0900_ai_ci");
+                entity.UseCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Name).HasMaxLength(40);
 
@@ -62,7 +62,7 @@ namespace Osekai.Octon.Database.EntityFramework
             {
                 entity.ToTable("Faq");
 
-                entity.UseCollation("utf8mb4_0900_ai_ci");
+                entity.UseCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Content).HasColumnType("text");
 
