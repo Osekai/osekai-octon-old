@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Database", "Os
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Database.EntityFramework.MySql", "Osekai.Octon.Database.EntityFramework.MySql\Osekai.Octon.Database.EntityFramework.MySql.csproj", "{41573ED2-FC36-4D89-A99F-42B740F3D4A4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.EntityFramework.MySql.Migrations", "Osekai.Octon.EntityFramework.MySql.Migrations\Osekai.Octon.EntityFramework.MySql.Migrations.csproj", "{C1B14FB9-CBBE-4B41-805A-A85AE4A200B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{41573ED2-FC36-4D89-A99F-42B740F3D4A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41573ED2-FC36-4D89-A99F-42B740F3D4A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41573ED2-FC36-4D89-A99F-42B740F3D4A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C1B14FB9-CBBE-4B41-805A-A85AE4A200B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C1B14FB9-CBBE-4B41-805A-A85AE4A200B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C1B14FB9-CBBE-4B41-805A-A85AE4A200B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C1B14FB9-CBBE-4B41-805A-A85AE4A200B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

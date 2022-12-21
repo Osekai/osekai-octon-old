@@ -10,7 +10,7 @@ namespace Osekai.Octon.Database.EntityFramework
     {
         public DbSet<App> Apps { get; set; } = null!;
         public DbSet<AppTheme> AppThemes { get; set; } = null!;
-        public DbSet<Faq> Faqs { get; set; } = null!;
+        public DbSet<HomeFaq> Faqs { get; set; } = null!;
 
         public MySqlOsekaiDbContext(DbContextOptions options) : base(options) {}
         
@@ -58,9 +58,9 @@ namespace Osekai.Octon.Database.EntityFramework
                     .HasConstraintName("fk_AppId");
             });
 
-            modelBuilder.Entity<Faq>(entity =>
+            modelBuilder.Entity<HomeFaq>(entity =>
             {
-                entity.ToTable("Faq");
+                entity.ToTable("HomeFaq");
 
                 entity.UseCollation("utf8mb4_general_ci");
 

@@ -5,7 +5,9 @@ using Osekai.Octon.Database.EntityFramework;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDbContext<MySqlOsekaiDbContext>(options => 
-    options.UseMySql(builder.Configuration.GetConnectionString("MySql")!, MySqlServerVersion.LatestSupportedServerVersion));
+    options.UseMySql(builder.Configuration.GetConnectionString("MySql")!, MySqlServerVersion.LatestSupportedServerVersion, 
+        sqlOptions => sqlOptions.MigrationsAssembly("Osekai.Octon.EntityFramework.MySql.Migrations")));
+
 builder.Services.AddMemoryCache();
 
 #if DEBUG
@@ -25,9 +27,6 @@ app.MapControllers();
 IServiceScope scope = app.Services.CreateScope();
 
 await using (var context = scope.ServiceProvider.GetService<MySqlOsekaiDbContext>()!)
-{
-    await context.Database.EnsureCreatedAsync();
     await context.Database.MigrateAsync();
-}
 
 await app.RunAsync();

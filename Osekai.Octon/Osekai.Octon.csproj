@@ -15,10 +15,15 @@
     <ItemGroup>
       <ProjectReference Include="..\Osekai.Octon.Database.EntityFramework.MySql\Osekai.Octon.Database.EntityFramework.MySql.csproj" />
       <ProjectReference Include="..\Osekai.Octon.Database\Osekai.Octon.Database.csproj" />
+      <ProjectReference Include="..\Osekai.Octon.EntityFramework.MySql.Migrations\Osekai.Octon.EntityFramework.MySql.Migrations.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.1" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.1">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
     </ItemGroup>
 
 </Project>
