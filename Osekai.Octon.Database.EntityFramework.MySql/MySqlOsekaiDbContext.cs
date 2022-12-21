@@ -45,6 +45,11 @@ namespace Osekai.Octon.Database.EntityFramework
                     .HasMaxLength(11)
                     .UseCollation("ascii_general_ci")
                     .HasCharSet("ascii");
+                
+                entity.Property(e => e.DarkColor)
+                    .HasMaxLength(11)
+                    .UseCollation("ascii_general_ci")
+                    .HasCharSet("ascii");
 
                 entity.Property(e => e.Name)
                     .HasMaxLength(20)

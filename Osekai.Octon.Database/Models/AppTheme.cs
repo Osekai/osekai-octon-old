@@ -8,8 +8,12 @@ namespace Osekai.Octon.Database.Models
         public int AppId { get; set; }
         public string Name { get; set; } = null!;
         public string Color { get; set; } = null!;
+        public string DarkColor { get; set; } = null!;
+        
         public float HslValueMultiplier { get; set; }
-        public sbyte HasCover { get; set; }
+        public float DarkHslValueMultiplier { get; set; }
+
+        public bool HasCover { get; set; }
 
         public App App { get; set; } = null!;
     }

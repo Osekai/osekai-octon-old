@@ -27,8 +27,8 @@ namespace Osekai.Octon.Database.EntityFramework.MySql.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<sbyte>("Experimental")
-                        .HasColumnType("tinyint");
+                    b.Property<bool>("Experimental")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -46,8 +46,8 @@ namespace Osekai.Octon.Database.EntityFramework.MySql.Migrations
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("SimpleName"), "ascii");
 
-                    b.Property<sbyte>("Visible")
-                        .HasColumnType("tinyint");
+                    b.Property<bool>("Visible")
+                        .HasColumnType("tinyint(1)");
 
                     b.HasKey("Id");
 
@@ -73,8 +73,19 @@ namespace Osekai.Octon.Database.EntityFramework.MySql.Migrations
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Color"), "ascii");
 
-                    b.Property<sbyte>("HasCover")
-                        .HasColumnType("tinyint");
+                    b.Property<string>("DarkColor")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("varchar(11)")
+                        .UseCollation("ascii_general_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("DarkColor"), "ascii");
+
+                    b.Property<float>("DarkHslValueMultiplier")
+                        .HasColumnType("float");
+
+                    b.Property<bool>("HasCover")
+                        .HasColumnType("tinyint(1)");
 
                     b.Property<float>("HslValueMultiplier")
                         .HasColumnType("float");
@@ -120,7 +131,7 @@ namespace Osekai.Octon.Database.EntityFramework.MySql.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HomeFaqs", (string)null);
+                    b.ToTable("HomeFaq", (string)null);
 
                     MySqlEntityTypeBuilderExtensions.UseCollation(b, "utf8mb4_general_ci");
                 });
