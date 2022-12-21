@@ -25,6 +25,9 @@ app.MapControllers();
 IServiceScope scope = app.Services.CreateScope();
 
 await using (var context = scope.ServiceProvider.GetService<MySqlOsekaiDbContext>()!)
+{
+    await context.Database.EnsureCreatedAsync();
     await context.Database.MigrateAsync();
+}
 
 await app.RunAsync();
