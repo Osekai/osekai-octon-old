@@ -35,9 +35,9 @@ public abstract class AppBaseLayout : BaseLayout
     
     public virtual async Task<IActionResult> OnGet(CancellationToken cancellationToken)
     {
-        await using ITransactionalUnitOfWork transactionalUnitOfWork = await UnitOfWorkFactory.CreateTransactional(cancellationToken: cancellationToken);
+        IUnitOfWork unitOfWork = await UnitOfWorkFactory.CreateAsync(cancellationToken: cancellationToken);
         
-        App = await transactionalUnitOfWork.AppRepository.GetAppByIdAsync(_appId, includeTheme: true, cancellationToken) ?? 
+        App = await unitOfWork.AppRepository.GetAppByIdAsync(_appId, includeTheme: true, cancellationToken) ?? 
               throw new ArgumentException($"The application with Id {_appId} does not exist");
 
         if (App.AppTheme == null)

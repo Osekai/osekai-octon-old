@@ -19,7 +19,7 @@ public class MySqlUnitOfWorkFactory: IUnitOfWorkFactory
         return Task.FromResult((IUnitOfWork)new MySqlUnitOfWork(_context));
     }
 
-    public async Task<ITransactionalUnitOfWork> CreateTransactional(
+    public async Task<ITransactionalUnitOfWork> CreateTransactionalAsync(
         IsolationLevel isolationLevel = IsolationLevel.Serializable,
         CancellationToken cancellationToken = default)
     {
