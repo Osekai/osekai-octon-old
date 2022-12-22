@@ -6,7 +6,6 @@ namespace Osekai.Octon.Database.Models
     {
         public int Id { get; set; }
         public int AppId { get; set; }
-        public string Name { get; set; } = null!;
         public string Color { get; set; } = null!;
         public string DarkColor { get; set; } = null!;
         

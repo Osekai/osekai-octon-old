@@ -37,8 +37,6 @@ namespace Osekai.Octon.Database.EntityFramework
             {
                 entity.ToTable("AppTheme");
 
-                entity.HasIndex(e => e.Name, "Name_idx");
-
                 entity.HasIndex(e => e.AppId, "fk_AppId_idx");
 
                 entity.Property(e => e.Color)
@@ -48,11 +46,6 @@ namespace Osekai.Octon.Database.EntityFramework
                 
                 entity.Property(e => e.DarkColor)
                     .HasMaxLength(11)
-                    .UseCollation("ascii_general_ci")
-                    .HasCharSet("ascii");
-
-                entity.Property(e => e.Name)
-                    .HasMaxLength(20)
                     .UseCollation("ascii_general_ci")
                     .HasCharSet("ascii");
 

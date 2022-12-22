@@ -21,7 +21,7 @@ public abstract class AppBaseLayout : BaseLayout
     {
         App = await AppRepository.GetAppByIdAsync(_appId) ?? 
               throw new ArgumentException($"The application with Id {_appId} does not exist.");
-        
+
         return Page();
     }
 

@@ -90,17 +90,7 @@ namespace Osekai.Octon.Database.EntityFramework.MySql.Migrations
                     b.Property<float>("HslValueMultiplier")
                         .HasColumnType("float");
 
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)")
-                        .UseCollation("ascii_general_ci");
-
-                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Name"), "ascii");
-
                     b.HasKey("Id");
-
-                    b.HasIndex(new[] { "Name" }, "Name_idx");
 
                     b.HasIndex(new[] { "AppId" }, "fk_AppId_idx");
 
