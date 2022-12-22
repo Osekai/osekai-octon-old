@@ -19,6 +19,7 @@ builder.Services.AddMemoryCache();
 
 #if DEBUG
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
+builder.Services.AddScoped<ITestDataPopulator, MySqlTestDataPopulator>();
 #else
 builder.Services.AddRazorPages();
 #endif

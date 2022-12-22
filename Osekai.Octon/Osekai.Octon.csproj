@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <LangVersion>11</LangVersion>
+        <MvcBuildViews>true</MvcBuildViews>
     </PropertyGroup>
 
     <ItemGroup>
@@ -26,7 +27,8 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
     </ItemGroup>
-
+    
+    
     <ItemGroup>
       <_ContentIncludedByDefault Remove="Pages\Components\Metadata\Default.cshtml" />
       <_ContentIncludedByDefault Remove="Pages\Components\Style\Default.cshtml" />
