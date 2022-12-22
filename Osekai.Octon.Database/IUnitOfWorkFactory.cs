@@ -2,9 +2,10 @@
 
 namespace Osekai.Octon.Database;
 
-public interface ITransactionProvider
+public interface IUnitOfWorkFactory
 {
-    Task<ITransaction> BeginTransactionAsync(
+    Task<IUnitOfWork> CreateAsync(CancellationToken cancellationToken = default);
+    Task<ITransactionalUnitOfWork> CreateTransactional(
         IsolationLevel isolationLevel = IsolationLevel.Serializable,
         CancellationToken cancellationToken = default);
 }

@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿
+using System.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Osekai.Octon.Database.EntityFramework;
 
@@ -11,8 +13,10 @@ public class EntityFrameworkTransactionProvider : ITransactionProvider
         _context = context;
     }
 
-    public async Task<ITransaction> BeginTransactionAsync(CancellationToken cancellationToken)
+    public async Task<ITransaction> BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.Serializable,
+        CancellationToken cancellationToken = default)
     {
-        return new EntityFrameworkTransaction(await _context.Database.BeginTransactionAsync(cancellationToken));
+        return new EntityFrameworkTransaction(
+            await _context.Database.BeginTransactionAsync(isolationLevel, cancellationToken));
     }
 }

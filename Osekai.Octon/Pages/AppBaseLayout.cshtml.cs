@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Osekai.Octon.Database;
 using Osekai.Octon.Database.EntityFramework;
 using Osekai.Octon.Database.Repositories;
 
@@ -22,24 +23,26 @@ public abstract class AppBaseLayout : BaseLayout
     
     private int _appId;
     
-    protected IAppRepository AppRepository { get; }
+    protected IUnitOfWorkFactory UnitOfWorkFactory { get; }
 
     public virtual AccentOverride? AccentOvveride => null;
     
-    protected AppBaseLayout(IAppRepository appRepository, int appId)
+    protected AppBaseLayout(IUnitOfWorkFactory unitOfWorkFactory, int appId)
     {
-        AppRepository = appRepository;
+        UnitOfWorkFactory = unitOfWorkFactory;
         _appId = appId;
     }
     
     public virtual async Task<IActionResult> OnGet(CancellationToken cancellationToken)
     {
-        App = await AppRepository.GetAppByIdAsync(_appId, includeTheme: true, cancellationToken) ?? 
+        await using ITransactionalUnitOfWork transactionalUnitOfWork = await UnitOfWorkFactory.CreateTransactional(cancellationToken: cancellationToken);
+        
+        App = await transactionalUnitOfWork.AppRepository.GetAppByIdAsync(_appId, includeTheme: true, cancellationToken) ?? 
               throw new ArgumentException($"The application with Id {_appId} does not exist");
 
         if (App.AppTheme == null)
             throw new ArgumentException($"The application with Id {_appId} doesn't have a theme. It cannot be displayed");
-        
+
         return Page();
     }
 

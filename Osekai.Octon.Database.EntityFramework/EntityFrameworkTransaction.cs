@@ -16,4 +16,8 @@ public class EntityFrameworkTransaction: ITransaction
 
     public Task CommitAsync(CancellationToken cancellationToken = default) =>
         _transaction.CommitAsync(cancellationToken);
+
+    public ValueTask DisposeAsync() => _transaction.DisposeAsync();
+    
+    public void Dispose() => _transaction.Dispose();
 }

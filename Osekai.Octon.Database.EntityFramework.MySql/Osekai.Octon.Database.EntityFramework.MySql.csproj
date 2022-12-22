@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Osekai.Octon.Database.EntityFramework\Osekai.Octon.Database.EntityFramework.csproj" />
       <ProjectReference Include="..\Osekai.Octon.Database\Osekai.Octon.Database.csproj" />
     </ItemGroup>
 

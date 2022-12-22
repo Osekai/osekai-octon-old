@@ -6,7 +6,7 @@ namespace Osekai.Octon.Helpers;
 
 public class StringWithVersionQueryHtmlContent: IHtmlContent
 {
-    private string _input;
+    private readonly string _input;
 
     private const string VersionQuery = "?v=" + Constants.Version;
 

@@ -7,7 +7,7 @@ public class MySqlEntityFrameworkAppRepository: IAppRepository
 {
     private readonly MySqlOsekaiDbContext _context;
     
-    public MySqlEntityFrameworkAppRepository(MySqlOsekaiDbContext context)
+    internal MySqlEntityFrameworkAppRepository(MySqlOsekaiDbContext context)
     {
         _context = context;
     }

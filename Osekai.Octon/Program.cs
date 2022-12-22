@@ -13,7 +13,7 @@ builder.Services.AddDbContext<MySqlOsekaiDbContext>(options =>
 
 builder.Services.AddScoped<DbContext, MySqlOsekaiDbContext>();
 builder.Services.AddScoped<ITransactionProvider, EntityFrameworkTransactionProvider>();
-builder.Services.AddScoped<IAppRepository, MySqlEntityFrameworkAppRepository>();
+builder.Services.AddScoped<IUnitOfWorkFactory, MySqlUnitOfWorkFactory>();
 
 builder.Services.AddMemoryCache();
 

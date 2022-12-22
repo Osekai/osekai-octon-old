@@ -8,8 +8,8 @@ namespace Osekai.Octon.API;
 [Route("/api/dev")]
 public class DevController: Controller
 {
-    private ITestDataPopulator _testDataPopulator;
-    private DbContext _dbContext;
+    private readonly ITestDataPopulator _testDataPopulator;
+    private readonly DbContext _dbContext;
     
     public DevController(DbContext dbContext, ITestDataPopulator testDataPopulator)
     {
@@ -21,7 +21,7 @@ public class DevController: Controller
     public async Task<IActionResult> PopulateDatabaseWithTestData(CancellationToken cancellationToken)
     {
         await _dbContext.Database.EnsureDeletedAsync(cancellationToken);
-        await _dbContext.Database.EnsureCreatedAsync(cancellationToken);
+        await _dbContext.Database.MigrateAsync(cancellationToken);
         
         await _testDataPopulator.PopulateDatabaseAsync(cancellationToken);
 
