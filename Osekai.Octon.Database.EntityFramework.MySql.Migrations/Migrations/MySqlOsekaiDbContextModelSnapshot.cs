@@ -92,6 +92,9 @@ namespace Osekai.Octon.Database.EntityFramework.MySql.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AppId")
+                        .IsUnique();
+
                     b.HasIndex(new[] { "AppId" }, "fk_AppId_idx");
 
                     b.ToTable("AppTheme", (string)null);
@@ -129,8 +132,9 @@ namespace Osekai.Octon.Database.EntityFramework.MySql.Migrations
             modelBuilder.Entity("Osekai.Octon.Database.Models.AppTheme", b =>
                 {
                     b.HasOne("Osekai.Octon.Database.EntityFramework.App", "App")
-                        .WithMany("AppThemes")
-                        .HasForeignKey("AppId")
+                        .WithOne("AppThemes")
+                        .HasForeignKey("Osekai.Octon.Database.Models.AppTheme", "AppId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
                         .IsRequired()
                         .HasConstraintName("fk_AppId");
 
