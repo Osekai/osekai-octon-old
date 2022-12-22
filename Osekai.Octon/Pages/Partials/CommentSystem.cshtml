@@ -1,8 +1,8 @@
-﻿@using Osekai.Octon
+﻿@using Osekai.Octon.Helpers
 <script src="https://twemoji.maxcdn.com/v/latest/twemoji.min.js" crossorigin="anonymous"></script>
-<script src=@PathUtils.AppendVersionQuery("/static/shared/js/picmo/picmo.js")></script>
-<script src=@PathUtils.AppendVersionQuery("/static/shared/js/picmo/picmo-popup.js")></script>
-<link rel="stylesheet" href=@PathUtils.AppendVersionQuery("/static/shared/css/comments.css")>
-<script type="text/javascript" src=@PathUtils.AppendVersionQuery("/static/shared/js/bbcode/bbcode-config.js")></script>
-<script type="text/javascript" src=@PathUtils.AppendVersionQuery("/static/shared/js/bbcode/bbcode-parser.js")></script>
-<script rel="preload" type="text/javascript" src=@PathUtils.AppendVersionQuery("/static/shared/js/comment_system.js")></script>
+<script src="@StringWithVersionQueryHtmlContent.Create("/static/shared/js/picmo/picmo.js")"></script>
+<script src="@StringWithVersionQueryHtmlContent.Create("/static/shared/js/picmo/picmo-popup.js")"></script>
+<link rel="stylesheet" href="@StringWithVersionQueryHtmlContent.Create("/static/shared/css/comments.css")">
+<script type="text/javascript" src="@StringWithVersionQueryHtmlContent.Create("/static/shared/js/bbcode/bbcode-config.js")"></script>
+<script type="text/javascript" src="@StringWithVersionQueryHtmlContent.Create("/static/shared/js/bbcode/bbcode-parser.js")"></script>
+<script rel="preload" type="text/javascript" src="@StringWithVersionQueryHtmlContent.Create("/static/shared/js/comment_system.js")"></script>

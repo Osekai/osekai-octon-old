@@ -1,2 +1,4 @@
 ﻿@using Osekai.Octon
-<link rel="stylesheet" href="@PathUtils.AppendVersionQueryCached("/static/shared/css/main.css")">
+@using Osekai.Octon.Drawing
+@using Osekai.Octon.Helpers
+<link rel="stylesheet" href="@StringWithVersionQueryHtmlContent.Create("/static/shared/css/main.css")">

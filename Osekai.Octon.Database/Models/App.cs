@@ -13,6 +13,6 @@ namespace Osekai.Octon.Database.EntityFramework
         public bool Visible { get; set; }
         public bool Experimental { get; set; }
 
-        public AppTheme? AppThemes { get; set; }
+        public AppTheme? AppTheme { get; set; }
     }
 }

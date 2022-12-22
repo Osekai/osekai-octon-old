@@ -50,7 +50,7 @@ namespace Osekai.Octon.Database.EntityFramework
                     .HasCharSet("ascii");
 
                 entity.HasOne(d => d.App)
-                    .WithOne(p => p.AppThemes)
+                    .WithOne(p => p.AppTheme)
                     .HasForeignKey<AppTheme>(d => d.AppId)
                     .OnDelete(DeleteBehavior.ClientCascade)
                     .HasConstraintName("fk_AppId");

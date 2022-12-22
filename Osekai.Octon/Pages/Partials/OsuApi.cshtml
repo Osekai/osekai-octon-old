@@ -1,2 +1,2 @@
-@using Osekai.Octon
-<script src=@PathUtils.AppendVersionQuery("/static/shared/js/osu_api.js")></script>
+@using Osekai.Octon.Helpers
+<script src="@StringWithVersionQueryHtmlContent.Create("/static/shared/js/osu_api.js")"></script>

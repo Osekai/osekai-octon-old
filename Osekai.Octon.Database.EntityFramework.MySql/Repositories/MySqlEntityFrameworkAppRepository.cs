@@ -11,7 +11,15 @@ public class MySqlEntityFrameworkAppRepository: IAppRepository
     {
         _context = context;
     }
-    
-    public Task<App?> GetAppByIdAsync(int id) =>
-        _context.Apps.Where(app => app.Id == id).FirstOrDefaultAsync();
+
+    public Task<App?> GetAppByIdAsync(int id, bool includeTheme = false, CancellationToken cancellationToken = default)
+    {
+        IQueryable<App> queryable = _context.Apps.Where(app => app.Id == id);
+
+        if (includeTheme)
+            queryable = queryable.Include(app => app.AppTheme);
+
+        return queryable.FirstOrDefaultAsync(cancellationToken);
+    }
+
 }
