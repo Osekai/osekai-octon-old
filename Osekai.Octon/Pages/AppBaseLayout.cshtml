@@ -6,9 +6,8 @@
 }
 
 @section HeadExtension {
-    <link rel="stylesheet" href=@PathUtils.AppendQueryVersionCached($"/static/{Model.App.SimpleName}/css/main.css") />
-    @if (Model.App.Experimental) {<link rel="stylesheet" href=@PathUtils.AppendQueryVersionCached($"/static/shared/css/experimental/main.css") />}
-    
+    <link rel="stylesheet" href=@PathUtils.AppendVersionQueryCached($"/static/{Model.App.SimpleName}/css/main.css") />
+    @if (Model.App.Experimental) {<link rel="stylesheet" href=@PathUtils.AppendVersionQueryCached($"/static/shared/css/experimental/main.css") />}
 }
 
 @RenderBody()
