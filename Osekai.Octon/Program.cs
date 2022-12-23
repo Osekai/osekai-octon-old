@@ -12,8 +12,7 @@ builder.Services.AddDbContext<MySqlOsekaiDbContext>(options =>
         sqlOptions => sqlOptions.MigrationsAssembly("Osekai.Octon.Database.EntityFramework.MySql.Migrations")));
 
 builder.Services.AddScoped<DbContext, MySqlOsekaiDbContext>();
-builder.Services.AddScoped<ITransactionProvider, EntityFrameworkTransactionProvider>();
-builder.Services.AddScoped<IUnitOfWorkFactory, MySqlUnitOfWorkFactory>();
+builder.Services.AddTransient<IUnitOfWork, MySqlUnitOfWork>();
 
 builder.Services.AddMemoryCache();
 

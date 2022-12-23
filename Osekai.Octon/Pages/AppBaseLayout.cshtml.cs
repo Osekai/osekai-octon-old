@@ -23,21 +23,19 @@ public abstract class AppBaseLayout : BaseLayout
     
     private int _appId;
     
-    protected IUnitOfWorkFactory UnitOfWorkFactory { get; }
+    protected IUnitOfWork UnitOfWork { get; }
 
     public virtual AccentOverride? AccentOvveride => null;
     
-    protected AppBaseLayout(IUnitOfWorkFactory unitOfWorkFactory, int appId)
+    protected AppBaseLayout(IUnitOfWork unitOfWork, int appId)
     {
-        UnitOfWorkFactory = unitOfWorkFactory;
+        UnitOfWork = unitOfWork;
         _appId = appId;
     }
     
     public virtual async Task<IActionResult> OnGet(CancellationToken cancellationToken)
     {
-        IUnitOfWork unitOfWork = await UnitOfWorkFactory.CreateAsync(cancellationToken: cancellationToken);
-        
-        App = await unitOfWork.AppRepository.GetAppByIdAsync(_appId, includeTheme: true, cancellationToken) ?? 
+        App = await UnitOfWork.AppRepository.GetAppByIdAsync(_appId, includeTheme: true, cancellationToken) ?? 
               throw new ArgumentException($"The application with Id {_appId} does not exist");
 
         if (App.AppTheme == null)
