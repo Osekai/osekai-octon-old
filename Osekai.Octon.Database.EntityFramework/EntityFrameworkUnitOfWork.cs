@@ -14,7 +14,8 @@ public abstract class EntityFrameworkUnitOfWork<T>: IUnitOfWork where T: DbConte
     }
 
     public abstract IAppRepository AppRepository { get; }
-    
+    public abstract ISessionRepository SessionRepository { get; }
+
     public virtual async Task SaveAsync(CancellationToken cancellationToken)
     {
         await Context.SaveChangesAsync(cancellationToken);

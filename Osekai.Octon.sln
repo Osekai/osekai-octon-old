@@ -10,6 +10,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Database.Entit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Database.EntityFramework", "Osekai.Octon.Database.EntityFramework\Osekai.Octon.Database.EntityFramework.csproj", "{DE9BFCCB-73FC-43D9-A276-B1D1136DF677}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Services", "Osekai.Octon.Services\Osekai.Octon.Services.csproj", "{F4A6ED15-F580-4F60-9C4D-7B5DA011D066}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Exceptions", "Osekai.Octon.Exceptions\Osekai.Octon.Exceptions.csproj", "{D7ACB8AF-4A1D-414C-9A8C-52AD661D7B04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Options", "Osekai.Octon.Options\Osekai.Octon.Options.csproj", "{E7DBAB49-9356-429D-8E21-A8073B0AA89D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Providers", "Osekai.Octon.Providers\Osekai.Octon.Providers.csproj", "{0409D951-088F-4196-A52A-41D8F994E66C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +44,21 @@ Global
 		{DE9BFCCB-73FC-43D9-A276-B1D1136DF677}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE9BFCCB-73FC-43D9-A276-B1D1136DF677}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE9BFCCB-73FC-43D9-A276-B1D1136DF677}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4A6ED15-F580-4F60-9C4D-7B5DA011D066}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4A6ED15-F580-4F60-9C4D-7B5DA011D066}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4A6ED15-F580-4F60-9C4D-7B5DA011D066}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4A6ED15-F580-4F60-9C4D-7B5DA011D066}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7ACB8AF-4A1D-414C-9A8C-52AD661D7B04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7ACB8AF-4A1D-414C-9A8C-52AD661D7B04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7ACB8AF-4A1D-414C-9A8C-52AD661D7B04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7ACB8AF-4A1D-414C-9A8C-52AD661D7B04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7DBAB49-9356-429D-8E21-A8073B0AA89D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7DBAB49-9356-429D-8E21-A8073B0AA89D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7DBAB49-9356-429D-8E21-A8073B0AA89D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7DBAB49-9356-429D-8E21-A8073B0AA89D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0409D951-088F-4196-A52A-41D8F994E66C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0409D951-088F-4196-A52A-41D8F994E66C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0409D951-088F-4196-A52A-41D8F994E66C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0409D951-088F-4196-A52A-41D8F994E66C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

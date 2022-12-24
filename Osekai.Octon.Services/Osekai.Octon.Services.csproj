@@ -7,7 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Osekai.Octon.Database\Osekai.Octon.Database.csproj" />
       <ProjectReference Include="..\Osekai.Octon.Exceptions\Osekai.Octon.Exceptions.csproj" />
+      <ProjectReference Include="..\Osekai.Octon.Providers\Osekai.Octon.Providers.csproj" />
     </ItemGroup>
 
 </Project>

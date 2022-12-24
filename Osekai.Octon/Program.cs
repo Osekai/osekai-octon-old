@@ -11,6 +11,7 @@ builder.Services.AddDbContext<MySqlOsekaiDbContext>(options =>
     options.UseMySql(builder.Configuration.GetConnectionString("MySql")!, MySqlServerVersion.LatestSupportedServerVersion, 
         sqlOptions => sqlOptions.MigrationsAssembly("Osekai.Octon.Database.EntityFramework.MySql.Migrations")));
 
+builder.Services.AddHttpClient();
 builder.Services.AddScoped<DbContext, MySqlOsekaiDbContext>();
 builder.Services.AddScoped<ITransactionProvider, EntityFrameworkTransactionProvider>();
 builder.Services.AddTransient<IUnitOfWork, MySqlUnitOfWork>();

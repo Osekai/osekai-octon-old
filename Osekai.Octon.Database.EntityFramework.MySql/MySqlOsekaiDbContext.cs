@@ -11,6 +11,7 @@ namespace Osekai.Octon.Database.EntityFramework
         public DbSet<App> Apps { get; set; } = null!;
         public DbSet<AppTheme> AppThemes { get; set; } = null!;
         public DbSet<HomeFaq> Faqs { get; set; } = null!;
+        public DbSet<Session> Sessions { get; set; } = null!;
 
         public MySqlOsekaiDbContext(DbContextOptions options) : base(options) {}
         
@@ -25,27 +26,27 @@ namespace Osekai.Octon.Database.EntityFramework
 
                 entity.UseCollation("utf8mb4_general_ci");
 
-                entity.Property(e => e.Name).HasMaxLength(40);
+                entity.Property(e => e.Name).HasMaxLength(Specifications.AppNameMaxLength);
 
                 entity.Property(e => e.SimpleName)
-                    .HasMaxLength(20)
+                    .HasMaxLength(Specifications.AppSimpleNameMaxLength)
                     .UseCollation("ascii_general_ci")
                     .HasCharSet("ascii");
             });
 
             modelBuilder.Entity<AppTheme>(entity =>
             {
-                entity.ToTable("AppTheme");
+                entity.ToTable("AppThemes");
 
                 entity.HasIndex(e => e.AppId, "fk_AppId_idx");
 
                 entity.Property(e => e.Color)
-                    .HasMaxLength(11)
+                    .HasMaxLength(Specifications.AppColorMaxLength)
                     .UseCollation("ascii_general_ci")
                     .HasCharSet("ascii");
                 
                 entity.Property(e => e.DarkColor)
-                    .HasMaxLength(11)
+                    .HasMaxLength(Specifications.AppColorMaxLength)
                     .UseCollation("ascii_general_ci")
                     .HasCharSet("ascii");
 
@@ -58,18 +59,38 @@ namespace Osekai.Octon.Database.EntityFramework
 
             modelBuilder.Entity<HomeFaq>(entity =>
             {
-                entity.ToTable("HomeFaq");
+                entity.ToTable("HomeFaqs");
 
                 entity.UseCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Content).HasColumnType("text");
 
                 entity.Property(e => e.LocalizationPrefix)
-                    .HasMaxLength(40)
+                    .HasMaxLength(Specifications.HomeFaqLocalizationPrefixMaxLength)
                     .UseCollation("ascii_general_ci")
                     .HasCharSet("ascii");
 
                 entity.Property(e => e.Title).HasColumnType("tinytext");
+            });
+            
+            modelBuilder.Entity<Session>(entity =>
+            {
+                entity.ToTable("Sessions");
+
+                entity.UseCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Token)
+                    .HasMaxLength(Specifications.SessionTokenLength)
+                    .UseCollation("ascii_general_ci")
+                    .HasCharSet("ascii")
+                    .HasColumnType("char");
+
+                entity.HasKey(e => e.Token);
+                entity.HasIndex(e => e.Token).IsUnique();
+                
+                entity.Property(e => e.Payload).HasColumnType("text");
+
+                entity.Property(e => e.ExpiresAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
             });
         }
     }

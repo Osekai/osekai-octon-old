@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Osekai.Octon.Database.Models;
-
-namespace Osekai.Octon.Database.EntityFramework
+﻿namespace Osekai.Octon.Database.Models
 {
     public sealed class App
     {

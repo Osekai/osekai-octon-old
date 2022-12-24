@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Osekai.Octon.Database.Models;
 using Osekai.Octon.Database.Repositories;
+using Osekai.Octon.Database.Repositories.Query;
 
 namespace Osekai.Octon.Database.EntityFramework.Repositories;
 
@@ -12,11 +14,11 @@ public class MySqlEntityFrameworkAppRepository: IAppRepository
         _context = context;
     }
 
-    public Task<App?> GetAppByIdAsync(int id, bool includeTheme = false, CancellationToken cancellationToken = default)
+    public Task<App?> GetAppByIdAsync(GetAppByIdQuery query, CancellationToken cancellationToken = default)
     {
-        IQueryable<App> queryable = _context.Apps.Where(app => app.Id == id);
+        IQueryable<App> queryable = _context.Apps.AsNoTracking().Where(app => app.Id == query.Id);
 
-        if (includeTheme)
+        if (query.IncludeTheme)
             queryable = queryable.Include(app => app.AppTheme);
 
         return queryable.FirstOrDefaultAsync(cancellationToken);

@@ -1,9 +1,9 @@
-﻿using Osekai.Octon.Database.EntityFramework;
-using Osekai.Octon.Database.Models;
+﻿using Osekai.Octon.Database.Models;
+using Osekai.Octon.Database.Repositories.Query;
 
 namespace Osekai.Octon.Database.Repositories;
 
 public interface IAppRepository
 {
-    Task<App?> GetAppByIdAsync(int id, bool includeTheme = false, CancellationToken cancellationToken = default);
+    Task<App?> GetAppByIdAsync(GetAppByIdQuery query, CancellationToken cancellationToken = default);
 }
