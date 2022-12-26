@@ -7,9 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Osekai.Octon.Database\Osekai.Octon.Database.csproj" />
-      <ProjectReference Include="..\Osekai.Octon.Exceptions\Osekai.Octon.Exceptions.csproj" />
       <ProjectReference Include="..\Osekai.Octon\Osekai.Octon.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="MessagePack" Version="2.4.59" />
+      <PackageReference Include="RecyclableMemoryStream" Version="1.0.0" />
     </ItemGroup>
 
 </Project>

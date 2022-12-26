@@ -1,0 +1,25 @@
+﻿@model Osekai.Octon.WebServer.Pages.BaseLayout
+
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="msapplication-TileColor" content="@Model.MetadataThemeColor">
+    <meta name="theme-color" content="@Model.MetadataThemeColor">
+    <meta name="description" content="@Model.MetadataDescription" />
+    <meta property="og:title" content="@Model.MetadataTitle" />
+    <meta property="og:description" content="@Model.MetadataDescription" />
+    <meta name="twitter:title" content="@Model.MetadataTitle" />
+    <meta name="twitter:description" content="@Model.MetadataDescription" />
+    <title name="title">@Model.MetadataTitle</title>
+    <meta name="keywords" content="@string.Join(',', Model.MetadataKeywords)">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:url" content="@Model.MetadataUrl" />
+    @await Html.PartialAsync("Partials/Fonts")
+    @await Html.PartialAsync("Partials/Stylesheets")
+    @if (IsSectionDefined("HeadExtension")) {@await RenderSectionAsync("HeadExtension")}
+</head>
+@RenderBody()
+</html>

@@ -3,9 +3,9 @@ using Osekai.Octon.Database.HelperTypes;
 using Osekai.Octon.Database.Models;
 using Osekai.Octon.Database.Repositories.Query;
 using Osekai.Octon.Exceptions;
-using Osekai.Octon.Applications;
-using Osekai.Octon.Applications.OsuApi;
-using Osekai.Octon.Applications.OsuApi.Payloads;
+using Osekai.Octon;
+using Osekai.Octon.OsuApi;
+using Osekai.Octon.OsuApi.Payloads;
 using Osekai.Octon.Services.Query;
 
 namespace Osekai.Octon.Services;

@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon", "Osekai.Octon\Osekai.Octon.csproj", "{42358FAB-20DC-40DB-806D-BF21650CB7D4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.WebServer", "Osekai.Octon.WebServer\Osekai.Octon.WebServer.csproj", "{42358FAB-20DC-40DB-806D-BF21650CB7D4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Database", "Osekai.Octon.Database\Osekai.Octon.Database.csproj", "{0C0E50EC-C16A-4214-BBE1-25FAA295DD29}"
 EndProject
@@ -16,9 +16,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Exceptions", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Options", "Osekai.Octon.Options\Osekai.Octon.Options.csproj", "{E7DBAB49-9356-429D-8E21-A8073B0AA89D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Applications", "Osekai.Octon.Applications\Osekai.Octon.Applications.csproj", "{0409D951-088F-4196-A52A-41D8F994E66C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon", "Osekai.Octon\Osekai.Octon.csproj", "{0409D951-088F-4196-A52A-41D8F994E66C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Applications.Caching.MsgPack", "Osekai.Octon.Applications.Caching.MsgPack\Osekai.Octon.Applications.Caching.MsgPack.csproj", "{0668BB68-E3FE-413F-9DFB-B16D3B71A8F2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Caching.MsgPack", "Osekai.Octon.Caching.MsgPack\Osekai.Octon.Caching.MsgPack.csproj", "{0668BB68-E3FE-413F-9DFB-B16D3B71A8F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
