@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "Osekai.Octon": {
+    "Osekai.Octon.WebServer": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7167;http://localhost:5263",
