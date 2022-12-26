@@ -262,7 +262,7 @@ public partial class Statistics
     public Level Level { get; set; }
 
     [JsonPropertyName("pp")]
-    public long Pp { get; set; }
+    public double Pp { get; set; }
 
     [JsonPropertyName("global_rank")]
     public long GlobalRank { get; set; }

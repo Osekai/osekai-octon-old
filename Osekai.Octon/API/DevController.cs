@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Osekai.Octon.Applications;
+using Osekai.Octon.Applications.OsuApiV2;
 using Osekai.Octon.Database;
 
 namespace Osekai.Octon.API;
@@ -14,11 +15,15 @@ public class DevController: Controller
     private readonly DbContext _dbContext;
     private readonly StaticUrlGenerator _staticUrlGenerator;
     private readonly CurrentSession _currentSession;
+    private readonly AuthenticatedOsuApiV2 _authenticatedOsuApiV2;
     
-    public DevController(DbContext dbContext, StaticUrlGenerator staticUrlGenerator,
+    public DevController(DbContext dbContext, 
+        StaticUrlGenerator staticUrlGenerator,
         CurrentSession currentSession,
+        AuthenticatedOsuApiV2 authenticatedOsuApi,
         ITestDataPopulator testDataPopulator)
     {
+        _authenticatedOsuApiV2 = authenticatedOsuApi;
         _currentSession = currentSession;
         _testDataPopulator = testDataPopulator;
         _dbContext = dbContext;
@@ -47,6 +52,12 @@ public class DevController: Controller
     public async Task<IActionResult> GetSessionInfo(CancellationToken cancellationToken)
     {
         return Ok(await _currentSession.GetAsync(cancellationToken));
+    }
+    
+    [HttpGet("meApiTest")]
+    public async Task<IActionResult> MeApiTest(CancellationToken cancellationToken)
+    {
+        return Ok(await _authenticatedOsuApiV2.MeAsync(cancellationToken: cancellationToken));
     }
 }
 #endif

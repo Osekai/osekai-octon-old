@@ -12,12 +12,10 @@ namespace Osekai.Octon.API;
 public class LoginController: Controller
 {
     private readonly AuthenticationService _authenticationService;
-    private readonly CurrentSession _currentSession;
     
-    public LoginController(CurrentSession currentSession, AuthenticationService authenticationService)
+    public LoginController(AuthenticationService authenticationService)
     {
         _authenticationService = authenticationService;
-        _currentSession = currentSession;
     }
 
     [HttpGet("/login")]

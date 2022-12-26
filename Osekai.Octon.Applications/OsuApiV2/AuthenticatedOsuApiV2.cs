@@ -6,7 +6,7 @@ using Osekai.Octon.Exceptions;
 
 namespace Osekai.Octon.Applications.OsuApiV2;
 
-public class AuthenticatedOsuApiV2
+public class AuthenticatedOsuApiV2 : IAuthenticatedOsuApiV2
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IOsuApiV2TokenProvider _tokenProvider;
@@ -31,10 +31,23 @@ public class AuthenticatedOsuApiV2
         return client;
     }
 
-    private async Task<User?> SearchUserAsync(string searchString, string mode = "osu", CancellationToken cancellationToken = default)
+    public async Task<User?> SearchUserAsync(string searchString, string mode = "osu", CancellationToken cancellationToken = default)
     { 
         HttpClient client = await CreateAuthenticatedClientAsync(cancellationToken);
-        HttpResponseMessage response = await client.GetAsync($"https://osu.api.sh/api/v2/users/{searchString}/{mode}", cancellationToken);
+        HttpResponseMessage response = await client.GetAsync($"https://osu.ppy.sh/api/v2/users/{searchString}/{mode}", cancellationToken);
+
+        if (response.StatusCode == HttpStatusCode.NotFound)
+            return null;
+        
+        response.EnsureSuccessStatusCode();
+        
+        return await response.Content.ReadFromJsonAsync<User>(cancellationToken: cancellationToken);
+    }
+    
+    public async Task<User?> MeAsync(string mode = "osu", CancellationToken cancellationToken = default)
+    { 
+        HttpClient client = await CreateAuthenticatedClientAsync(cancellationToken);
+        HttpResponseMessage response = await client.GetAsync($"https://osu.ppy.sh/api/v2/me/{mode}", cancellationToken);
 
         if (response.StatusCode == HttpStatusCode.NotFound)
             return null;
