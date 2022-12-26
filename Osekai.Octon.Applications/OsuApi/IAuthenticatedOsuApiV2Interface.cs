@@ -1,8 +1,8 @@
-﻿using Osekai.Octon.Applications.OsuApiV2.Payloads;
+﻿using Osekai.Octon.Applications.OsuApi.Payloads;
 
-namespace Osekai.Octon.Applications.OsuApiV2;
+namespace Osekai.Octon.Applications.OsuApi;
 
-public interface IAuthenticatedOsuApiV2
+public interface IAuthenticatedOsuApiV2Interface
 {
     Task<User?> SearchUserAsync(string searchString, string mode = "osu",
         CancellationToken cancellationToken = default);

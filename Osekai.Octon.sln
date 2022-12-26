@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Options", "Ose
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Applications", "Osekai.Octon.Applications\Osekai.Octon.Applications.csproj", "{0409D951-088F-4196-A52A-41D8F994E66C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Applications.Caching.MsgPack", "Osekai.Octon.Applications.Caching.MsgPack\Osekai.Octon.Applications.Caching.MsgPack.csproj", "{0668BB68-E3FE-413F-9DFB-B16D3B71A8F2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,5 +62,9 @@ Global
 		{0409D951-088F-4196-A52A-41D8F994E66C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0409D951-088F-4196-A52A-41D8F994E66C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0409D951-088F-4196-A52A-41D8F994E66C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0668BB68-E3FE-413F-9DFB-B16D3B71A8F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0668BB68-E3FE-413F-9DFB-B16D3B71A8F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0668BB68-E3FE-413F-9DFB-B16D3B71A8F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0668BB68-E3FE-413F-9DFB-B16D3B71A8F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

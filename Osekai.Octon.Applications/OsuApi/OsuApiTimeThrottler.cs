@@ -1,4 +1,4 @@
-﻿namespace Osekai.Octon.Applications.OsuApiV2;
+﻿namespace Osekai.Octon.Applications.OsuApi;
 
 public class OsuApiTimeThrottler: TimeThrottlerPerSecond
 {

@@ -4,9 +4,9 @@ using Osekai.Octon.Exceptions;
 
 namespace Osekai.Octon.Database.Repositories.Query;
 
-public struct AddOrReplaceSessionQuery
+public struct AddOrUpdateSessionQuery
 {
-    public AddOrReplaceSessionQuery(string token, string payload)
+    public AddOrUpdateSessionQuery(string token, string payload)
     {
         if (token.Length != Specifications.SessionTokenLength)
             throw new InvalidLengthException(nameof(Token), Specifications.SessionTokenLength);
@@ -15,7 +15,7 @@ public struct AddOrReplaceSessionQuery
         Payload = payload;
     }
     
-    public AddOrReplaceSessionQuery(string token, SessionPayload payload) : this(token, JsonSerializer.Serialize(payload))
+    public AddOrUpdateSessionQuery(string token, SessionPayload payload) : this(token, JsonSerializer.Serialize(payload))
     {
     }
     

@@ -14,6 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Osekai.Octon.Applications.Caching.MsgPack\Osekai.Octon.Applications.Caching.MsgPack.csproj" />
       <ProjectReference Include="..\Osekai.Octon.Applications\Osekai.Octon.Applications.csproj" />
       <ProjectReference Include="..\Osekai.Octon.Database.EntityFramework.MySql\Osekai.Octon.Database.EntityFramework.MySql.csproj" />
       <ProjectReference Include="..\Osekai.Octon.Database.EntityFramework\Osekai.Octon.Database.EntityFramework.csproj" />

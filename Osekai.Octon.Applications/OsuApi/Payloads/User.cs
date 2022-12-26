@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Osekai.Octon.Applications.OsuApiV2.Payloads;
+namespace Osekai.Octon.Applications.OsuApi.Payloads;
 
 #nullable disable
 
@@ -34,7 +34,7 @@ public partial class User
     public bool IsSupporter { get; set; }
 
     [JsonPropertyName("last_visit")]
-    public DateTimeOffset LastVisit { get; set; }
+    public DateTimeOffset? LastVisit { get; set; }
 
     [JsonPropertyName("pm_friends_only")]
     public bool PmFriendsOnly { get; set; }
@@ -265,7 +265,7 @@ public partial class Statistics
     public double Pp { get; set; }
 
     [JsonPropertyName("global_rank")]
-    public long GlobalRank { get; set; }
+    public long? GlobalRank { get; set; }
 
     [JsonPropertyName("ranked_score")]
     public long RankedScore { get; set; }
@@ -331,10 +331,10 @@ public partial class Level
 public partial class Rank
 {
     [JsonPropertyName("global")]
-    public long Global { get; set; }
+    public long? Global { get; set; }
 
     [JsonPropertyName("country")]
-    public long Country { get; set; }
+    public long? Country { get; set; }
 }
 
 public partial class UserAchievement

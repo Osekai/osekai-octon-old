@@ -2,9 +2,11 @@
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.ObjectPool;
+using Microsoft.IO;
 using Osekai.Octon;
 using Osekai.Octon.Applications;
-using Osekai.Octon.Applications.OsuApiV2;
+using Osekai.Octon.Applications.Caching.MsgPack;
+using Osekai.Octon.Applications.OsuApi;
 using Osekai.Octon.Database;
 using Osekai.Octon.Database.EntityFramework;
 using Osekai.Octon.Database.EntityFramework.Repositories;
@@ -29,15 +31,19 @@ builder.Services.AddSingleton<ObjectPool<StringBuilder>>(serviceProvider =>
     return provider.Create(policy);
 });
 
+builder.Services.AddSingleton<RecyclableMemoryStreamManager>();
+builder.Services.AddTransient<ICache, MsgPackDatabaseCache>();
 builder.Services.AddHttpClient();
 builder.Services.AddSingleton<OsuApiTimeThrottler>();
-builder.Services.AddScoped<OsuApiV2>();
-builder.Services.AddScoped<AuthenticatedOsuApiV2>();
+builder.Services.AddScoped<OsuApiV2Interface>();
+builder.Services.AddScoped<IAuthenticatedOsuApiV2Interface, AuthenticatedOsuApiV2Interface>();
+builder.Services.AddScoped<CachedAuthenticatedOsuApiV2Interface>();
+builder.Services.AddScoped<AuthenticatedOsuApiV2Interface>();
 builder.Services.AddScoped<CurrentSession>();
 builder.Services.AddScoped<IOsuApiV2TokenProvider>(provider => provider.GetService<CurrentSession>()!);
 builder.Services.AddScoped<DbContext>(provider => provider.GetService<MySqlOsekaiDbContext>()!);
 builder.Services.AddScoped<ITransactionProvider, EntityFrameworkTransactionProvider>();
-builder.Services.AddTransient<IUnitOfWork, MySqlUnitOfWork>();
+builder.Services.AddTransient<IDatabaseUnitOfWork, MySqlDatabaseUnitOfWork>();
 builder.Services.AddScoped<ITokenGenerator, RandomBytes128BitTokenGenerator>();
 builder.Services.AddSingleton<StaticUrlGenerator>();
 builder.Services.AddScoped<AuthenticationService>();

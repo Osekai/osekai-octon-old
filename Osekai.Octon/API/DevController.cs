@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Osekai.Octon.Applications;
-using Osekai.Octon.Applications.OsuApiV2;
+using Osekai.Octon.Applications.OsuApi;
 using Osekai.Octon.Database;
 
 namespace Osekai.Octon.API;
@@ -15,15 +15,15 @@ public class DevController: Controller
     private readonly DbContext _dbContext;
     private readonly StaticUrlGenerator _staticUrlGenerator;
     private readonly CurrentSession _currentSession;
-    private readonly AuthenticatedOsuApiV2 _authenticatedOsuApiV2;
+    private readonly CachedAuthenticatedOsuApiV2Interface _authenticatedOsuApiV2Interface;
     
     public DevController(DbContext dbContext, 
         StaticUrlGenerator staticUrlGenerator,
         CurrentSession currentSession,
-        AuthenticatedOsuApiV2 authenticatedOsuApi,
+        CachedAuthenticatedOsuApiV2Interface authenticatedOsuApi,
         ITestDataPopulator testDataPopulator)
     {
-        _authenticatedOsuApiV2 = authenticatedOsuApi;
+        _authenticatedOsuApiV2Interface = authenticatedOsuApi;
         _currentSession = currentSession;
         _testDataPopulator = testDataPopulator;
         _dbContext = dbContext;
@@ -57,7 +57,13 @@ public class DevController: Controller
     [HttpGet("meApiTest")]
     public async Task<IActionResult> MeApiTest(CancellationToken cancellationToken)
     {
-        return Ok(await _authenticatedOsuApiV2.MeAsync(cancellationToken: cancellationToken));
+        return Ok(await _authenticatedOsuApiV2Interface.MeAsync(cancellationToken: cancellationToken));
+    }
+    
+    [HttpGet("userApiTest")]
+    public async Task<IActionResult> UserApiTest([FromQuery] string user, CancellationToken cancellationToken)
+    {
+        return Ok(await _authenticatedOsuApiV2Interface.SearchUserAsync(user, cancellationToken: cancellationToken));
     }
 }
 #endif

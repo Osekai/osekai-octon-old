@@ -2,9 +2,9 @@
 
 namespace Osekai.Octon.Database.Repositories.Query;
 
-public struct DeleteTokenQuery
+public struct DeleteSessionQuery
 {
-    public DeleteTokenQuery(string token)
+    public DeleteSessionQuery(string token)
     {
         if (token.Length != Specifications.SessionTokenLength)
             throw new InvalidLengthException(nameof(Token), Specifications.SessionTokenLength);

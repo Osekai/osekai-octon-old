@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using Microsoft.Extensions.Logging;
-using Osekai.Octon.Applications.OsuApiV2;
-using Osekai.Octon.Applications.OsuApiV2.Payloads;
+using Osekai.Octon.Applications.OsuApi;
+using Osekai.Octon.Applications.OsuApi.Payloads;
 using Osekai.Octon.Database;
 using Osekai.Octon.Database.HelperTypes;
 using Osekai.Octon.Database.Models;
@@ -14,18 +14,18 @@ public class CurrentSession: IOsuApiV2TokenProvider
 {
     private (Session Session, SessionPayload SessionPayload)? _sessionAndPayload;
 
-    private readonly OsuApiV2.OsuApiV2 _osuApiV2;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly OsuApiV2Interface _osuApiV2Interface;
+    private readonly IDatabaseUnitOfWork _databaseUnitOfWork;
 
     private readonly ILogger<CurrentSession> _logger;
 
     public CurrentSession(
-        OsuApiV2.OsuApiV2 osuApiV2, 
-        IUnitOfWork unitOfWork,
+        OsuApiV2Interface osuApiV2Interface, 
+        IDatabaseUnitOfWork databaseUnitOfWork,
         ILogger<CurrentSession> logger)
     {
-        _osuApiV2 = osuApiV2;
-        _unitOfWork = unitOfWork;
+        _osuApiV2Interface = osuApiV2Interface;
+        _databaseUnitOfWork = databaseUnitOfWork;
         _logger = logger;
     }
     
@@ -52,7 +52,7 @@ public class CurrentSession: IOsuApiV2TokenProvider
             if (DateTime.Now > sessionPayload.ExpiresAt)
             {
                 AuthenticationResultPayload payload =
-                    await _osuApiV2.AuthenticateWithRefreshTokenAsync(
+                    await _osuApiV2Interface.RefreshTokenAsync(
                         sessionPayload.OsuApiV2RefreshToken,
                         cancellationToken);
 
@@ -60,24 +60,23 @@ public class CurrentSession: IOsuApiV2TokenProvider
                 sessionPayload.OsuApiV2Token = payload.Token;
                 sessionPayload.ExpiresAt = DateTime.Now.AddSeconds(payload.ExpiresIn);
 
-                await _unitOfWork.SessionRepository.AddOrUpdateSessionAsync(
-                    new AddOrReplaceSessionQuery(session.Token, sessionPayload),
+                await _databaseUnitOfWork.SessionRepository.AddOrUpdateSessionAsync(
+                    new AddOrUpdateSessionQuery(session.Token, sessionPayload),
                     cancellationToken);
 
-                await _unitOfWork.SaveAsync(cancellationToken);
+                await _databaseUnitOfWork.SaveAsync(cancellationToken);
             }
         }
         catch (Exception exception)
         {
-            _unitOfWork.DiscardChanges();
+            _databaseUnitOfWork.DiscardChanges();
 
-            await _unitOfWork.SessionRepository.DeleteTokenAsync(new DeleteTokenQuery(session.Token),
+            await _databaseUnitOfWork.SessionRepository.DeleteSessionAsync(new DeleteSessionQuery(session.Token),
                 cancellationToken);
             
-            await _unitOfWork.SaveAsync(cancellationToken);
+            await _databaseUnitOfWork.SaveAsync(cancellationToken);
             
             _sessionAndPayload = null;
-
             _logger.LogError(exception, exception.Message);
             
             throw;

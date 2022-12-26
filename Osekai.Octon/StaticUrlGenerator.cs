@@ -27,7 +27,7 @@ public class StaticUrlGenerator
         return @string switch
         {
             StaticUrlGeneratorString.OsuLoginString =>
-                $"https://osu.ppy.sh/oauth/authorize?response_type=code&client_id={_osuOAuthConfiguration.ClientId}&redirect_uri={_osuOAuthConfiguration.RedirectUri}",
+                $"https://osu.ppy.sh/oauth/authorize?response_type=code&client_id={_osuOAuthConfiguration.ClientId}&scope=public&redirect_uri={_osuOAuthConfiguration.RedirectUri}",
             _ => throw new ArgumentOutOfRangeException(nameof(@string), @string, null)
         };
     }

@@ -4,5 +4,5 @@ public sealed class Session
 {
     public string Token { get; set; } = null!;
     public string Payload { get; set; } = null!;
-    public DateTime ExpiresAt { get; set; }
+    public DateTimeOffset ExpiresAt { get; set; }
 }

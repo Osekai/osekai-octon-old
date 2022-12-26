@@ -1,4 +1,4 @@
-﻿namespace Osekai.Octon.Applications;
+﻿namespace Osekai.Octon.Applications.OsuApi;
 
 public interface IOsuApiV2TokenProvider
 {

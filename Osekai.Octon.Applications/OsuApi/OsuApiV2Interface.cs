@@ -1,24 +1,23 @@
 ﻿using System.Diagnostics;
 using System.Net.Http.Json;
 using Microsoft.Extensions.Options;
-using Osekai.Octon.Applications.OsuApiV2.Payloads;
-using Osekai.Octon.Applications.OsuApiV2Payloads;
+using Osekai.Octon.Applications.OsuApi.Payloads;
 using Osekai.Octon.Options;
 
-namespace Osekai.Octon.Applications.OsuApiV2;
+namespace Osekai.Octon.Applications.OsuApi;
 
-public class OsuApiV2
+public class OsuApiV2Interface
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly OsuOAuthConfiguration _osuOAuthConfiguration;
     
-    public OsuApiV2(IHttpClientFactory httpClientFactory, IOptions<OsuOAuthConfiguration> osuOAuthConfiguration)
+    public OsuApiV2Interface(IHttpClientFactory httpClientFactory, IOptions<OsuOAuthConfiguration> osuOAuthConfiguration)
     {
         _httpClientFactory = httpClientFactory;
         _osuOAuthConfiguration = osuOAuthConfiguration.Value;
     }
 
-    public async Task<AuthenticationResultPayload> AuthenticateWithRefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default)
+    public async Task<AuthenticationResultPayload> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default)
     {
         using HttpClient client = _httpClientFactory.CreateClient();
 

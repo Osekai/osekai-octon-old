@@ -1,18 +1,17 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
-using Osekai.Octon.Applications.OsuApiV2.Payloads;
-using Osekai.Octon.Database.HelperTypes;
+using Osekai.Octon.Applications.OsuApi.Payloads;
 using Osekai.Octon.Exceptions;
 
-namespace Osekai.Octon.Applications.OsuApiV2;
+namespace Osekai.Octon.Applications.OsuApi;
 
-public class AuthenticatedOsuApiV2 : IAuthenticatedOsuApiV2
+public class AuthenticatedOsuApiV2Interface : IAuthenticatedOsuApiV2Interface
 {
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly IOsuApiV2TokenProvider _tokenProvider;
     private readonly OsuApiTimeThrottler _timeThrottler;
 
-    public AuthenticatedOsuApiV2(OsuApiTimeThrottler timeThrottler, IOsuApiV2TokenProvider tokenProvider, IHttpClientFactory httpClientFactory)
+    public AuthenticatedOsuApiV2Interface(OsuApiTimeThrottler timeThrottler, IOsuApiV2TokenProvider tokenProvider, IHttpClientFactory httpClientFactory)
     {
         _httpClientFactory = httpClientFactory;
         _tokenProvider = tokenProvider;

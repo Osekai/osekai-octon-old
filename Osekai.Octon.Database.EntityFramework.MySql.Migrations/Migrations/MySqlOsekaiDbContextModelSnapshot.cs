@@ -101,6 +101,34 @@ namespace Osekai.Octon.Database.EntityFramework.MySql.Migrations
                     b.ToTable("AppThemes", (string)null);
                 });
 
+            modelBuilder.Entity("Osekai.Octon.Database.Models.CacheEntry", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar")
+                        .UseCollation("ascii_general_ci");
+
+                    MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Name"), "ascii");
+
+                    b.Property<byte[]>("Data")
+                        .IsRequired()
+                        .HasColumnType("blob");
+
+                    b.Property<DateTimeOffset>("ExpiresAt")
+                        .HasColumnType("datetime(6)");
+
+                    b.HasKey("Name");
+
+                    b.HasIndex("ExpiresAt");
+
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.ToTable("CacheEntries", (string)null);
+
+                    MySqlEntityTypeBuilderExtensions.UseCollation(b, "utf8mb4_general_ci");
+                });
+
             modelBuilder.Entity("Osekai.Octon.Database.Models.HomeFaq", b =>
                 {
                     b.Property<int>("Id")
@@ -139,7 +167,7 @@ namespace Osekai.Octon.Database.EntityFramework.MySql.Migrations
 
                     MySqlPropertyBuilderExtensions.HasCharSet(b.Property<string>("Token"), "ascii");
 
-                    b.Property<DateTime>("ExpiresAt")
+                    b.Property<DateTimeOffset>("ExpiresAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime(6)")
                         .HasDefaultValueSql("CURRENT_TIMESTAMP(6)");

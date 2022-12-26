@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Osekai.Octon.Applications.OsuApiV2Payloads;
+namespace Osekai.Octon.Applications.OsuApi.Payloads;
 
 
 public class AuthenticationPayload

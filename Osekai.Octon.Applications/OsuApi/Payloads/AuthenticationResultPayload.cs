@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Osekai.Octon.Applications.OsuApiV2.Payloads;
+namespace Osekai.Octon.Applications.OsuApi.Payloads;
 
 #nullable disable
 
