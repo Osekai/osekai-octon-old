@@ -9,7 +9,7 @@ using Osekai.Octon.Caching.MsgPack;
 using Osekai.Octon.OsuApi;
 using Osekai.Octon.Database;
 using Osekai.Octon.Database.EntityFramework;
-using Osekai.Octon.Database.EntityFramework.Repositories;
+using Osekai.Octon.Database.EntityFramework.MySql;
 using Osekai.Octon.Database.Repositories;
 using Osekai.Octon.Options;
 using Osekai.Octon.Services;

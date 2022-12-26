@@ -1,5 +1,6 @@
 ﻿using Osekai.Octon.Database.Models;
 using Osekai.Octon.Exceptions;
+using Osekai.Octon.Exceptions.Validation;
 
 namespace Osekai.Octon.Database.Repositories.Query;
 

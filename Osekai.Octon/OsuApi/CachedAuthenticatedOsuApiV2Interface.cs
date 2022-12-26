@@ -1,5 +1,4 @@
 ﻿using Osekai.Octon.OsuApi.Payloads;
-using Osekai.Octon.Services;
 
 namespace Osekai.Octon.OsuApi;
 

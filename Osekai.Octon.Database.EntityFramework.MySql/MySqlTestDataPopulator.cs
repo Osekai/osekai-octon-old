@@ -1,6 +1,6 @@
 ﻿using Osekai.Octon.Database.Models;
 
-namespace Osekai.Octon.Database.EntityFramework;
+namespace Osekai.Octon.Database.EntityFramework.MySql;
 
 public class MySqlTestDataPopulator: ITestDataPopulator
 {

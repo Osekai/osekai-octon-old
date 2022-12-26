@@ -1,4 +1,4 @@
-﻿namespace Osekai.Octon.Services;
+﻿namespace Osekai.Octon;
 
 public interface ICache
 {

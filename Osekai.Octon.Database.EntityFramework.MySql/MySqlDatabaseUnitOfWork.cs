@@ -1,7 +1,7 @@
-﻿using Osekai.Octon.Database.EntityFramework.Repositories;
+﻿using Osekai.Octon.Database.EntityFramework.MySql.Repositories;
 using Osekai.Octon.Database.Repositories;
 
-namespace Osekai.Octon.Database.EntityFramework;
+namespace Osekai.Octon.Database.EntityFramework.MySql;
 
 public class MySqlDatabaseUnitOfWork: EntityFrameworkDatabaseUnitOfWork<MySqlOsekaiDbContext>
 {

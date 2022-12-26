@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 using Osekai.Octon.Database.Models;
 
-namespace Osekai.Octon.Database.EntityFramework
+namespace Osekai.Octon.Database.EntityFramework.MySql
 {
     public class MySqlOsekaiDbContext : DbContext
     {

@@ -3,7 +3,7 @@ using Osekai.Octon.Database.Models;
 using Osekai.Octon.Database.Repositories;
 using Osekai.Octon.Database.Repositories.Query;
 
-namespace Osekai.Octon.Database.EntityFramework.Repositories;
+namespace Osekai.Octon.Database.EntityFramework.MySql.Repositories;
 
 public class MySqlEntityFrameworkAppRepository: IAppRepository
 {

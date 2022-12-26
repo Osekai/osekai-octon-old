@@ -1,4 +1,4 @@
-﻿namespace Osekai.Octon.Exceptions;
+﻿namespace Osekai.Octon.Exceptions.Validation;
 
 public class FieldTooShortException: ValidationException
 {
