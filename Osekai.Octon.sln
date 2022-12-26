@@ -16,7 +16,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Exceptions", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Options", "Osekai.Octon.Options\Osekai.Octon.Options.csproj", "{E7DBAB49-9356-429D-8E21-A8073B0AA89D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Providers", "Osekai.Octon.Providers\Osekai.Octon.Providers.csproj", "{0409D951-088F-4196-A52A-41D8F994E66C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Applications", "Osekai.Octon.Applications\Osekai.Octon.Applications.csproj", "{0409D951-088F-4196-A52A-41D8F994E66C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

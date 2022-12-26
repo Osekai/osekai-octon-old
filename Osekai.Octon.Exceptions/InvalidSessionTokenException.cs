@@ -4,11 +4,10 @@ public class InvalidSessionTokenException: OsekaiException
 {
     public InvalidSessionTokenException(string token)
     {
-        Details = token;
+        Details = new { Token = token };
     }
     
     public override string ExceptionIdentifier => "invalidSessionToken";
-    public override OsekaiExceptionReason Reason => OsekaiExceptionReason.BadInput;
-    
+    public override OsekaiExceptionReason Reason => OsekaiExceptionReason.Unauthorized;
     public override object Details { get; }
 }

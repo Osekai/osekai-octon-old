@@ -14,10 +14,12 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Osekai.Octon.Applications\Osekai.Octon.Applications.csproj" />
       <ProjectReference Include="..\Osekai.Octon.Database.EntityFramework.MySql\Osekai.Octon.Database.EntityFramework.MySql.csproj" />
       <ProjectReference Include="..\Osekai.Octon.Database.EntityFramework\Osekai.Octon.Database.EntityFramework.csproj" />
       <ProjectReference Include="..\Osekai.Octon.Database\Osekai.Octon.Database.csproj" />
       <ProjectReference Include="..\Osekai.Octon.Database.EntityFramework.MySql.Migrations\Osekai.Octon.Database.EntityFramework.MySql.Migrations.csproj" />
+      <ProjectReference Include="..\Osekai.Octon.Services\Osekai.Octon.Services.csproj" />
     </ItemGroup>
 
     <ItemGroup>

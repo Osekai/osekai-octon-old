@@ -3,20 +3,20 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.ObjectPool;
 
-namespace Osekai.Octon.Providers;
+namespace Osekai.Octon.Applications;
 
-public class RandomBytes128BitTokenProvider: ITokenProvider
+public class RandomBytes128BitTokenGenerator: ITokenGenerator
 {
-    private ObjectPool<StringBuilder> _stringBuilderObjectPool;
+    private readonly ObjectPool<StringBuilder> _stringBuilderObjectPool;
     
-    public RandomBytes128BitTokenProvider(ObjectPool<StringBuilder> stringBuilderObjectPool)
+    public RandomBytes128BitTokenGenerator(ObjectPool<StringBuilder> stringBuilderObjectPool)
     {
         _stringBuilderObjectPool = stringBuilderObjectPool;
     }
     
     public string GenerateToken()
     {
-        byte[] bytes = ArrayPool<byte>.Shared.Rent(32)[0..32];
+        byte[] bytes = ArrayPool<byte>.Shared.Rent(16)[0..16];
         RandomNumberGenerator.Fill(bytes);
 
         StringBuilder stringBuilder = _stringBuilderObjectPool.Get();

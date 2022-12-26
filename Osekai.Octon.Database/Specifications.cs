@@ -22,4 +22,6 @@ public static class Specifications
 
     public const int SessionTokenLength = 32;
     public const int SessionTokenPayloadMaxLength = int.MaxValue;
+
+    public const long SessionTokenMaxLifeInSeconds = 2592000;
 }

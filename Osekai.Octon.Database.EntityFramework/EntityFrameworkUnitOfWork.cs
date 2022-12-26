@@ -20,4 +20,28 @@ public abstract class EntityFrameworkUnitOfWork<T>: IUnitOfWork where T: DbConte
     {
         await Context.SaveChangesAsync(cancellationToken);
     }
+
+    public void DiscardChanges()
+    {
+        foreach (var entry in Context.ChangeTracker.Entries())
+        {
+            switch (entry.State)
+            {
+                case EntityState.Modified:
+                case EntityState.Deleted:
+                    entry.State = EntityState.Modified; 
+                    entry.State = EntityState.Unchanged;
+                    break;
+                case EntityState.Added:
+                    entry.State = EntityState.Detached;
+                    break;
+                case EntityState.Detached:
+                    break;
+                case EntityState.Unchanged:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+    }
 }

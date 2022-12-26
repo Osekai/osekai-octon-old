@@ -3,5 +3,6 @@
 public enum OsekaiExceptionReason
 {
     BadInput,
-    ResourceNotFound
+    ResourceNotFound,
+    Unauthorized
 }

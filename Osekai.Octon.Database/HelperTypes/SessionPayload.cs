@@ -2,12 +2,15 @@
 
 public class SessionPayload
 {
-    public SessionPayload(string osuApiV2Token, string osuApiV2RefreshToken)
+    public SessionPayload(string osuApiV2Token, string osuApiV2RefreshToken, DateTime expiresAt)
     {
         OsuApiV2Token = osuApiV2Token;
         OsuApiV2RefreshToken = osuApiV2RefreshToken;
+        ExpiresAt = expiresAt;
     }
     
-    public string OsuApiV2Token { get; }
-    public string OsuApiV2RefreshToken { get; }
+    public string OsuApiV2Token { get; set; }
+    public string OsuApiV2RefreshToken { get; set; }
+    
+    public DateTime ExpiresAt { get; set; }
 }

@@ -19,13 +19,41 @@ public class MySqlEntityFrameworkSessionRepository: ISessionRepository
     public Task<Session?> GetSessionFromTokenAsync(GetSessionByTokenQuery query, CancellationToken cancellationToken = default) =>
         _context.Sessions.AsNoTracking().Where(s => s.Token == query.Token).FirstOrDefaultAsync(cancellationToken);
 
-    public Task<Session> AddOrReplaceSessionAsync(AddOrReplaceSessionQuery query, CancellationToken cancellationToken = default)
+    public async Task<Session> AddOrUpdateSessionAsync(AddOrReplaceSessionQuery query, CancellationToken cancellationToken = default)
     {
-        return _context.Database.SqlQueryRaw<Session>(
-            "REPLACE INTO Sessions (Token, Payload) VALUES ({0}, {1}); SELECT * FROM Sessions WHERE Token = {1}", query.Token, query.Payload)
-            .FirstAsync(cancellationToken);
+        if (await SessionExists(new SessionExistsQuery(query.Token), cancellationToken))
+            _context.Entry(
+                new Session
+                {
+                    Token = query.Token,
+                    Payload = query.Payload,
+                    ExpiresAt = DateTime.Now.AddSeconds(Specifications.SessionTokenMaxLifeInSeconds)
+                }).State = EntityState.Modified;
+        else
+            _context.Add(
+                new Session
+                {
+                    Token = query.Token, 
+                    Payload = query.Payload,
+                    ExpiresAt = DateTime.Now.AddSeconds(Specifications.SessionTokenMaxLifeInSeconds)
+                });
+
+        return new Session
+        {
+            Token = query.Token,
+            Payload = query.Payload,
+            ExpiresAt = DateTime.Now.AddSeconds(Specifications.SessionTokenMaxLifeInSeconds)
+        };
     }
 
-    public Task<bool> SessionExists(SessionExistsQuery query, CancellationToken cancellationToken = default) =>
-        _context.Sessions.AsNoTracking().AnyAsync(s => s.Token == query.Token, cancellationToken);
+    public Task<bool> SessionExists(SessionExistsQuery query, CancellationToken cancellationToken = default)
+    {
+        return _context.Sessions.AsNoTracking().AnyAsync(s => s.Token == query.Token, cancellationToken);
+    }
+
+    public Task DeleteTokenAsync(DeleteTokenQuery query, CancellationToken cancellationToken = default)
+    {
+        _context.Entry(new Session { Token = query.Token }).State = EntityState.Deleted;
+        return Task.CompletedTask;
+    }
 }

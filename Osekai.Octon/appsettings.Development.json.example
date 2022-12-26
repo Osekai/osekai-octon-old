@@ -7,5 +7,10 @@
   },
   "ConnectionStrings": {
     "MySql": ""
+  },
+  "OsuOAuthConfiguration" : {
+    "ClientId": 0,
+    "ClientSecret": "",
+    "RedirectUri": ""
   }
 }

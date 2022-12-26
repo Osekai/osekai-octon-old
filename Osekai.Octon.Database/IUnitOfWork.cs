@@ -9,4 +9,5 @@ public interface IUnitOfWork
     public ISessionRepository SessionRepository { get; }
     
     Task SaveAsync(CancellationToken cancellationToken = default);
+    void DiscardChanges();
 }
