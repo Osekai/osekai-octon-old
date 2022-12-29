@@ -12,5 +12,5 @@ public class SessionPayload
     public string OsuApiV2Token { get; set; }
     public string OsuApiV2RefreshToken { get; set; }
     
-    public DateTime ExpiresAt { get; set; }
+    public DateTimeOffset ExpiresAt { get; set; }
 }
