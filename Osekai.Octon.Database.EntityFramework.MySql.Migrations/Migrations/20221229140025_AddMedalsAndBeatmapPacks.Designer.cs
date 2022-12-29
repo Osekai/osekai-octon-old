@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Osekai.Octon.Database.EntityFramework.MySql;
 
@@ -10,9 +11,11 @@ using Osekai.Octon.Database.EntityFramework.MySql;
 namespace Osekai.Octon.Database.EntityFramework.MySql.Migrations
 {
     [DbContext(typeof(MySqlOsekaiDbContext))]
-    partial class MySqlOsekaiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221229140025_AddMedalsAndBeatmapPacks")]
+    partial class AddMedalsAndBeatmapPacks
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -215,6 +218,7 @@ namespace Osekai.Octon.Database.EntityFramework.MySql.Migrations
                         .HasColumnType("varchar");
 
                     b.Property<string>("Instructions")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Link")

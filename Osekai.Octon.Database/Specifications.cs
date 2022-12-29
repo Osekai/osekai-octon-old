@@ -28,4 +28,26 @@ public static class Specifications
     public const int CacheEntryNameMaxLength = 255;
     public const int CacheEntryNameMinLength = 1;
     public const int CacheEntryDataMaxLength = int.MaxValue;
+
+    public const int MedalNameMaxLength = 50;
+    public const int MedalNameMinLength = 1;
+
+    public const int MedalLinkMaxLength = 255;
+    public const int MedalLinkMinLength = 1;
+    
+    public const int MedalDescriptionMaxLength = 65535;
+    public const int MedalDescriptionMinLength = 1;
+
+    public const int MedalInstructionsMaxLength = 65535;
+    public const int MedalInstructionsMinLength = 1;
+    
+    public const int MedalRestrictionMaxLength = 8;
+    public const int MedalRestrictionMinLength = 1;
+
+    public const int VideoMaxLength = 255;
+    public const int VideoMinLength = 1;
+    
+    public const int GroupingMaxLength = 30;
+    public const int GroupingMinLength = 1;
+    
 }
