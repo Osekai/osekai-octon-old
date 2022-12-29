@@ -12,15 +12,15 @@ namespace Osekai.Octon.Services;
 
 public class AuthenticationService
 {
-    private readonly IDatabaseUnitOfWork _databaseUnitOfWork;
+    private readonly IDatabaseUnitOfWorkFactory _databaseUnitOfWorkFactory;
     private readonly OsuApiV2Interface _osuApiV2Interface;
     private readonly ITokenGenerator _tokenGenerator;
     private readonly CurrentSession _currentSession;
     
-    public AuthenticationService(CurrentSession currentSession, IDatabaseUnitOfWork databaseUnitOfWork, ITokenGenerator tokenGenerator, OsuApiV2Interface osuApiV2Interface)
+    public AuthenticationService(CurrentSession currentSession, IDatabaseUnitOfWorkFactory databaseUnitOfWorkFactory, ITokenGenerator tokenGenerator, OsuApiV2Interface osuApiV2Interface)
     {
         _currentSession = currentSession;
-        _databaseUnitOfWork = databaseUnitOfWork;
+        _databaseUnitOfWorkFactory = databaseUnitOfWorkFactory;
         _osuApiV2Interface = osuApiV2Interface; 
         _tokenGenerator = tokenGenerator;
     }
@@ -29,14 +29,18 @@ public class AuthenticationService
     {
         if (!_currentSession.IsNull())
             throw new AlreadyAuthenticatedException();
+
+        await using IDatabaseTransactionalUnitOfWork unitOfWork = await _databaseUnitOfWorkFactory.CreateTransactional();
         
-        Session? session = await _databaseUnitOfWork.SessionRepository.GetSessionFromTokenAsync(new GetSessionByTokenQuery(query.Token), cancellationToken);
+        Session? session = await unitOfWork.SessionRepository.GetSessionFromTokenAsync(
+            new GetSessionByTokenQuery(query.Token), cancellationToken);
         
         if (session == null)
             throw new InvalidSessionTokenFormatException(query.Token);
         
         _currentSession.Set(session);
-
+        
+        await unitOfWork.CommitAsync(cancellationToken);
         return session;
     }
 
@@ -45,6 +49,8 @@ public class AuthenticationService
         if (!_currentSession.IsNull())
             throw new AlreadyAuthenticatedException();
         
+        await using IDatabaseTransactionalUnitOfWork unitOfWork = await _databaseUnitOfWorkFactory.CreateTransactional();
+        
         AuthenticationResultPayload payload = await _osuApiV2Interface.AuthenticateWithCodeAsync(query.Code, cancellationToken);
 
         string generatedToken;
@@ -52,15 +58,17 @@ public class AuthenticationService
         do
         {
             generatedToken = _tokenGenerator.GenerateToken();
-        } while (await _databaseUnitOfWork.SessionRepository.SessionExists(new SessionExistsQuery(generatedToken), cancellationToken));
+        } while (await unitOfWork.SessionRepository.SessionExists(new SessionExistsQuery(generatedToken), cancellationToken));
         
-        Session session = await _databaseUnitOfWork.SessionRepository.AddOrUpdateSessionAsync(
-            new AddOrUpdateSessionQuery(generatedToken, new SessionPayload(payload.Token, payload.RefreshToken, DateTime.Now.AddSeconds(payload.ExpiresIn))),
+        Session session = await unitOfWork.SessionRepository.AddOrUpdateSessionAsync(
+            new AddOrUpdateSessionQuery(generatedToken, 
+                new SessionPayload(payload.Token, payload.RefreshToken, DateTime.Now.AddSeconds(payload.ExpiresIn))),
             cancellationToken);
         
-        await _databaseUnitOfWork.SaveAsync(cancellationToken);
-        
+        await unitOfWork.SaveAsync(cancellationToken);
         _currentSession.Set(session);
+
+        await unitOfWork.CommitAsync(cancellationToken);
         
         return session;
     }

@@ -4,7 +4,7 @@ namespace Osekai.Octon.Database;
 
 public interface ITransactionProvider
 {
-    Task<ITransaction> BeginTransactionAsync(
-        IsolationLevel isolationLevel = IsolationLevel.Serializable,
-        CancellationToken cancellationToken = default);
+    ITransaction? Current { get; }
+    
+    Task<ITransaction> BeginTransactionAsync(CancellationToken cancellationToken = default);
 }

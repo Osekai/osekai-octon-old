@@ -18,21 +18,23 @@ public class MsgPackDatabaseCache: ICache
         public T? Content { get; }
     }
     
-    private readonly IDatabaseUnitOfWork _databaseUnitOfWork;
+    private readonly IDatabaseUnitOfWorkFactory _databaseUnitOfWorkFactory;
     private readonly RecyclableMemoryStreamManager _recyclableMemoryStreamManager;
     
     public MsgPackDatabaseCache(
-        IDatabaseUnitOfWork databaseUnitOfWork,
+        IDatabaseUnitOfWorkFactory databaseUnitOfWorkFactory,
         RecyclableMemoryStreamManager recyclableMemoryStreamManager)
     {
-        _databaseUnitOfWork = databaseUnitOfWork;
+        _databaseUnitOfWorkFactory = databaseUnitOfWorkFactory;
         _recyclableMemoryStreamManager = recyclableMemoryStreamManager;
     }
 
     
     public async Task<T?> GetAsync<T>(string name, CancellationToken cancellationToken = default) where T: class
     {
-        CacheEntry? cacheEntry = await _databaseUnitOfWork.CacheEntryRepository.GetCacheEntryFromNameAsync(
+        IDatabaseUnitOfWork unitOfWork = await _databaseUnitOfWorkFactory.Create();
+        
+        CacheEntry? cacheEntry = await unitOfWork.CacheEntryRepository.GetCacheEntryFromNameAsync(
             new GetCacheEntryFromNameQuery(name),
             cancellationToken);
 
@@ -45,25 +47,29 @@ public class MsgPackDatabaseCache: ICache
 
     public async Task SetAsync<T>(string name, T? data, long expiresAfter = 3600, CancellationToken cancellationToken = default) where T: class
     {
+        IDatabaseUnitOfWork unitOfWork = await _databaseUnitOfWorkFactory.Create();
+
         using MemoryStream memoryStream = _recyclableMemoryStreamManager.GetStream();
         
         await MessagePackSerializer.SerializeAsync(memoryStream, new MsgPackContainer<T>(data),
             MessagePack.Resolvers.ContractlessStandardResolver.Options, cancellationToken);
         
-        await _databaseUnitOfWork.CacheEntryRepository.AddOrUpdateCacheEntryAsync(
+        await unitOfWork.CacheEntryRepository.AddOrUpdateCacheEntryAsync(
             new AddOrUpdateCacheEntryQuery(name, memoryStream.GetBuffer()[0..(int)memoryStream.Length], expiresAfter),
             cancellationToken);
 
-        await _databaseUnitOfWork.SaveAsync(cancellationToken);
+        await unitOfWork.SaveAsync(cancellationToken);
     }
 
 
     public async Task DeleteAsync(string name, CancellationToken cancellationToken = default)
     {
-        await _databaseUnitOfWork.CacheEntryRepository.DeleteCacheEntryAsync(
+        IDatabaseUnitOfWork unitOfWork = await _databaseUnitOfWorkFactory.Create();
+
+        await unitOfWork.CacheEntryRepository.DeleteCacheEntryAsync(
             new DeleteCacheEntryQuery(name),
             cancellationToken);
 
-        await _databaseUnitOfWork.SaveAsync(cancellationToken);
+        await unitOfWork.SaveAsync(cancellationToken);
     }
 }

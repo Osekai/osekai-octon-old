@@ -15,17 +15,17 @@ public class CurrentSession: IOsuApiV2TokenProvider
     private (Session Session, SessionPayload SessionPayload)? _sessionAndPayload;
 
     private readonly OsuApiV2Interface _osuApiV2Interface;
-    private readonly IDatabaseUnitOfWork _databaseUnitOfWork;
+    private readonly IDatabaseUnitOfWorkFactory _databaseUnitOfWorkFactory;
 
     private readonly ILogger<CurrentSession> _logger;
 
     public CurrentSession(
         OsuApiV2Interface osuApiV2Interface, 
-        IDatabaseUnitOfWork databaseUnitOfWork,
+        IDatabaseUnitOfWorkFactory databaseUnitOfWork,
         ILogger<CurrentSession> logger)
     {
         _osuApiV2Interface = osuApiV2Interface;
-        _databaseUnitOfWork = databaseUnitOfWork;
+        _databaseUnitOfWorkFactory = databaseUnitOfWork;
         _logger = logger;
     }
     
@@ -59,22 +59,24 @@ public class CurrentSession: IOsuApiV2TokenProvider
                 sessionPayload.OsuApiV2RefreshToken = payload.RefreshToken;
                 sessionPayload.OsuApiV2Token = payload.Token;
                 sessionPayload.ExpiresAt = DateTime.Now.AddSeconds(payload.ExpiresIn);
-
-                await _databaseUnitOfWork.SessionRepository.AddOrUpdateSessionAsync(
+                
+                IDatabaseUnitOfWork unitOfWork = await _databaseUnitOfWorkFactory.Create();
+                
+                await unitOfWork.SessionRepository.AddOrUpdateSessionAsync(
                     new AddOrUpdateSessionQuery(session.Token, sessionPayload),
                     cancellationToken);
 
-                await _databaseUnitOfWork.SaveAsync(cancellationToken);
+                await unitOfWork.SaveAsync(cancellationToken);
             }
         }
         catch (Exception exception)
         {
-            _databaseUnitOfWork.DiscardChanges();
-
-            await _databaseUnitOfWork.SessionRepository.DeleteSessionAsync(new DeleteSessionQuery(session.Token),
+            IDatabaseUnitOfWork unitOfWork = await _databaseUnitOfWorkFactory.Create();
+            
+            await unitOfWork.SessionRepository.DeleteSessionAsync(new DeleteSessionQuery(session.Token),
                 cancellationToken);
             
-            await _databaseUnitOfWork.SaveAsync(cancellationToken);
+            await unitOfWork.SaveAsync(cancellationToken);
             
             _sessionAndPayload = null;
             _logger.LogError(exception, exception.Message);

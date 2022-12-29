@@ -1,7 +1,8 @@
-﻿namespace Osekai.Octon.Database;
+﻿using System.Data;
+
+namespace Osekai.Octon.Database;
 
 public interface ITransaction: IAsyncDisposable, IDisposable
 {
-    Task RollbackAsync(CancellationToken cancellationToken = default);
     Task CommitAsync(CancellationToken cancellationToken = default);
 }

@@ -13,5 +13,5 @@ public class Home : AppBaseLayout
     public override string MetadataTitle => "Osekai • the home of alternative rankings, medal solutions, and more";
     public override string MetadataThemeColor => "#353d55";
     public override string MetadataUrl => "https://osekai.net/home";
-    public Home(IDatabaseUnitOfWork databaseUnitOfWork) : base(databaseUnitOfWork, appId: -1)  {}
+    public Home(IDatabaseUnitOfWorkFactory databaseUnitOfWorkFactory) : base(databaseUnitOfWorkFactory, appId: -1)  {}
 }
