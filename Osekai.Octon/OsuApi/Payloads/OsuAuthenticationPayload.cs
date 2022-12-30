@@ -3,9 +3,9 @@
 namespace Osekai.Octon.OsuApi.Payloads;
 
 
-public class AuthenticationPayload
+public class OsuAuthenticationPayload
 {
-    public AuthenticationPayload(int clientId, string clientSecret, string code, string grantType, string redirectUri)
+    public OsuAuthenticationPayload(int clientId, string clientSecret, string code, string grantType, string redirectUri)
     {
         ClientId = clientId;
         ClientSecret = clientSecret;

@@ -13,6 +13,7 @@ public class DevController: Controller
 {
     private readonly ITestDataPopulator _testDataPopulator;
     private readonly DbContext _dbContext;
+    private readonly IDatabaseUnitOfWorkFactory _databaseUnitOfWorkFactory;
     private readonly StaticUrlGenerator _staticUrlGenerator;
     private readonly CurrentSession _currentSession;
     private readonly CachedAuthenticatedOsuApiV2Interface _authenticatedOsuApiV2Interface;
@@ -21,10 +22,12 @@ public class DevController: Controller
         StaticUrlGenerator staticUrlGenerator,
         CurrentSession currentSession,
         CachedAuthenticatedOsuApiV2Interface authenticatedOsuApi,
+        IDatabaseUnitOfWorkFactory databaseUnitOfWorkFactory,
         ITestDataPopulator testDataPopulator)
     {
         _authenticatedOsuApiV2Interface = authenticatedOsuApi;
         _currentSession = currentSession;
+        _databaseUnitOfWorkFactory = databaseUnitOfWorkFactory;
         _testDataPopulator = testDataPopulator;
         _dbContext = dbContext;
         _staticUrlGenerator = staticUrlGenerator;
@@ -54,8 +57,16 @@ public class DevController: Controller
         return Ok(await _currentSession.GetAsync(cancellationToken));
     }
     
-    [HttpGet("meApiTest")]
+    [HttpGet("getMedalsTest")]
     public async Task<IActionResult> MeApiTest(CancellationToken cancellationToken)
+    {
+        IDatabaseUnitOfWork unitOfWork = await _databaseUnitOfWorkFactory.Create();
+        
+        return Ok(await unitOfWork.MedalRepository.GetMedalsAsync(cancellationToken: cancellationToken));
+    }
+    
+    [HttpGet("meApiTest")]
+    public async Task<IActionResult> GetMedalsTest(CancellationToken cancellationToken)
     {
         return Ok(await _authenticatedOsuApiV2Interface.MeAsync(cancellationToken: cancellationToken));
     }

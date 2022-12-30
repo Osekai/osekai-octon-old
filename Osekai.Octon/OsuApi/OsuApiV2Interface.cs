@@ -17,43 +17,58 @@ public class OsuApiV2Interface
         _osuOAuthConfiguration = osuOAuthConfiguration.Value;
     }
 
-    public async Task<AuthenticationResultPayload> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default)
+    public async Task<(OsuAuthenticationResultPayload, OsuUser)> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default)
     {
         using HttpClient client = _httpClientFactory.CreateClient();
 
         HttpResponseMessage response = await client.PostAsync(
             "https://osu.ppy.sh/oauth/token", 
             JsonContent.Create(
-                new AuthenticationPayload(
+                new OsuAuthenticationPayload(
                     _osuOAuthConfiguration.ClientId, _osuOAuthConfiguration.ClientSecret, 
                     refreshToken, "refresh_token", _osuOAuthConfiguration.RedirectUri)), 
             cancellationToken);
         
         response.EnsureSuccessStatusCode();
-        
-        AuthenticationResultPayload? authenticatedPayload = await response.Content.ReadFromJsonAsync<AuthenticationResultPayload>(cancellationToken: cancellationToken = default);
-        Debug.Assert(authenticatedPayload != null);
 
-        return authenticatedPayload!;
+        OsuAuthenticationResultPayload authenticatedPayload =
+            await response.Content.ReadFromJsonAsync<OsuAuthenticationResultPayload>(cancellationToken: cancellationToken) ??
+            throw new InvalidDataException();
+
+        
+        client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"Bearer {authenticatedPayload.Token}");
+
+        response = await client.GetAsync($"https://osu.ppy.sh/api/v2/me", cancellationToken);
+        response.EnsureSuccessStatusCode();
+        OsuUser osuUser = (await response.Content.ReadFromJsonAsync<OsuUser>()) ?? throw new InvalidDataException();
+        
+        return (authenticatedPayload!, osuUser);
     }
     
-    public async Task<AuthenticationResultPayload> AuthenticateWithCodeAsync(string code, CancellationToken cancellationToken = default)
+    
+    public async Task<(OsuAuthenticationResultPayload, OsuUser user)> AuthenticateWithCodeAsync(string code, CancellationToken cancellationToken = default)
     {
         using HttpClient client = _httpClientFactory.CreateClient();
-
+        
         HttpResponseMessage response = await client.PostAsync(
             "https://osu.ppy.sh/oauth/token", 
             JsonContent.Create(
-                new AuthenticationPayload(
+                new OsuAuthenticationPayload(
                     _osuOAuthConfiguration.ClientId, _osuOAuthConfiguration.ClientSecret, 
                     code, "authorization_code", _osuOAuthConfiguration.RedirectUri)), 
             cancellationToken);
 
         response.EnsureSuccessStatusCode();
 
-        AuthenticationResultPayload? authenticatedPayload = await response.Content.ReadFromJsonAsync<AuthenticationResultPayload>(cancellationToken: cancellationToken);
-        Debug.Assert(authenticatedPayload != null);
+        OsuAuthenticationResultPayload authenticatedPayload = await response.Content.ReadFromJsonAsync<OsuAuthenticationResultPayload>(cancellationToken: cancellationToken)
+            ?? throw new InvalidDataException();
+        
+        client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"Bearer {authenticatedPayload.Token}");
 
-        return authenticatedPayload!;
+        response = await client.GetAsync($"https://osu.ppy.sh/api/v2/me", cancellationToken);
+        response.EnsureSuccessStatusCode();
+        OsuUser osuUser = (await response.Content.ReadFromJsonAsync<OsuUser>()) ?? throw new InvalidDataException();
+
+        return (authenticatedPayload!, osuUser);
     }
 }

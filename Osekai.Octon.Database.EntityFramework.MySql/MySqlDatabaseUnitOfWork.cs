@@ -9,10 +9,14 @@ public class MySqlDatabaseUnitOfWork: EntityFrameworkDatabaseUnitOfWork<MySqlOse
 
     private IAppRepository? _appRepository;
     private ISessionRepository? _sessionRepository;
+    private IMedalRepository? _medalRepository;
     private ICacheEntryRepository? _cacheEntryRepository;
 
     public override IAppRepository AppRepository => 
         _appRepository ??= new MySqlEntityFrameworkAppRepository(Context);
+    
+    public override IMedalRepository MedalRepository => 
+        _medalRepository ??= new MySqlEntityFrameworkMedalRepository(Context);
 
     public override ISessionRepository SessionRepository =>
         _sessionRepository ??= new MySqlEntityFrameworkSessionRepository(Context);

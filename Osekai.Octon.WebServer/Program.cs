@@ -1,5 +1,6 @@
 
 using System.Text;
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.ObjectPool;
 using Microsoft.IO;
@@ -34,7 +35,6 @@ builder.Services.AddSingleton<ObjectPool<StringBuilder>>(serviceProvider =>
 builder.Services.AddSingleton<RecyclableMemoryStreamManager>();
 builder.Services.AddTransient<ICache, MsgPackDatabaseCache>();
 builder.Services.AddHttpClient();
-builder.Services.AddSingleton<OsuApiTimeThrottler>();
 builder.Services.AddScoped<EntityFrameworkTransactionProvider>();
 builder.Services.AddScoped<ITransactionProvider, EntityFrameworkTransactionProvider>(provider => provider.GetService<EntityFrameworkTransactionProvider>()!);
 builder.Services.AddScoped<OsuApiV2Interface>();
@@ -58,6 +58,8 @@ builder.Services.AddScoped<ITestDataPopulator, MySqlTestDataPopulator>();
 builder.Services.AddRazorPages();
 #endif
 
+builder.Services.AddControllers()
+    .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddRouting();
 
 var app = builder.Build();

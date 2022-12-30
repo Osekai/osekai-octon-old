@@ -19,29 +19,41 @@ public class MySqlEntityFrameworkSessionRepository: ISessionRepository
 
     public async Task<Session> AddOrUpdateSessionAsync(AddOrUpdateSessionQuery query, CancellationToken cancellationToken = default)
     {
-        if (await SessionExists(new SessionExistsQuery(query.Token), cancellationToken))
-            _context.Entry(
-                new Session
-                {
-                    Token = query.Token,
-                    Payload = query.Payload,
-                    ExpiresAt = DateTime.Now.AddSeconds(Specifications.SessionTokenMaxLifeInSeconds)
-                }).State = EntityState.Modified;
+        Session? session = await _context.Sessions.Where(s => s.Token == query.Token).FirstOrDefaultAsync(cancellationToken);
+        DateTime dateTime = DateTime.Now.AddSeconds(Specifications.SessionTokenMaxLifeInSeconds);
+        
+        if (session != null)
+        {
+            session.Payload = query.Payload;
+            session.ExpiresAt = dateTime;
+        }
         else
             _context.Add(
                 new Session
                 {
                     Token = query.Token, 
                     Payload = query.Payload,
-                    ExpiresAt = DateTime.Now.AddSeconds(Specifications.SessionTokenMaxLifeInSeconds)
+                    ExpiresAt = dateTime
                 });
 
         return new Session
         {
             Token = query.Token,
             Payload = query.Payload,
-            ExpiresAt = DateTime.Now.AddSeconds(Specifications.SessionTokenMaxLifeInSeconds)
+            ExpiresAt = dateTime
         };
+    }
+
+    public async Task<DateTimeOffset?> RefreshSessionAsync(RefreshSessionQuery query, CancellationToken cancellationToken = default)
+    {
+        Session? session = await _context.Sessions.Where(s => s.Token == query.Token).FirstOrDefaultAsync(cancellationToken);
+        if (session == null)
+            return null;
+
+        DateTimeOffset expireAt = DateTime.Now.AddSeconds(Specifications.SessionTokenMaxLifeInSeconds);
+
+        session.ExpiresAt = expireAt;
+        return expireAt;
     }
 
     public Task<bool> SessionExists(SessionExistsQuery query, CancellationToken cancellationToken = default)
@@ -49,9 +61,10 @@ public class MySqlEntityFrameworkSessionRepository: ISessionRepository
         return _context.Sessions.AsNoTracking().AnyAsync(s => s.Token == query.Token, cancellationToken);
     }
 
-    public Task DeleteSessionAsync(DeleteSessionQuery query, CancellationToken cancellationToken = default)
+    public async Task DeleteSessionAsync(DeleteSessionQuery query, CancellationToken cancellationToken = default)
     {
-        _context.Entry(new Session { Token = query.Token }).State = EntityState.Deleted;
-        return Task.CompletedTask;
+        Session? session = await _context.Sessions.Where(s => s.Token == query.Token).FirstOrDefaultAsync(cancellationToken);
+        if (session != null)
+            _context.Remove(session);
     }
 }

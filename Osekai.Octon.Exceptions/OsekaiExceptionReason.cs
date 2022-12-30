@@ -2,7 +2,8 @@
 
 public enum OsekaiExceptionReason
 {
-    BadInput,
-    ResourceNotFound,
-    Unauthorized
+    BadInput = 400,
+    ResourceNotFound = 404,
+    Unauthorized = 401,
+    Forbidden = 403 
 }

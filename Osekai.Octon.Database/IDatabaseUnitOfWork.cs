@@ -5,9 +5,10 @@ namespace Osekai.Octon.Database;
 
 public interface IDatabaseUnitOfWork
 {
-    public IAppRepository AppRepository { get; }
-    public ISessionRepository SessionRepository { get; }
-    public ICacheEntryRepository CacheEntryRepository { get; }
+    IAppRepository AppRepository { get; }
+    ISessionRepository SessionRepository { get; }
+    ICacheEntryRepository CacheEntryRepository { get; }
+    IMedalRepository MedalRepository { get; }
     Task SaveAsync(CancellationToken cancellationToken = default);
     void DiscardChanges();
 }

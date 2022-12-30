@@ -4,7 +4,7 @@ namespace Osekai.Octon.OsuApi.Payloads;
 
 #nullable disable
 
-public class AuthenticationResultPayload
+public class OsuAuthenticationResultPayload
 {
     [JsonPropertyName("access_token")] 
     public string Token { set; get; }

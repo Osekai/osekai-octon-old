@@ -31,9 +31,6 @@ public class CurrentSession: IOsuApiV2TokenProvider
     
     public void Set(Session session)
     {
-        if (_sessionAndPayload != null)
-            throw new InvalidOperationException("Session is already set");
-
         _sessionAndPayload = (session, 
             JsonSerializer.Deserialize<SessionPayload>(session.Payload) 
             ?? throw new ArgumentException("Invalid session payload"));
@@ -41,9 +38,14 @@ public class CurrentSession: IOsuApiV2TokenProvider
 
     private async Task UpdateIfNeededAsync(CancellationToken cancellationToken)
     {
+        if (_sessionAndPayload == null)
+            return;
+        
         Session session = _sessionAndPayload!.Value.Session;
         SessionPayload sessionPayload = _sessionAndPayload.Value.SessionPayload;
-
+        
+        IDatabaseUnitOfWork unitOfWork = await _databaseUnitOfWorkFactory.Create();
+        
         try
         {
             if (DateTime.Now > session.ExpiresAt)
@@ -51,27 +53,34 @@ public class CurrentSession: IOsuApiV2TokenProvider
 
             if (DateTime.Now > sessionPayload.ExpiresAt)
             {
-                AuthenticationResultPayload payload =
+                (OsuAuthenticationResultPayload payload, OsuUser user) =
                     await _osuApiV2Interface.RefreshTokenAsync(
                         sessionPayload.OsuApiV2RefreshToken,
                         cancellationToken);
 
+                if (user.IsRestricted)
+                    throw new OsuUserRestrictedException(user.Id);
+                
+                if (user.IsDeleted)
+                    throw new OsuUserDeletedException(user.Id);
+                
                 sessionPayload.OsuApiV2RefreshToken = payload.RefreshToken;
                 sessionPayload.OsuApiV2Token = payload.Token;
                 sessionPayload.ExpiresAt = DateTime.Now.AddSeconds(payload.ExpiresIn);
-                
-                IDatabaseUnitOfWork unitOfWork = await _databaseUnitOfWorkFactory.Create();
-                
-                await unitOfWork.SessionRepository.AddOrUpdateSessionAsync(
+
+                session = await unitOfWork.SessionRepository.AddOrUpdateSessionAsync(
                     new AddOrUpdateSessionQuery(session.Token, sessionPayload),
                     cancellationToken);
-
-                await unitOfWork.SaveAsync(cancellationToken);
             }
+            else
+                session.ExpiresAt = (await unitOfWork.SessionRepository.RefreshSessionAsync(
+                    new RefreshSessionQuery(session.Token), cancellationToken))!.Value;
+            
+            await unitOfWork.SaveAsync(cancellationToken);
         }
         catch (Exception exception)
         {
-            IDatabaseUnitOfWork unitOfWork = await _databaseUnitOfWorkFactory.Create();
+            unitOfWork.DiscardChanges();
             
             await unitOfWork.SessionRepository.DeleteSessionAsync(new DeleteSessionQuery(session.Token),
                 cancellationToken);
@@ -92,7 +101,7 @@ public class CurrentSession: IOsuApiV2TokenProvider
 
         await UpdateIfNeededAsync(cancellationToken);
 
-        return _sessionAndPayload!.Value.Session;
+        return (Session)_sessionAndPayload!.Value.Session.Clone();
     }
 
     public async Task<SessionPayload?> GetPayloadAsync(CancellationToken cancellationToken = default)
@@ -102,7 +111,7 @@ public class CurrentSession: IOsuApiV2TokenProvider
 
         await UpdateIfNeededAsync(cancellationToken);
 
-        return _sessionAndPayload!.Value.SessionPayload;
+        return (SessionPayload)_sessionAndPayload!.Value.SessionPayload.Clone();
     }
 
     public async Task<bool> TryUpdateAsync(CancellationToken cancellationToken = default)
@@ -122,6 +131,9 @@ public class CurrentSession: IOsuApiV2TokenProvider
     
     public async Task<string?> GetOsuApiV2TokenAsync(CancellationToken cancellationToken = default)
     {
-        return (await GetPayloadAsync(cancellationToken))?.OsuApiV2Token;
+        await UpdateIfNeededAsync(cancellationToken);
+        return _sessionAndPayload?.SessionPayload.OsuApiV2Token;
     }
+
+    public int? OsuUserId => _sessionAndPayload?.SessionPayload.OsuUserId;
 }

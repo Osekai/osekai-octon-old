@@ -7,6 +7,7 @@ public interface ISessionRepository
 {
     Task<Session?> GetSessionFromTokenAsync(GetSessionByTokenQuery query, CancellationToken cancellationToken = default);
     Task<Session> AddOrUpdateSessionAsync(AddOrUpdateSessionQuery query, CancellationToken cancellationToken = default);
+    Task<DateTimeOffset?> RefreshSessionAsync(RefreshSessionQuery query, CancellationToken cancellationToken = default);
     Task<bool> SessionExists(SessionExistsQuery query, CancellationToken cancellationToken = default);
     Task DeleteSessionAsync(DeleteSessionQuery query, CancellationToken cancellationToken = default);
 }

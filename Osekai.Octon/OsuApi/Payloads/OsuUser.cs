@@ -4,7 +4,7 @@ namespace Osekai.Octon.OsuApi.Payloads;
 
 #nullable disable
 
-public partial class User
+public partial class OsuUser
 {
     [JsonPropertyName("avatar_url")]
     public Uri AvatarUrl { get; set; }
@@ -16,7 +16,7 @@ public partial class User
     public string DefaultGroup { get; set; }
 
     [JsonPropertyName("id")]
-    public long Id { get; set; }
+    public int Id { get; set; }
 
     [JsonPropertyName("is_active")]
     public bool IsActive { get; set; }

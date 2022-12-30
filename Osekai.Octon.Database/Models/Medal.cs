@@ -13,10 +13,10 @@ public class Medal
     public string? Instructions { get; set; } 
     public int Ordering { get; set; }
     public string? Video { get; set; }
-    public DateTimeOffset Date { get; set; }
+    public DateTimeOffset? Date { get; set; }
     public DateTimeOffset? FirstAchievedDate { get; set; }
 
-    public ICollection<BeatmapPackForMedal> BeatmapPacksForMedal { get; set; } = null;
+    public ICollection<BeatmapPackForMedal> BeatmapPacksForMedal { get; set; } = null!;
     
     public string? FirstAchievedBy { get; set; } 
 }

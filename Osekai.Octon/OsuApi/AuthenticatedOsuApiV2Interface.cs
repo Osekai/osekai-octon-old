@@ -8,19 +8,19 @@ namespace Osekai.Octon.OsuApi;
 public class AuthenticatedOsuApiV2Interface : IAuthenticatedOsuApiV2Interface
 {
     private readonly IHttpClientFactory _httpClientFactory;
-    private readonly IOsuApiV2TokenProvider _tokenProvider;
+    private readonly CurrentSession _currentSession;
 
     public AuthenticatedOsuApiV2Interface(
-        IOsuApiV2TokenProvider tokenProvider, 
+        CurrentSession currentSession, 
         IHttpClientFactory httpClientFactory)
     {
         _httpClientFactory = httpClientFactory;
-        _tokenProvider = tokenProvider;
+        _currentSession = currentSession;
     }
 
     private async Task<HttpClient> CreateAuthenticatedClientAsync(CancellationToken cancellationToken = default)
     {
-        string token = await _tokenProvider.GetOsuApiV2TokenAsync(cancellationToken) ?? throw new NotAuthenticatedException();
+        string token = await _currentSession.GetOsuApiV2TokenAsync(cancellationToken) ?? throw new NotAuthenticatedException();
         
         HttpClient client = _httpClientFactory.CreateClient();
         client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"Bearer {token}");
@@ -28,7 +28,7 @@ public class AuthenticatedOsuApiV2Interface : IAuthenticatedOsuApiV2Interface
         return client;
     }
 
-    public async Task<User?> SearchUserAsync(string searchString, string mode = "osu", CancellationToken cancellationToken = default)
+    public async Task<OsuUser?> SearchUserAsync(string searchString, string mode = "osu", CancellationToken cancellationToken = default)
     { 
         HttpClient client = await CreateAuthenticatedClientAsync(cancellationToken);
         HttpResponseMessage response =
@@ -39,19 +39,19 @@ public class AuthenticatedOsuApiV2Interface : IAuthenticatedOsuApiV2Interface
 
         response.EnsureSuccessStatusCode();
 
-        return await response.Content.ReadFromJsonAsync<User>(cancellationToken: cancellationToken);
+        return await response.Content.ReadFromJsonAsync<OsuUser>(cancellationToken: cancellationToken);
     }
     
-    public async Task<User?> MeAsync(string mode = "osu", CancellationToken cancellationToken = default)
-    { 
+    public async Task<OsuUser> MeAsync(string mode = "osu", CancellationToken cancellationToken = default)
+    {
         HttpClient client = await CreateAuthenticatedClientAsync(cancellationToken);
-        HttpResponseMessage response = await client.GetAsync($"https://osu.ppy.sh/api/v2/me/{mode}", cancellationToken);
+        int osuUserId = _currentSession.OsuUserId!.Value;
 
-        if (response.StatusCode == HttpStatusCode.NotFound)
-            return null;
-        
+        HttpResponseMessage response =
+            await client.GetAsync($"https://osu.ppy.sh/api/v2/users/{osuUserId}/{mode}", cancellationToken);
+
         response.EnsureSuccessStatusCode();
-        
-        return await response.Content.ReadFromJsonAsync<User>(cancellationToken: cancellationToken);
+
+        return await response.Content.ReadFromJsonAsync<OsuUser>(cancellationToken: cancellationToken) ?? throw new InvalidDataException();
     }
 }

@@ -1,4 +1,5 @@
-﻿using Osekai.Octon.OsuApi.Payloads;
+﻿using Osekai.Octon.Exceptions;
+using Osekai.Octon.OsuApi.Payloads;
 
 namespace Osekai.Octon.OsuApi;
 
@@ -6,17 +7,25 @@ public class CachedAuthenticatedOsuApiV2Interface: IAuthenticatedOsuApiV2Interfa
 {
     private readonly IAuthenticatedOsuApiV2Interface _authenticatedOsuApiV2Interface;
     private readonly ICache _cache;
+
+    private readonly CurrentSession _currentSession;
     
-    public CachedAuthenticatedOsuApiV2Interface(ICache cache, IAuthenticatedOsuApiV2Interface authenticatedOsuApiV2Interface)
+    public CachedAuthenticatedOsuApiV2Interface(ICache cache,
+        CurrentSession currentSession,
+        IAuthenticatedOsuApiV2Interface authenticatedOsuApiV2Interface)
     {
         _authenticatedOsuApiV2Interface = authenticatedOsuApiV2Interface;
+        _currentSession = currentSession;
         _cache = cache;
     } 
     
-    public async Task<User?> SearchUserAsync(string searchString, string mode = "osu", CancellationToken cancellationToken = default)
+    public async Task<OsuUser?> SearchUserAsync(string searchString, string mode = "osu", CancellationToken cancellationToken = default)
     {
+        if (_currentSession.IsNull())
+            throw new NotAuthenticatedException();
+        
         string entryName = $"osu_api_user_{searchString}_{mode}";
-        User? user = await _cache.GetAsync<User>(entryName);
+        OsuUser? user = await _cache.GetAsync<OsuUser>(entryName);
         
         if (user == null)
         {
@@ -27,8 +36,11 @@ public class CachedAuthenticatedOsuApiV2Interface: IAuthenticatedOsuApiV2Interfa
         return user;
     }
 
-    public Task<User?> MeAsync(string mode = "osu", CancellationToken cancellationToken = default)
+    public Task<OsuUser> MeAsync(string mode = "osu", CancellationToken cancellationToken = default)
     {
-        return _authenticatedOsuApiV2Interface.MeAsync(mode, cancellationToken);
+        if (_currentSession.IsNull())
+            throw new NotAuthenticatedException();
+
+        return SearchUserAsync(_currentSession.OsuUserId!.Value.ToString(), mode, cancellationToken)!;
     }
 }
