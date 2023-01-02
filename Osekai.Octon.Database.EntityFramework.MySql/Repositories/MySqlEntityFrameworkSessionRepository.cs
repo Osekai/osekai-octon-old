@@ -1,7 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Osekai.Octon.Database.Models;
+﻿using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
+using Osekai.Octon.Database.Dtos;
+using Osekai.Octon.Database.EntityFramework.MySql.Models;
+using Osekai.Octon.Database.HelperTypes;
 using Osekai.Octon.Database.Repositories;
-using Osekai.Octon.Database.Repositories.Query;
 
 namespace Osekai.Octon.Database.EntityFramework.MySql.Repositories;
 
@@ -13,57 +15,56 @@ public class MySqlEntityFrameworkSessionRepository: ISessionRepository
     {
         _context = context;
     }
-    
-    public Task<Session?> GetSessionFromTokenAsync(GetSessionByTokenQuery query, CancellationToken cancellationToken = default) =>
-        _context.Sessions.AsNoTracking().Where(s => s.Token == query.Token).FirstOrDefaultAsync(cancellationToken);
 
-    public async Task<Session> AddOrUpdateSessionAsync(AddOrUpdateSessionQuery query, CancellationToken cancellationToken = default)
+    public async Task<SessionDto?> GetSessionFromTokenAsync(string token, CancellationToken cancellationToken = default)
     {
-        Session? session = await _context.Sessions.Where(s => s.Token == query.Token).FirstOrDefaultAsync(cancellationToken);
-        DateTime dateTime = DateTime.Now.AddSeconds(Specifications.SessionTokenMaxLifeInSeconds);
+        Session? session = await _context.Sessions.AsNoTracking().Where(s => s.Token == token && DateTimeOffset.Now < s.ExpiresAt).FirstOrDefaultAsync(cancellationToken);
+        return session?.ToDto();
+    }
+
+    public Task<SessionDto> AddSessionAsync(string token, SessionDtoPayload payload, DateTimeOffset expiresAt, CancellationToken cancellationToken = default)
+    {
+        _context.Sessions.Add(new Session
+        {
+            Token = token, 
+            ExpiresAt = expiresAt, 
+            Payload = JsonSerializer.Serialize(payload)
+        });
         
-        if (session != null)
-        {
-            session.Payload = query.Payload;
-            session.ExpiresAt = dateTime;
-        }
-        else
-            _context.Add(
-                new Session
-                {
-                    Token = query.Token, 
-                    Payload = query.Payload,
-                    ExpiresAt = dateTime
-                });
-
-        return new Session
-        {
-            Token = query.Token,
-            Payload = query.Payload,
-            ExpiresAt = dateTime
-        };
+        return Task.FromResult(new SessionDto(token, payload, expiresAt));
     }
 
-    public async Task<DateTimeOffset?> RefreshSessionAsync(RefreshSessionQuery query, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateSessionPayloadAsync(
+        string token, SessionDtoPayload payload,
+        CancellationToken cancellationToken = default)
     {
-        Session? session = await _context.Sessions.Where(s => s.Token == query.Token).FirstOrDefaultAsync(cancellationToken);
+        Session? session = await _context.Sessions.Where(s => s.Token == token).FirstOrDefaultAsync(cancellationToken);
         if (session == null)
-            return null;
+            return false;
 
-        DateTimeOffset expireAt = DateTime.Now.AddSeconds(Specifications.SessionTokenMaxLifeInSeconds);
-
-        session.ExpiresAt = expireAt;
-        return expireAt;
+        session.Payload = JsonSerializer.Serialize(payload);
+        return true;
     }
 
-    public Task<bool> SessionExists(SessionExistsQuery query, CancellationToken cancellationToken = default)
+    public async Task<bool> UpdateExpirationDateTimeAsync(string token, DateTimeOffset dateTime,
+        CancellationToken cancellationToken = default)
     {
-        return _context.Sessions.AsNoTracking().AnyAsync(s => s.Token == query.Token, cancellationToken);
+        Session? session = await _context.Sessions.Where(s => s.Token == token).FirstOrDefaultAsync(cancellationToken);
+        if (session == null)
+            return false;
+
+        session.ExpiresAt = dateTime;
+        return true;
     }
 
-    public async Task DeleteSessionAsync(DeleteSessionQuery query, CancellationToken cancellationToken = default)
+    public Task<bool> SessionExists(string token, CancellationToken cancellationToken = default)
     {
-        Session? session = await _context.Sessions.Where(s => s.Token == query.Token).FirstOrDefaultAsync(cancellationToken);
+        return _context.Sessions.AsNoTracking().AnyAsync(s => s.Token == token, cancellationToken);
+    }
+
+    public async Task DeleteSessionAsync(string token, CancellationToken cancellationToken = default)
+    {
+        Session? session = await _context.Sessions.Where(s => s.Token == token).FirstOrDefaultAsync(cancellationToken);
         if (session != null)
             _context.Remove(session);
     }

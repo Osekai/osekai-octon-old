@@ -1,8 +1,8 @@
-﻿using System.Text.Json.Serialization;
+﻿using Osekai.Octon.Database.Dtos;
 
-namespace Osekai.Octon.Database.Models;
+namespace Osekai.Octon.Database.EntityFramework.MySql.Models;
 
-public class Medal
+internal sealed class Medal
 {
     public int Id { get; set; }
     public string Name { get; set; } = null!;
@@ -18,5 +18,12 @@ public class Medal
 
     public ICollection<BeatmapPackForMedal> BeatmapPacksForMedal { get; set; } = null!;
     
-    public string? FirstAchievedBy { get; set; } 
+    public string? FirstAchievedBy { get; set; }
+
+    public MedalDto ToDto()
+    {
+        return new MedalDto(Id, Name, Link, Description, Grouping, Ordering,
+            BeatmapPacksForMedal.Select(b => b.BeatmapPack.ToDto()),
+            Restriction, Instructions, Video, Date, FirstAchievedDate, FirstAchievedBy);
+    }
 }

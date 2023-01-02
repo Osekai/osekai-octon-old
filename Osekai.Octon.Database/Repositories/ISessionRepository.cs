@@ -1,13 +1,14 @@
-﻿using Osekai.Octon.Database.Models;
-using Osekai.Octon.Database.Repositories.Query;
+﻿using Osekai.Octon.Database.Dtos;
+using Osekai.Octon.Database.HelperTypes;
 
 namespace Osekai.Octon.Database.Repositories;
 
 public interface ISessionRepository
 {
-    Task<Session?> GetSessionFromTokenAsync(GetSessionByTokenQuery query, CancellationToken cancellationToken = default);
-    Task<Session> AddOrUpdateSessionAsync(AddOrUpdateSessionQuery query, CancellationToken cancellationToken = default);
-    Task<DateTimeOffset?> RefreshSessionAsync(RefreshSessionQuery query, CancellationToken cancellationToken = default);
-    Task<bool> SessionExists(SessionExistsQuery query, CancellationToken cancellationToken = default);
-    Task DeleteSessionAsync(DeleteSessionQuery query, CancellationToken cancellationToken = default);
+    Task<SessionDto?> GetSessionFromTokenAsync(string token, CancellationToken cancellationToken = default);
+    Task<SessionDto> AddSessionAsync(string token, SessionDtoPayload payload, DateTimeOffset expiresAt, CancellationToken cancellationToken = default);
+    Task<bool> UpdateSessionPayloadAsync(string token, SessionDtoPayload payload, CancellationToken cancellationToken = default);
+    Task<bool> UpdateExpirationDateTimeAsync(string token, DateTimeOffset dateTime, CancellationToken cancellationToken = default);
+    Task<bool> SessionExists(string token, CancellationToken cancellationToken = default);
+    Task DeleteSessionAsync(string token, CancellationToken cancellationToken = default);
 }

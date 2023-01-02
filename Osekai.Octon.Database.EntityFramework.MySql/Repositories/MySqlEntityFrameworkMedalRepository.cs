@@ -1,7 +1,8 @@
 ﻿using System.Collections.Immutable;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
-using Osekai.Octon.Database.Models;
+using Osekai.Octon.Database.Dtos;
+using Osekai.Octon.Database.EntityFramework.MySql.Models;
 using Osekai.Octon.Database.Repositories;
 
 namespace Osekai.Octon.Database.EntityFramework.MySql.Repositories;
@@ -15,19 +16,24 @@ public class MySqlEntityFrameworkMedalRepository: IMedalRepository
         _context = context;
     }
     
-    public async Task<IReadOnlyCollection<Medal>> GetMedalsAsync(
-        Expression<Func<Medal, bool>>? filter = null, 
-        long offset  = 0, 
-        long limit = long.MaxValue,
+    public async Task<IReadOnlyCollection<MedalDto>> GetMedalsAsync(
+        IMedalRepository.MedalFilter filter = default,
+        int offset  = 0, 
+        int limit = int.MaxValue,
         CancellationToken cancellationToken = default)
     {
         IQueryable<Medal> query = _context.Medals;
 
-        if (filter != null)
-            query = query.Where(filter);
-
-        return await query.Include(e => e.BeatmapPacksForMedal)
+        query = query.Include(e => e.BeatmapPacksForMedal)
             .ThenInclude(e => e.BeatmapPack)
-            .ToArrayAsync(cancellationToken);
+            .Take(limit)
+            .Skip(offset);
+
+        if (filter.Name != null)
+            query = query.Where(medal => filter.Name.Contains(medal.Name));
+
+        IAsyncEnumerable<Medal> medals = query.AsAsyncEnumerable();
+
+        return await medals.Select(medal =>  medal.ToDto()).ToArrayAsync();
     }
 }

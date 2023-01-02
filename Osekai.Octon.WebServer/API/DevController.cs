@@ -60,7 +60,7 @@ public class DevController: Controller
     [HttpGet("getMedalsTest")]
     public async Task<IActionResult> MeApiTest(CancellationToken cancellationToken)
     {
-        IDatabaseUnitOfWork unitOfWork = await _databaseUnitOfWorkFactory.Create();
+        IDatabaseUnitOfWork unitOfWork = await _databaseUnitOfWorkFactory.CreateAsync();
         
         return Ok(await unitOfWork.MedalRepository.GetMedalsAsync(cancellationToken: cancellationToken));
     }
@@ -68,13 +68,13 @@ public class DevController: Controller
     [HttpGet("meApiTest")]
     public async Task<IActionResult> GetMedalsTest(CancellationToken cancellationToken)
     {
-        return Ok(await _authenticatedOsuApiV2Interface.MeAsync(cancellationToken: cancellationToken));
+        return Ok(await _authenticatedOsuApiV2Interface.MeAsync(_currentSession, cancellationToken: cancellationToken));
     }
     
     [HttpGet("userApiTest")]
     public async Task<IActionResult> UserApiTest([FromQuery] string user, CancellationToken cancellationToken)
     {
-        return Ok(await _authenticatedOsuApiV2Interface.SearchUserAsync(user, cancellationToken: cancellationToken));
+        return Ok(await _authenticatedOsuApiV2Interface.SearchUserAsync(_currentSession, user, cancellationToken: cancellationToken));
     }
 }
 #endif

@@ -8,19 +8,15 @@ namespace Osekai.Octon.OsuApi;
 public class AuthenticatedOsuApiV2Interface : IAuthenticatedOsuApiV2Interface
 {
     private readonly IHttpClientFactory _httpClientFactory;
-    private readonly CurrentSession _currentSession;
 
-    public AuthenticatedOsuApiV2Interface(
-        CurrentSession currentSession, 
-        IHttpClientFactory httpClientFactory)
+    public AuthenticatedOsuApiV2Interface(IHttpClientFactory httpClientFactory)
     {
         _httpClientFactory = httpClientFactory;
-        _currentSession = currentSession;
     }
 
-    private async Task<HttpClient> CreateAuthenticatedClientAsync(CancellationToken cancellationToken = default)
+    private async Task<HttpClient> CreateAuthenticatedClientAsync(IOsuApiV2SessionProvider sessionProvider, CancellationToken cancellationToken = default)
     {
-        string token = await _currentSession.GetOsuApiV2TokenAsync(cancellationToken) ?? throw new NotAuthenticatedException();
+        string token = await sessionProvider.GetOsuApiV2TokenAsync(cancellationToken) ?? throw new NotAuthenticatedException();
         
         HttpClient client = _httpClientFactory.CreateClient();
         client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"Bearer {token}");
@@ -28,9 +24,9 @@ public class AuthenticatedOsuApiV2Interface : IAuthenticatedOsuApiV2Interface
         return client;
     }
 
-    public async Task<OsuUser?> SearchUserAsync(string searchString, string mode = "osu", CancellationToken cancellationToken = default)
+    public async Task<OsuUser?> SearchUserAsync(IOsuApiV2SessionProvider sessionProvider, string searchString, string mode = "osu", CancellationToken cancellationToken = default)
     { 
-        HttpClient client = await CreateAuthenticatedClientAsync(cancellationToken);
+        HttpClient client = await CreateAuthenticatedClientAsync(sessionProvider, cancellationToken);
         HttpResponseMessage response =
             await client.GetAsync($"https://osu.ppy.sh/api/v2/users/{searchString}/{mode}", cancellationToken);
 
@@ -42,10 +38,10 @@ public class AuthenticatedOsuApiV2Interface : IAuthenticatedOsuApiV2Interface
         return await response.Content.ReadFromJsonAsync<OsuUser>(cancellationToken: cancellationToken);
     }
     
-    public async Task<OsuUser> MeAsync(string mode = "osu", CancellationToken cancellationToken = default)
+    public async Task<OsuUser> MeAsync(IOsuApiV2SessionProvider sessionProvider, string mode = "osu", CancellationToken cancellationToken = default)
     {
-        HttpClient client = await CreateAuthenticatedClientAsync(cancellationToken);
-        int osuUserId = _currentSession.OsuUserId!.Value;
+        HttpClient client = await CreateAuthenticatedClientAsync(sessionProvider, cancellationToken);
+        int osuUserId = (await sessionProvider.GetOsuApiV2UserIdAsync(cancellationToken))!.Value;
 
         HttpResponseMessage response =
             await client.GetAsync($"https://osu.ppy.sh/api/v2/users/{osuUserId}/{mode}", cancellationToken);

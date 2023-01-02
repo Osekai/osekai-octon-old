@@ -11,6 +11,6 @@ public abstract class EntityFrameworkDatabaseUnitOfWorkFactory: IDatabaseUnitOfW
         TransactionProvider = transactionProvider;
     }
 
-    public abstract Task<IDatabaseUnitOfWork> Create(CancellationToken cancellationToken = default);
-    public abstract Task<IDatabaseTransactionalUnitOfWork> CreateTransactional(CancellationToken cancellationToken = default);
+    public abstract Task<IDatabaseUnitOfWork> CreateAsync(CancellationToken cancellationToken = default);
+    public abstract Task<IDatabaseTransactionalUnitOfWork> CreateTransactionalAsync(CancellationToken cancellationToken = default);
 }

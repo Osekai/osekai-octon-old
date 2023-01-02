@@ -32,6 +32,7 @@ builder.Services.AddSingleton<ObjectPool<StringBuilder>>(serviceProvider =>
     return provider.Create(policy);
 });
 
+builder.Services.AddScoped<SessionService>();
 builder.Services.AddSingleton<RecyclableMemoryStreamManager>();
 builder.Services.AddTransient<ICache, MsgPackDatabaseCache>();
 builder.Services.AddHttpClient();
@@ -42,7 +43,7 @@ builder.Services.AddScoped<IAuthenticatedOsuApiV2Interface, AuthenticatedOsuApiV
 builder.Services.AddScoped<CachedAuthenticatedOsuApiV2Interface>();
 builder.Services.AddScoped<AuthenticatedOsuApiV2Interface>();
 builder.Services.AddScoped<CurrentSession>();
-builder.Services.AddScoped<IOsuApiV2TokenProvider>(provider => provider.GetService<CurrentSession>()!);
+builder.Services.AddScoped<IOsuApiV2SessionProvider>(provider => provider.GetService<CurrentSession>()!);
 builder.Services.AddScoped<DbContext>(provider => provider.GetService<MySqlOsekaiDbContext>()!);
 builder.Services.AddScoped<IDatabaseUnitOfWorkFactory, MySqlDatabaseUnitOfWorkFactory>();
 builder.Services.AddScoped<ITokenGenerator, RandomBytes128BitTokenGenerator>();

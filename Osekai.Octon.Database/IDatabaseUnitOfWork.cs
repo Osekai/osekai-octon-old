@@ -10,5 +10,4 @@ public interface IDatabaseUnitOfWork
     ICacheEntryRepository CacheEntryRepository { get; }
     IMedalRepository MedalRepository { get; }
     Task SaveAsync(CancellationToken cancellationToken = default);
-    void DiscardChanges();
 }

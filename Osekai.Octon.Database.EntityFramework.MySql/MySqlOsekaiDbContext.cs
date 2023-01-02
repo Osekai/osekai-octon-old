@@ -1,18 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Osekai.Octon.Database.Models;
+using Osekai.Octon.Database.EntityFramework.MySql.Models;
 
 namespace Osekai.Octon.Database.EntityFramework.MySql
 {
     public class MySqlOsekaiDbContext : DbContext
     {
-        public DbSet<App> Apps { get; set; } = null!;
-        public DbSet<AppTheme> AppThemes { get; set; } = null!;
-        public DbSet<HomeFaq> Faqs { get; set; } = null!;
-        public DbSet<Session> Sessions { get; set; } = null!;
-        public DbSet<CacheEntry> CacheEntries { get; set; } = null!;
-        public DbSet<BeatmapPack> BeatmapPacks { get; set; } = null!;
-        public DbSet<Medal> Medals { get; set; } = null!;
-        public DbSet<BeatmapPackForMedal> BeatmapPacksForMedals { get; set; } = null!;
+        internal DbSet<App> Apps { get; set; } = null!;
+        internal DbSet<AppTheme> AppThemes { get; set; } = null!;
+        internal DbSet<HomeFaq> Faqs { get; set; } = null!;
+        internal DbSet<Session> Sessions { get; set; } = null!;
+        internal DbSet<CacheEntry> CacheEntries { get; set; } = null!;
+        internal DbSet<BeatmapPack> BeatmapPacks { get; set; } = null!;
+        internal DbSet<Medal> Medals { get; set; } = null!;
+        internal DbSet<BeatmapPackForMedal> BeatmapPacksForMedals { get; set; } = null!;
 
         public MySqlOsekaiDbContext(DbContextOptions options) : base(options) {}
         

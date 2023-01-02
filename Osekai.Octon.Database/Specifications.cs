@@ -23,7 +23,7 @@ public static class Specifications
     public const int SessionTokenLength = 32;
     public const int SessionTokenPayloadMaxLength = int.MaxValue;
 
-    public const long SessionTokenMaxLifeInSeconds = 2592000;
+    public const long SessionTokenMaxAgeInSeconds = 2592000;
 
     public const int CacheEntryNameMaxLength = 255;
     public const int CacheEntryNameMinLength = 1;

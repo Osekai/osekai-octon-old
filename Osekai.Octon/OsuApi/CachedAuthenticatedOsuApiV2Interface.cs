@@ -8,39 +8,30 @@ public class CachedAuthenticatedOsuApiV2Interface: IAuthenticatedOsuApiV2Interfa
     private readonly IAuthenticatedOsuApiV2Interface _authenticatedOsuApiV2Interface;
     private readonly ICache _cache;
 
-    private readonly CurrentSession _currentSession;
-    
     public CachedAuthenticatedOsuApiV2Interface(ICache cache,
-        CurrentSession currentSession,
         IAuthenticatedOsuApiV2Interface authenticatedOsuApiV2Interface)
     {
         _authenticatedOsuApiV2Interface = authenticatedOsuApiV2Interface;
-        _currentSession = currentSession;
         _cache = cache;
     } 
     
-    public async Task<OsuUser?> SearchUserAsync(string searchString, string mode = "osu", CancellationToken cancellationToken = default)
+    public async Task<OsuUser?> SearchUserAsync(IOsuApiV2SessionProvider sessionProvider, string searchString, string mode = "osu", CancellationToken cancellationToken = default)
     {
-        if (_currentSession.IsNull())
-            throw new NotAuthenticatedException();
-        
         string entryName = $"osu_api_user_{searchString}_{mode}";
         OsuUser? user = await _cache.GetAsync<OsuUser>(entryName);
         
         if (user == null)
         {
-            user = await _authenticatedOsuApiV2Interface.SearchUserAsync(searchString, mode, cancellationToken);
+            user = await _authenticatedOsuApiV2Interface.SearchUserAsync(sessionProvider, searchString, mode, cancellationToken);
             await _cache.SetAsync(entryName, user);
-        }
+        }   
 
         return user;
     }
 
-    public Task<OsuUser> MeAsync(string mode = "osu", CancellationToken cancellationToken = default)
+    public async Task<OsuUser> MeAsync(IOsuApiV2SessionProvider sessionProvider, string mode = "osu", CancellationToken cancellationToken = default)
     {
-        if (_currentSession.IsNull())
-            throw new NotAuthenticatedException();
-
-        return SearchUserAsync(_currentSession.OsuUserId!.Value.ToString(), mode, cancellationToken)!;
+        int osuUserId = await sessionProvider.GetOsuApiV2UserIdAsync() ?? throw new NotAuthenticatedException();
+        return (await SearchUserAsync(sessionProvider, osuUserId.ToString(), mode, cancellationToken))!;
     }
 }

@@ -2,8 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Osekai.Octon;
+using Osekai.Octon.Database.Dtos;
 using Osekai.Octon.Services;
-using Osekai.Octon.Services.Query;
 
 namespace Osekai.Octon.WebServer;
 
@@ -20,15 +20,13 @@ public class DefaultAuthenticationFilter: Attribute, IAsyncAuthorizationFilter
                 Match match = Regex.Match(token);
                 if (match.Success)
                 {
-                    AuthenticationService authenticationService =
-                        context.HttpContext.RequestServices.GetService<AuthenticationService>()!;
+                    AuthenticationService authenticationService = context.HttpContext.RequestServices.GetService<AuthenticationService>()!;
+                    SessionService sessionService = context.HttpContext.RequestServices.GetService<SessionService>()!;
 
-                    await authenticationService.LogInWithTokenAsync(
-                        new AuthenticateWithTokenQuery(match.Groups[1].Value),
-                        context.HttpContext.RequestAborted);
-
+                    SessionDto session = await authenticationService.LogInWithTokenAsync(match.Groups[1].Value, context.HttpContext.RequestAborted);
+                    
                     CurrentSession currentSession = context.HttpContext.RequestServices.GetService<CurrentSession>()!;
-                    await currentSession.TryUpdateAsync();
+                    currentSession.Set(session);
                 }
             }
         }

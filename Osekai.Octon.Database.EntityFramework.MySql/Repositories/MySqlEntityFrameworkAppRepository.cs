@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Osekai.Octon.Database.Models;
+using Osekai.Octon.Database.Dtos;
+using Osekai.Octon.Database.EntityFramework.MySql.Models;
 using Osekai.Octon.Database.Repositories;
-using Osekai.Octon.Database.Repositories.Query;
 
 namespace Osekai.Octon.Database.EntityFramework.MySql.Repositories;
 
@@ -14,14 +14,12 @@ public class MySqlEntityFrameworkAppRepository: IAppRepository
         _context = context;
     }
 
-    public Task<App?> GetAppByIdAsync(GetAppByIdQuery query, CancellationToken cancellationToken = default)
+    public async Task<AppDto?> GetAppByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        IQueryable<App> queryable = _context.Apps.AsNoTracking().Where(app => app.Id == query.Id);
-
-        if (query.IncludeTheme)
-            queryable = queryable.Include(app => app.AppTheme);
-
-        return queryable.FirstOrDefaultAsync(cancellationToken);
+        IQueryable<App> queryable = _context.Apps.AsNoTracking().Include(app => app.AppTheme).Where(app => app.Id == id);
+        App? app = await queryable.FirstOrDefaultAsync(cancellationToken);
+        
+        return app?.ToDto();
     }
 
 }

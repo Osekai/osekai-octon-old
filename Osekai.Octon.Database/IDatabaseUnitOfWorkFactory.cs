@@ -4,6 +4,6 @@ namespace Osekai.Octon.Database;
 
 public interface IDatabaseUnitOfWorkFactory
 {
-    Task<IDatabaseUnitOfWork> Create(CancellationToken cancellationToken = default);
-    Task<IDatabaseTransactionalUnitOfWork> CreateTransactional(CancellationToken cancellationToken = default);
+    Task<IDatabaseUnitOfWork> CreateAsync(CancellationToken cancellationToken = default);
+    Task<IDatabaseTransactionalUnitOfWork> CreateTransactionalAsync(CancellationToken cancellationToken = default);
 }

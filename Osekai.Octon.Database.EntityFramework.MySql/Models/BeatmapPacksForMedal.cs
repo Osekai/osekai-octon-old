@@ -1,8 +1,8 @@
 ﻿using Osekai.Octon.Database.Enums;
 
-namespace Osekai.Octon.Database.Models;
+namespace Osekai.Octon.Database.EntityFramework.MySql.Models;
 
-public class BeatmapPackForMedal
+internal sealed class BeatmapPackForMedal
 {
     public Medal Medal { get; set; } = null!;
     public BeatmapPack BeatmapPack { get; set; } = null!;

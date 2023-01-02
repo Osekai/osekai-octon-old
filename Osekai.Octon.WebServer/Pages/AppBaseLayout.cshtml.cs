@@ -1,11 +1,7 @@
 ﻿using System.Drawing;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Osekai.Octon.Database;
-using Osekai.Octon.Database.EntityFramework;
-using Osekai.Octon.Database.Models;
-using Osekai.Octon.Database.Repositories;
-using Osekai.Octon.Database.Repositories.Query;
+using Osekai.Octon.Database.Dtos;
 
 namespace Osekai.Octon.WebServer.Pages;
 
@@ -37,9 +33,9 @@ public abstract class AppBaseLayout : BaseLayout
     
     public virtual async Task<IActionResult> OnGet(CancellationToken cancellationToken)
     {
-        IDatabaseUnitOfWork unitOfWork = await DatabaseUnitOfWorkFactory.Create();
+        IDatabaseUnitOfWork unitOfWork = await DatabaseUnitOfWorkFactory.CreateAsync();
         
-        App = await unitOfWork.AppRepository.GetAppByIdAsync(new GetAppByIdQuery(_appId, includeTheme: true), cancellationToken) ?? 
+        App = await unitOfWork.AppRepository.GetAppByIdAsync(_appId, cancellationToken) ?? 
               throw new ArgumentException($"The application with Id {_appId} does not exist");
 
         if (App.AppTheme == null)
@@ -48,5 +44,5 @@ public abstract class AppBaseLayout : BaseLayout
         return Page();
     }
 
-    public App App { get; private set; } = null!;
+    public AppDto App { get; private set; } = null!;
 }

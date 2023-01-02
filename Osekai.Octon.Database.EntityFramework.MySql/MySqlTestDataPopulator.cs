@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Osekai.Octon.Database.Enums;
-using Osekai.Octon.Database.Models;
 
 namespace Osekai.Octon.Database.EntityFramework.MySql;
 

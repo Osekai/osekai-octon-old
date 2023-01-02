@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Osekai.Octon.Database.Models
+﻿namespace Osekai.Octon.Database.EntityFramework.MySql.Models
 {
-    public sealed class HomeFaq
+    internal sealed class HomeFaq
     {
         public int Id { get; set; }
         public string Title { get; set; } = null!;

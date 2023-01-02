@@ -6,20 +6,6 @@
 
 @{
     Layout = "BaseLayout";
-
-    Color GetColorFromCommaSeparatedValues(string values)
-    {
-        string[] splitValues = values.Split(',');
-
-        if (splitValues.Length != 3)
-            throw new ArgumentException("Invalid color string");
-
-        int r = int.Parse(splitValues[0]);
-        int g = int.Parse(splitValues[1]);
-        int b = int.Parse(splitValues[2]);
-
-        return Color.FromArgb(r, g, b);
-    }
 }
  
 @section HeadExtension {
@@ -27,8 +13,8 @@
     @if (Model.App.Experimental) {<link rel="stylesheet" href="@StringWithVersionQueryHtmlContent.Create($"/static/shared/css/experimental/main.css")" />}
     
     @{
-        Color color = Model.AccentOvveride?.Color ?? GetColorFromCommaSeparatedValues(Model.App.AppTheme!.Color);
-        Color darkColor = Model.AccentOvveride?.DarkColor ?? GetColorFromCommaSeparatedValues(Model.App.AppTheme!.DarkColor);
+        Color color = Model.AccentOvveride?.Color ?? Model.App.AppTheme!.Color;
+        Color darkColor = Model.AccentOvveride?.DarkColor ?? Model.App.AppTheme!.DarkColor;
 
         Hsl colorHsl = color.ToHsl();
         Hsl darkColorHsl = darkColor.ToHsl();

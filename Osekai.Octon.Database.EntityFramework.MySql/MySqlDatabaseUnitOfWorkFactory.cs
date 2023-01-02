@@ -11,12 +11,12 @@ public class MySqlDatabaseUnitOfWorkFactory: EntityFrameworkDatabaseUnitOfWorkFa
         _context = context;
     }
 
-    public override Task<IDatabaseUnitOfWork> Create(CancellationToken cancellationToken = default)
+    public override Task<IDatabaseUnitOfWork> CreateAsync(CancellationToken cancellationToken = default)
     {
         return Task.FromResult((IDatabaseUnitOfWork)new MySqlDatabaseUnitOfWork(_context));
     }
 
-    public override async Task<IDatabaseTransactionalUnitOfWork> CreateTransactional(CancellationToken cancellationToken = default)
+    public override async Task<IDatabaseTransactionalUnitOfWork> CreateTransactionalAsync(CancellationToken cancellationToken = default)
     {
         ITransaction transaction = await TransactionProvider.BeginTransactionAsync(cancellationToken);
         return new MySqlTransactionalDatabaseUnitOfWork(transaction, _context);

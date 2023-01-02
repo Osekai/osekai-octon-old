@@ -1,13 +1,11 @@
-﻿using Osekai.Octon.Database.Models;
-using Osekai.Octon.Database.Repositories.Query;
+﻿using Osekai.Octon.Database.Dtos;
 
 namespace Osekai.Octon.Database.Repositories;
 
 public interface ICacheEntryRepository
 {
-    Task<CacheEntry?> GetCacheEntryFromNameAsync(GetCacheEntryFromNameQuery query, CancellationToken cancellationToken = default);
-    Task<CacheEntry> AddOrUpdateCacheEntryAsync(AddOrUpdateCacheEntryQuery query, CancellationToken cancellationToken = default);
-    Task DeleteCacheEntryAsync(DeleteCacheEntryQuery query, CancellationToken cancellationToken = default);
-
-    Task<bool> CacheEntryExists(CacheEntryExistsQuery query, CancellationToken cancellationToken = default);
+    Task<CacheEntryDto?> GetCacheEntryByNameAsync(string name, CancellationToken cancellationToken = default);
+    Task<CacheEntryDto> AddOrUpdateCacheEntryAsync(string name, byte[] data, DateTimeOffset expiresAfter, CancellationToken cancellationToken = default);
+    Task DeleteCacheEntryAsync(string name, CancellationToken cancellationToken = default);
+    Task<bool> CacheEntryExists(string name, CancellationToken cancellationToken = default);
 }

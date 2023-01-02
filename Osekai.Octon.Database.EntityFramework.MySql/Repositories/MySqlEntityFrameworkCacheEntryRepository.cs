@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Osekai.Octon.Database.Models;
+using Osekai.Octon.Database.Dtos;
+using Osekai.Octon.Database.EntityFramework.MySql.Models;
 using Osekai.Octon.Database.Repositories;
-using Osekai.Octon.Database.Repositories.Query;
 
 namespace Osekai.Octon.Database.EntityFramework.MySql.Repositories;
 
@@ -14,46 +14,42 @@ public class MySqlEntityFrameworkCacheEntryRepository: ICacheEntryRepository
         _context = context;
     }
 
-    public Task<CacheEntry?> GetCacheEntryFromNameAsync(GetCacheEntryFromNameQuery query, CancellationToken cancellationToken = default)
+    public async Task<CacheEntryDto?> GetCacheEntryByNameAsync(string name, CancellationToken cancellationToken = default)
     {
-        return _context.CacheEntries.AsNoTracking().Where(c => c.Name == query.Name).FirstOrDefaultAsync(cancellationToken);
+        CacheEntry? entry = await _context.CacheEntries.AsNoTracking().Where(c => c.Name == name).FirstOrDefaultAsync(cancellationToken);
+        return entry?.ToDto();
     }
 
-    public async Task<CacheEntry> AddOrUpdateCacheEntryAsync(AddOrUpdateCacheEntryQuery query, CancellationToken cancellationToken = default)
+    public async Task<CacheEntryDto> AddOrUpdateCacheEntryAsync(string name, byte[] data, DateTimeOffset expiresAt, CancellationToken cancellationToken = default)
     {
-        if (await CacheEntryExists(new CacheEntryExistsQuery(query.Name), cancellationToken))
-            _context.Entry(
-                new CacheEntry()
-                {
-                    Name = query.Name,
-                    Data = query.Data,
-                    ExpiresAt = query.ExpiresAt
-                }).State = EntityState.Modified;
+        CacheEntry? cacheEntry = await _context.CacheEntries.Where(c => c.Name == name).FirstOrDefaultAsync(cancellationToken);
+
+        if (cacheEntry != null)
+        {
+            cacheEntry.Data = data;
+            cacheEntry.ExpiresAt = expiresAt;
+        }
         else
             _context.Add(
                 new CacheEntry()
                 {
-                    Name = query.Name, 
-                    Data = query.Data,
-                    ExpiresAt = query.ExpiresAt
+                    Name = name, 
+                    Data = data,
+                    ExpiresAt = expiresAt
                 });
 
-        return new CacheEntry()
-        {
-            Name = query.Name, 
-            Data = query.Data,
-            ExpiresAt = query.ExpiresAt
-        };
+        return new CacheEntryDto(name, data, expiresAt);
     }
 
-    public Task DeleteCacheEntryAsync(DeleteCacheEntryQuery query, CancellationToken cancellationToken = default)
+    public async Task DeleteCacheEntryAsync(string name, CancellationToken cancellationToken = default)
     {
-        _context.Entry(new CacheEntry() { Name = query.Name }).State = EntityState.Deleted;
-        return Task.CompletedTask;
+        CacheEntry? cacheEntry = await _context.CacheEntries.Where(c => c.Name == name).FirstOrDefaultAsync(cancellationToken);
+        if (cacheEntry != null)
+            _context.Remove(cacheEntry);
     }
 
-    public Task<bool> CacheEntryExists(CacheEntryExistsQuery query, CancellationToken cancellationToken = default)
+    public Task<bool> CacheEntryExists(string name, CancellationToken cancellationToken = default)
     {
-        return _context.CacheEntries.AsNoTracking().AnyAsync(c => c.Name == query.Name);
+        return _context.CacheEntries.AsNoTracking().AnyAsync(c => c.Name == name);
     }
 }

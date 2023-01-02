@@ -17,7 +17,7 @@ public class OsuApiV2Interface
         _osuOAuthConfiguration = osuOAuthConfiguration.Value;
     }
 
-    public async Task<(OsuAuthenticationResultPayload, OsuUser)> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default)
+    public async Task<(OsuAuthenticationResultPayload, OsuUser, DateTimeOffset)> RefreshTokenAsync(string refreshToken, CancellationToken cancellationToken = default)
     {
         using HttpClient client = _httpClientFactory.CreateClient();
 
@@ -34,19 +34,21 @@ public class OsuApiV2Interface
         OsuAuthenticationResultPayload authenticatedPayload =
             await response.Content.ReadFromJsonAsync<OsuAuthenticationResultPayload>(cancellationToken: cancellationToken) ??
             throw new InvalidDataException();
-
         
+        DateTimeOffset responseDateTime = response.Headers.Date ?? DateTimeOffset.Now;
+            
         client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"Bearer {authenticatedPayload.Token}");
 
         response = await client.GetAsync($"https://osu.ppy.sh/api/v2/me", cancellationToken);
+        
         response.EnsureSuccessStatusCode();
         OsuUser osuUser = (await response.Content.ReadFromJsonAsync<OsuUser>()) ?? throw new InvalidDataException();
         
-        return (authenticatedPayload!, osuUser);
+        return (authenticatedPayload, osuUser, responseDateTime);
     }
     
     
-    public async Task<(OsuAuthenticationResultPayload, OsuUser user)> AuthenticateWithCodeAsync(string code, CancellationToken cancellationToken = default)
+    public async Task<(OsuAuthenticationResultPayload, OsuUser, DateTimeOffset)> AuthenticateWithCodeAsync(string code, CancellationToken cancellationToken = default)
     {
         using HttpClient client = _httpClientFactory.CreateClient();
         
@@ -59,16 +61,18 @@ public class OsuApiV2Interface
             cancellationToken);
 
         response.EnsureSuccessStatusCode();
-
+        
         OsuAuthenticationResultPayload authenticatedPayload = await response.Content.ReadFromJsonAsync<OsuAuthenticationResultPayload>(cancellationToken: cancellationToken)
             ?? throw new InvalidDataException();
-        
+
+        DateTimeOffset responseDateTime = response.Headers.Date ?? DateTimeOffset.Now;
+            
         client.DefaultRequestHeaders.TryAddWithoutValidation("Authorization", $"Bearer {authenticatedPayload.Token}");
 
         response = await client.GetAsync($"https://osu.ppy.sh/api/v2/me", cancellationToken);
         response.EnsureSuccessStatusCode();
         OsuUser osuUser = (await response.Content.ReadFromJsonAsync<OsuUser>()) ?? throw new InvalidDataException();
 
-        return (authenticatedPayload!, osuUser);
+        return (authenticatedPayload, osuUser, responseDateTime);
     }
 }
