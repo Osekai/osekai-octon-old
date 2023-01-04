@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using Microsoft.AspNetCore.Mvc;
+using Osekai.Octon.DataAdapter;
 using Osekai.Octon.Database;
 using Osekai.Octon.Database.Dtos;
 
@@ -22,12 +23,17 @@ public abstract class AppBaseLayout : BaseLayout
     private int _appId;
     
     protected IDatabaseUnitOfWorkFactory DatabaseUnitOfWorkFactory { get; }
+    protected CachedOsekaiDataAdapter OsekaiDataAdapter { get; }
 
     public virtual AccentOverride? AccentOvveride => null;
+    public IEnumerable<OsekaiMedalData> Medals { get; private set; } = null!;
+
+    public AppDto App { get; private set; } = null!;
     
-    protected AppBaseLayout(IDatabaseUnitOfWorkFactory databaseUnitOfWorkFactory, int appId)
+    protected AppBaseLayout(CachedOsekaiDataAdapter osekaiDataAdapter, IDatabaseUnitOfWorkFactory databaseUnitOfWorkFactory, int appId)
     {
         DatabaseUnitOfWorkFactory = databaseUnitOfWorkFactory;
+        OsekaiDataAdapter = osekaiDataAdapter;
         _appId = appId;
     }
     
@@ -38,11 +44,11 @@ public abstract class AppBaseLayout : BaseLayout
         App = await unitOfWork.AppRepository.GetAppByIdAsync(_appId, cancellationToken) ?? 
               throw new ArgumentException($"The application with Id {_appId} does not exist");
 
+        Medals = await OsekaiDataAdapter.GetMedalDataAsync(cancellationToken);
+        
         if (App.AppTheme == null)
             throw new ArgumentException($"The application with Id {_appId} doesn't have a theme. It cannot be displayed");
 
         return Page();
     }
-
-    public AppDto App { get; private set; } = null!;
 }

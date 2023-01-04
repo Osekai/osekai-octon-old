@@ -7,7 +7,7 @@ using Osekai.Octon.Database.Enums;
 
 namespace Osekai.Octon.DataAdapter;
 
-public class OsekaiDataAdapter
+public class OsekaiDataAdapter: IOsekaiDataAdapter
 {   
     private readonly IDatabaseUnitOfWorkFactory _unitOfWorkFactory;
     private readonly ObjectPool<StringBuilder> _stringBuilderObjectPool;
@@ -94,10 +94,10 @@ public class OsekaiDataAdapter
         }
     }
     
-    public async Task<IAsyncEnumerable<OsekaiMedalData>> GetMedalDataAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<OsekaiMedalData>> GetMedalDataAsync(CancellationToken cancellationToken)
     { 
         IDatabaseUnitOfWork unitOfWork = await _unitOfWorkFactory.CreateAsync(cancellationToken);
-        IAsyncEnumerable<MedalDto> medals = await unitOfWork.MedalRepository.GetMedalsAsync(cancellationToken: cancellationToken);
+        IEnumerable<MedalDto> medals = await unitOfWork.MedalRepository.GetMedalsAsync(cancellationToken: cancellationToken);
 
         return medals.Select(m => new OsekaiMedalData
         {

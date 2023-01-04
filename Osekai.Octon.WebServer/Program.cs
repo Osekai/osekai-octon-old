@@ -35,7 +35,7 @@ builder.Services.AddSingleton<ObjectPool<StringBuilder>>(serviceProvider =>
 
 builder.Services.AddScoped<SessionService>();
 builder.Services.AddSingleton<RecyclableMemoryStreamManager>();
-builder.Services.AddTransient<ICache, MsgPackDatabaseCache>();
+builder.Services.AddScoped<ICache, MsgPackDatabaseCache>();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<EntityFrameworkTransactionProvider>();
 builder.Services.AddScoped<ITransactionProvider, EntityFrameworkTransactionProvider>(provider => provider.GetService<EntityFrameworkTransactionProvider>()!);
@@ -49,7 +49,8 @@ builder.Services.AddScoped<DbContext>(provider => provider.GetService<MySqlOseka
 builder.Services.AddScoped<IDatabaseUnitOfWorkFactory, MySqlDatabaseUnitOfWorkFactory>();
 builder.Services.AddScoped<ITokenGenerator, RandomBytes128BitTokenGenerator>();
 builder.Services.AddSingleton<StaticUrlGenerator>();
-builder.Services.AddTransient<OsekaiDataAdapter>();
+builder.Services.AddScoped<IOsekaiDataAdapter, OsekaiDataAdapter>();
+builder.Services.AddScoped<CachedOsekaiDataAdapter>();
 builder.Services.AddScoped<AuthenticationService>();
 
 builder.Services.AddMemoryCache();

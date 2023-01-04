@@ -18,14 +18,14 @@ public class DevController: Controller
     private readonly StaticUrlGenerator _staticUrlGenerator;
     private readonly CurrentSession _currentSession;
     private readonly CachedAuthenticatedOsuApiV2Interface _authenticatedOsuApiV2Interface;
-    private readonly OsekaiDataAdapter _osekaiDataAdapter;
+    private readonly CachedOsekaiDataAdapter _osekaiDataAdapter;
     
     public DevController(DbContext dbContext, 
         StaticUrlGenerator staticUrlGenerator,
         CurrentSession currentSession,
         CachedAuthenticatedOsuApiV2Interface authenticatedOsuApi,
         IDatabaseUnitOfWorkFactory databaseUnitOfWorkFactory,
-        OsekaiDataAdapter osekaiDataAdapter,
+        CachedOsekaiDataAdapter osekaiDataAdapter,
         ITestDataPopulator testDataPopulator)
     {
         _authenticatedOsuApiV2Interface = authenticatedOsuApi;

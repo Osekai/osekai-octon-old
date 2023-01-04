@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Caching.Memory;
+using Osekai.Octon.DataAdapter;
 using Osekai.Octon.Database;
 using Osekai.Octon.Database.EntityFramework;
 using Osekai.Octon.Database.Repositories;
@@ -13,5 +14,8 @@ public class Home : AppBaseLayout
     public override string MetadataTitle => "Osekai • the home of alternative rankings, medal solutions, and more";
     public override string MetadataThemeColor => "#353d55";
     public override string MetadataUrl => "https://osekai.net/home";
-    public Home(IDatabaseUnitOfWorkFactory databaseUnitOfWorkFactory) : base(databaseUnitOfWorkFactory, appId: -1)  {}
+
+    public Home(CachedOsekaiDataAdapter osekaiDataAdapter, IDatabaseUnitOfWorkFactory databaseUnitOfWorkFactory) : base(osekaiDataAdapter, databaseUnitOfWorkFactory, -1)
+    {
+    }
 }

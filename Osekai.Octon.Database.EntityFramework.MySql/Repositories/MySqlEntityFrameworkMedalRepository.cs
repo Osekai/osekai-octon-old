@@ -16,7 +16,7 @@ public class MySqlEntityFrameworkMedalRepository: IMedalRepository
         _context = context;
     }
     
-    public Task<IAsyncEnumerable<MedalDto>> GetMedalsAsync(
+    public async Task<IEnumerable<MedalDto>> GetMedalsAsync(
         IMedalRepository.MedalFilter filter = default,
         int offset  = 0, 
         int limit = int.MaxValue,
@@ -37,6 +37,6 @@ public class MySqlEntityFrameworkMedalRepository: IMedalRepository
 
         IAsyncEnumerable<Medal> medals = query.AsAsyncEnumerable();
 
-        return Task.FromResult(medals.Select(medal =>  medal.ToDto()).AsAsyncEnumerable());
+        return await medals.Select(medal => medal.ToDto()).ToArrayAsync();
     }
 }
