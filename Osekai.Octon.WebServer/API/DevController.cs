@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Osekai.Octon;
+using Osekai.Octon.DataAdapter;
 using Osekai.Octon.OsuApi;
 using Osekai.Octon.Database;
 
@@ -17,12 +18,14 @@ public class DevController: Controller
     private readonly StaticUrlGenerator _staticUrlGenerator;
     private readonly CurrentSession _currentSession;
     private readonly CachedAuthenticatedOsuApiV2Interface _authenticatedOsuApiV2Interface;
+    private readonly OsekaiDataAdapter _osekaiDataAdapter;
     
     public DevController(DbContext dbContext, 
         StaticUrlGenerator staticUrlGenerator,
         CurrentSession currentSession,
         CachedAuthenticatedOsuApiV2Interface authenticatedOsuApi,
         IDatabaseUnitOfWorkFactory databaseUnitOfWorkFactory,
+        OsekaiDataAdapter osekaiDataAdapter,
         ITestDataPopulator testDataPopulator)
     {
         _authenticatedOsuApiV2Interface = authenticatedOsuApi;
@@ -31,6 +34,7 @@ public class DevController: Controller
         _testDataPopulator = testDataPopulator;
         _dbContext = dbContext;
         _staticUrlGenerator = staticUrlGenerator;
+        _osekaiDataAdapter = osekaiDataAdapter;
     }
     
     [HttpGet("populateDatabaseWithTestData")]
@@ -60,9 +64,7 @@ public class DevController: Controller
     [HttpGet("getMedalsTest")]
     public async Task<IActionResult> MeApiTest(CancellationToken cancellationToken)
     {
-        IDatabaseUnitOfWork unitOfWork = await _databaseUnitOfWorkFactory.CreateAsync();
-        
-        return Ok(await unitOfWork.MedalRepository.GetMedalsAsync(cancellationToken: cancellationToken));
+        return Ok(await _osekaiDataAdapter.GetMedalDataAsync(cancellationToken));
     }
     
     [HttpGet("meApiTest")]

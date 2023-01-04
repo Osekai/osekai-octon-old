@@ -7,6 +7,7 @@ using Microsoft.IO;
 using Osekai.Octon.WebServer;
 using Osekai.Octon;
 using Osekai.Octon.Caching.MsgPack;
+using Osekai.Octon.DataAdapter;
 using Osekai.Octon.OsuApi;
 using Osekai.Octon.Database;
 using Osekai.Octon.Database.EntityFramework;
@@ -48,6 +49,7 @@ builder.Services.AddScoped<DbContext>(provider => provider.GetService<MySqlOseka
 builder.Services.AddScoped<IDatabaseUnitOfWorkFactory, MySqlDatabaseUnitOfWorkFactory>();
 builder.Services.AddScoped<ITokenGenerator, RandomBytes128BitTokenGenerator>();
 builder.Services.AddSingleton<StaticUrlGenerator>();
+builder.Services.AddTransient<OsekaiDataAdapter>();
 builder.Services.AddScoped<AuthenticationService>();
 
 builder.Services.AddMemoryCache();

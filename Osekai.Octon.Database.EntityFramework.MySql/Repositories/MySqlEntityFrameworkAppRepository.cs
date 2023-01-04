@@ -8,7 +8,6 @@ namespace Osekai.Octon.Database.EntityFramework.MySql.Repositories;
 public class MySqlEntityFrameworkAppRepository: IAppRepository
 {
     private readonly MySqlOsekaiDbContext _context;
-    
     internal MySqlEntityFrameworkAppRepository(MySqlOsekaiDbContext context)
     {
         _context = context;
@@ -20,6 +19,5 @@ public class MySqlEntityFrameworkAppRepository: IAppRepository
         App? app = await queryable.FirstOrDefaultAsync(cancellationToken);
         
         return app?.ToDto();
-    }
-
+    }   
 }

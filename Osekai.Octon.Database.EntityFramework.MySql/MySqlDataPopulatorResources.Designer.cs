@@ -60,7 +60,9 @@ namespace Osekai.Octon.Database.EntityFramework.MySql {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to INSERT INTO `BeatmapPacksForMedals` VALUES (10,0,1),(10,0,2),(10,0,3),(54,0,0),(154,0,0),(155,0,0),(156,0,0),(170,0,0),(171,0,0),(187,0,3),(221,0,0),(222,0,0),(235,0,0),(235,0,1),(235,0,3),(269,0,0),(272,0,0),(273,0,0),(275,0,0),(276,0,0),(277,0,0),(278,0,0),(279,0,0),(280,0,0),(281,0,0),(7,40,0),(8,41,0),(9,42,0),(10,43,0),(11,48,0),(12,49,0),(14,70,0),(18,93,0),(19,94,0),(25,207,0),(26,208,0),(27,209,0),(34,363,0),(37,364,0),(35,365,0),(36,366,0),(162,1186,0),(162,1187,1),(162,1188,2),(162,1189,3),(163,12 [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to INSERT INTO `Apps` VALUES (-1,1,&apos;Home&apos;,&apos;home&apos;,1,0);
+        ///INSERT INTO `AppThemes` VALUES (1,-1,&apos;53,61,85&apos;,1,1,&apos;53,61,85&apos;,1);
+        ///INSERT INTO `Medals` VALUES (1,&apos;500 Combo&apos;,&apos;https://assets.ppy.sh/medals/web/osu-combo-500.png&apos;,&apos;500 big ones! You\&apos;re moving up in the world!&apos;,&apos;osu&apos;,&apos;Skill&apos;,&apos;aiming for a combo of 500 or higher on any beatmap&apos;,0,NULL,&apos;2008-08-02 00:00:00.000000&apos;,NULL,NULL),(3,&apos;750 Combo&apos;,&apos;https://assets.ppy.sh/medals/web/osu-combo-750.png&apos;,&apos;750 notes back to back? Woah.&apos;,&apos;osu&apos;,&apos;Skill&apos;,&apos;aiming for a combo [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string Sql {
             get {

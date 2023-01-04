@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Osekai.Octon.Database.EntityFramework.MySql;
 
@@ -10,9 +11,11 @@ using Osekai.Octon.Database.EntityFramework.MySql;
 namespace Osekai.Octon.Database.EntityFramework.MySql.Migrations
 {
     [DbContext(typeof(MySqlOsekaiDbContext))]
-    partial class MySqlOsekaiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230103125019_AddMedalRarity")]
+    partial class AddMedalRarity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -263,27 +266,7 @@ namespace Osekai.Octon.Database.EntityFramework.MySql.Migrations
                     b.HasIndex("MedalId")
                         .IsUnique();
 
-                    b.ToTable("MedalRarities");
-                });
-
-            modelBuilder.Entity("Osekai.Octon.Database.EntityFramework.MySql.Models.MedalSettings", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<bool>("Locked")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<int>("MedalId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MedalId")
-                        .IsUnique();
-
-                    b.ToTable("MedalSettings");
+                    b.ToTable("MedalRarity");
                 });
 
             modelBuilder.Entity("Osekai.Octon.Database.EntityFramework.MySql.Models.MedalSolution", b =>
@@ -385,17 +368,6 @@ namespace Osekai.Octon.Database.EntityFramework.MySql.Migrations
                     b.Navigation("Medal");
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Database.EntityFramework.MySql.Models.MedalSettings", b =>
-                {
-                    b.HasOne("Osekai.Octon.Database.EntityFramework.MySql.Models.Medal", "Medal")
-                        .WithOne("Settings")
-                        .HasForeignKey("Osekai.Octon.Database.EntityFramework.MySql.Models.MedalSettings", "MedalId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Medal");
-                });
-
             modelBuilder.Entity("Osekai.Octon.Database.EntityFramework.MySql.Models.MedalSolution", b =>
                 {
                     b.HasOne("Osekai.Octon.Database.EntityFramework.MySql.Models.Medal", "Medal")
@@ -422,8 +394,6 @@ namespace Osekai.Octon.Database.EntityFramework.MySql.Migrations
                     b.Navigation("BeatmapPacksForMedal");
 
                     b.Navigation("Rarity");
-
-                    b.Navigation("Settings");
 
                     b.Navigation("Solution");
                 });

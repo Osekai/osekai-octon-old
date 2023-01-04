@@ -21,9 +21,16 @@ public class RandomBytes128BitTokenGenerator: ITokenGenerator
 
         StringBuilder stringBuilder = _stringBuilderObjectPool.Get();
 
-        for (int i = 0; i < bytes.Length; ++i)
-            stringBuilder.Append($"{bytes[i]:x2}");
+        try
+        {
+            for (int i = 0; i < bytes.Length; ++i)
+                stringBuilder.Append($"{bytes[i]:x2}");
 
-        return stringBuilder.ToString();
+            return stringBuilder.ToString();
+        }
+        finally
+        {
+            _stringBuilderObjectPool.Return(stringBuilder);
+        }
     }
 }

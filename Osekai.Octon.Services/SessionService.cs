@@ -43,7 +43,7 @@ public class SessionService
         OsuAuthenticationResultPayload result;
         OsuUser user;
         DateTimeOffset responseDateTime;
-
+    
         try
         {
             (result, user, responseDateTime) =
@@ -74,6 +74,8 @@ public class SessionService
         await unitOfWork.SessionRepository.UpdateSessionPayloadAsync(session.Token, payload, cancellationToken);
         await unitOfWork.SaveAsync(cancellationToken);
 
+        await unitOfWork.CommitAsync(cancellationToken);
+        
         return payload;
     }
 }

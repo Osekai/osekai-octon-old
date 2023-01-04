@@ -15,5 +15,5 @@ public interface IMedalRepository
         public string? Name { get; }
     } 
     
-    Task<IReadOnlyCollection<MedalDto>> GetMedalsAsync(MedalFilter filter = default, int offset  = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default);
+    Task<IAsyncEnumerable<MedalDto>> GetMedalsAsync(MedalFilter filter = default, int offset  = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default);
 }   

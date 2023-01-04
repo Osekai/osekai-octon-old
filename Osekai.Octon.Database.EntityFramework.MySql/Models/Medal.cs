@@ -1,4 +1,5 @@
 ﻿using Osekai.Octon.Database.Dtos;
+using Osekai.Octon.Database.Enums;
 
 namespace Osekai.Octon.Database.EntityFramework.MySql.Models;
 
@@ -17,13 +18,17 @@ internal sealed class Medal
     public DateTimeOffset? FirstAchievedDate { get; set; }
 
     public ICollection<BeatmapPackForMedal> BeatmapPacksForMedal { get; set; } = null!;
+    public MedalSolution? Solution { get; set; }
+    public MedalRarity? Rarity { get; set; }
+    public MedalSettings? Settings { get; set; } 
     
     public string? FirstAchievedBy { get; set; }
 
+    
     public MedalDto ToDto()
     {
         return new MedalDto(Id, Name, Link, Description, Grouping, Ordering,
-            BeatmapPacksForMedal.Select(b => b.BeatmapPack.ToDto()),
-            Restriction, Instructions, Video, Date, FirstAchievedDate, FirstAchievedBy);
+            BeatmapPacksForMedal.Select(b => (b.BeatmapPack.ToDto(), b.Gamemode)), Solution?.ToDto(), Settings?.ToDto(),
+            Restriction, Instructions, Video, Date, FirstAchievedDate, FirstAchievedBy, Rarity?.Frequency ?? 0, Rarity?.Count ?? 0);
     }
 }

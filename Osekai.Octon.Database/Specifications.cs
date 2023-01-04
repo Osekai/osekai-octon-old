@@ -49,5 +49,10 @@ public static class Specifications
     
     public const int GroupingMaxLength = 30;
     public const int GroupingMinLength = 1;
+
+    public const int MedalSolutionSubmittedByMaxLength = 50;
+    public const int MedalSolutionSubmittedByMinLength = 1;
     
+    public const int MedalSolutionTextMaxLength = 65535;
+    public const int MedalSolutionTextMinLength = 1;
 }

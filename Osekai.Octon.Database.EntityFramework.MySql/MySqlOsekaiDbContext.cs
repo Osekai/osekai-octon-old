@@ -13,6 +13,8 @@ namespace Osekai.Octon.Database.EntityFramework.MySql
         internal DbSet<BeatmapPack> BeatmapPacks { get; set; } = null!;
         internal DbSet<Medal> Medals { get; set; } = null!;
         internal DbSet<BeatmapPackForMedal> BeatmapPacksForMedals { get; set; } = null!;
+        internal DbSet<MedalSolution> MedalSolutions { get; set; } = null!;
+        internal DbSet<MedalRarity> MedalRarities { get; set; } = null!;
 
         public MySqlOsekaiDbContext(DbContextOptions options) : base(options) {}
         
@@ -24,7 +26,7 @@ namespace Osekai.Octon.Database.EntityFramework.MySql
             modelBuilder.Entity<App>(entity =>
             {
                 entity.ToTable("Apps");
-
+                
                 entity.UseCollation("utf8mb4_general_ci");
 
                 entity.Property(e => e.Name).HasMaxLength(Specifications.AppNameMaxLength);
@@ -54,7 +56,7 @@ namespace Osekai.Octon.Database.EntityFramework.MySql
                 entity.HasOne(d => d.App)
                     .WithOne(p => p.AppTheme)
                     .HasForeignKey<AppTheme>(d => d.AppId)
-                    .OnDelete(DeleteBehavior.ClientCascade)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("fk_AppId");
             });
 
@@ -160,6 +162,36 @@ namespace Osekai.Octon.Database.EntityFramework.MySql
                 
                 entity.HasOne(e => e.BeatmapPack).WithMany(e => e.MedalsForBeatmapPack)
                     .HasForeignKey(e => e.BeatmapPackId).OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<MedalSolution>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+
+                entity.HasOne(e => e.Medal).WithOne(e => e.Solution)
+                    .HasForeignKey<MedalSolution>(e => e.MedalId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+                entity.Property(e => e.SubmittedBy)
+                    .HasMaxLength(Specifications.MedalSolutionSubmittedByMaxLength)
+                    .UseCollation("ascii_general_ci")
+                    .HasCharSet("ascii")
+                    .HasColumnType("varchar");
+
+                entity.Property(e => e.Text)
+                    .HasColumnType("text");
+            });
+
+            modelBuilder.Entity<MedalRarity>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasOne(e => e.Medal).WithOne(e => e.Rarity).HasForeignKey<MedalRarity>(e => e.MedalId);
+            });
+            
+            modelBuilder.Entity<MedalSettings>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.HasOne(e => e.Medal).WithOne(e => e.Settings).HasForeignKey<MedalSettings>(e => e.MedalId);
             });
         }
     }

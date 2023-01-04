@@ -1,11 +1,14 @@
-﻿namespace Osekai.Octon.Database.Dtos;
+﻿using Osekai.Octon.Database.Enums;
+
+namespace Osekai.Octon.Database.Dtos;
 
 public class MedalDto
 {
     public MedalDto(int id, string name, Uri link, string description, string grouping, int ordering,
-        IEnumerable<BeatmapPackDto> beatmapPacks, 
+        IEnumerable<(BeatmapPackDto BeatmapPack, OsuGamemode Gamemode)> beatmapPacks, 
+        MedalSolutionDto? solution = null, MedalSettingsDto? settings = null,
         string? restriction = null, string? instructions = null, string? video = null, DateTimeOffset? date = null,
-        DateTimeOffset? firstAchievedDate = null, string? firstAchievedBy = null)
+        DateTimeOffset? firstAchievedDate = null, string? firstAchievedBy = null, float rarity = 0, int timesOwned = 0)
     {
         Id = id;
         Name = name;
@@ -17,9 +20,13 @@ public class MedalDto
         Video = video;
         Date = date;
         Instructions = instructions;
-        BeatmapPacks = new List<BeatmapPackDto>(beatmapPacks);
+        BeatmapPacks = beatmapPacks.ToDictionary(t => t.Gamemode, t => t.BeatmapPack);
         FirstAchievedDate = firstAchievedDate;
         FirstAchievedBy = firstAchievedBy;
+        Solution = solution;
+        Rarity = rarity;
+        TimesOwned = timesOwned;
+        Settings = settings;
     }
 
     public int Id { get; }
@@ -34,5 +41,9 @@ public class MedalDto
     public DateTimeOffset? Date { get; }
     public DateTimeOffset? FirstAchievedDate { get; }
     public string? FirstAchievedBy { get; }
-    public IReadOnlyCollection<BeatmapPackDto> BeatmapPacks { get; }
+    public IReadOnlyDictionary<OsuGamemode, BeatmapPackDto> BeatmapPacks { get; }
+    public MedalSolutionDto? Solution { get; }
+    public MedalSettingsDto? Settings { get; }
+    public float Rarity { get; }
+    public int TimesOwned { get; }
 }
