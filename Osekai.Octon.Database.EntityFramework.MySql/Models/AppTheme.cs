@@ -17,8 +17,8 @@ namespace Osekai.Octon.Database.EntityFramework.MySql.Models
         private static Color GetColorFromString(string str)
         {
             int r = int.Parse(str.GetSplitSubstringByIndex(',', out int index));
-            int g = int.Parse(str.GetSplitSubstringByIndex(',', out index, index));
-            int b = int.Parse(str.GetSplitSubstringByIndex(',', out index, index));
+            int g = int.Parse(str.GetSplitSubstringByIndex(',', out index, index + 1));
+            int b = int.Parse(str.GetSplitSubstringByIndex(',', out index, index + 1));
 
             return System.Drawing.Color.FromArgb(r, g, b);
         }

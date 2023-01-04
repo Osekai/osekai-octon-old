@@ -10,6 +10,7 @@ public class AppDto
         Name = name;
         SimpleName = simpleName;
         Visible = visible;
+        AppTheme = appThemeDto;
         Experimental = experimental;
     }
     
