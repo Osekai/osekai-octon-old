@@ -19,7 +19,7 @@ public class CachedOsekaiDataAdapter: IOsekaiDataAdapter
         if (medalData == null)
         {
             medalData = await _osekaiDataAdapter.GetMedalDataAsync(cancellationToken).ContinueWith(r => r.Result.ToArray());
-            await _cache.SetAsync("data_adapter_medals", medalData, 600, cancellationToken);
+            await _cache.SetAsync("data_adapter_medals", medalData, 86400, cancellationToken);
         }
         
         return medalData;
