@@ -109,7 +109,7 @@ namespace Osekai.Octon.Database.EntityFramework.MySql
                 entity.HasIndex(e => e.Name).IsUnique();
                 entity.HasKey(e => e.Name);
 
-                entity.Property(e => e.Data).HasColumnType("blob");
+                entity.Property(e => e.Data).HasColumnType("longblob");
                 entity.HasIndex(e => e.ExpiresAt);
             });
 
