@@ -5,6 +5,8 @@ using Osekai.Octon;
 using Osekai.Octon.Database;
 using Osekai.Octon.Database.Dtos;
 using Osekai.Octon.Exceptions;
+using Osekai.Octon.OsuApi;
+using Osekai.Octon.OsuApi.Payloads;
 using Osekai.Octon.Services;
 
 namespace Osekai.Octon.WebServer;
@@ -30,6 +32,15 @@ public class DefaultAuthenticationFilter: Attribute, IAsyncAuthorizationFilter
 
                     CurrentSession currentSession = context.HttpContext.RequestServices.GetService<CurrentSession>()!;
                     currentSession.Set(session);
+
+                    CachedAuthenticatedOsuApiV2Interface cachedAuthenticatedOsuApiV2Interface = context.HttpContext.RequestServices.GetService<CachedAuthenticatedOsuApiV2Interface>()!;
+                    OsuUser user = await cachedAuthenticatedOsuApiV2Interface.MeAsync(currentSession, cancellationToken: context.HttpContext.RequestAborted);
+
+                    if (user.IsRestricted)
+                        throw new OsuUserRestrictedException(user.Id);
+
+                    if (user.IsDeleted)
+                        throw new OsuUserDeletedException(user.Id);
                 }
                 else
                     throw new InvalidSessionTokenException(token);
