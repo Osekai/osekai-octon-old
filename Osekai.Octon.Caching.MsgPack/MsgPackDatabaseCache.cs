@@ -31,7 +31,7 @@ public class MsgPackDatabaseCache: ICache
     
     public async Task<T?> GetAsync<T>(string name, CancellationToken cancellationToken = default) where T: class
     {
-        IDatabaseUnitOfWork unitOfWork = await _databaseUnitOfWorkFactory.CreateAsync();
+        await using IDatabaseUnitOfWork unitOfWork = await _databaseUnitOfWorkFactory.CreateAsync();
         CacheEntryDto? cacheEntry = await unitOfWork.CacheEntryRepository.GetCacheEntryByNameAsync(name, cancellationToken);
 
         if (cacheEntry == null)
@@ -43,7 +43,7 @@ public class MsgPackDatabaseCache: ICache
 
     public async Task SetAsync<T>(string name, T? data, long expiresAfter = 3600, CancellationToken cancellationToken = default) where T: class
     {
-        IDatabaseUnitOfWork unitOfWork = await _databaseUnitOfWorkFactory.CreateAsync();
+        await using IDatabaseUnitOfWork unitOfWork = await _databaseUnitOfWorkFactory.CreateAsync();
         using MemoryStream memoryStream = _recyclableMemoryStreamManager.GetStream();
         
         await MessagePackSerializer.SerializeAsync(memoryStream, new MsgPackContainer<T>(data),

@@ -33,7 +33,7 @@ public class SessionService
 
     public async Task<SessionDtoPayload> RefreshOsuSessionAsync(string token, CancellationToken cancellationToken)
     {
-        IDatabaseTransactionalUnitOfWork unitOfWork = await _unitOfWorkFactory.CreateTransactionalAsync(cancellationToken);
+        await using IDatabaseUnitOfWork unitOfWork = await _unitOfWorkFactory.CreateAsync(cancellationToken);
 
         SessionDto? session = await unitOfWork.SessionRepository.GetSessionFromTokenAsync(token);
 
@@ -73,8 +73,6 @@ public class SessionService
 
         await unitOfWork.SessionRepository.UpdateSessionPayloadAsync(session.Token, payload, cancellationToken);
         await unitOfWork.SaveAsync(cancellationToken);
-
-        await unitOfWork.CommitAsync(cancellationToken);
         
         return payload;
     }

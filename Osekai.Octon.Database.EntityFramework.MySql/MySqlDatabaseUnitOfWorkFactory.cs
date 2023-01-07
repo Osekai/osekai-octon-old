@@ -1,24 +1,19 @@
 ﻿using System.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Osekai.Octon.Database.EntityFramework.MySql;
 
-public class MySqlDatabaseUnitOfWorkFactory: EntityFrameworkDatabaseUnitOfWorkFactory
+public class MySqlDatabaseUnitOfWorkFactory: IDatabaseUnitOfWorkFactory
 {
-    private readonly MySqlOsekaiDbContext _context;
+    private IDbContextFactory<MySqlOsekaiDbContext> _dbContextFactory;
     
-    public MySqlDatabaseUnitOfWorkFactory(MySqlOsekaiDbContext context, EntityFrameworkTransactionProvider transactionProvider) : base(transactionProvider)
+    public MySqlDatabaseUnitOfWorkFactory(IDbContextFactory<MySqlOsekaiDbContext> dbContextFactory)
     {
-        _context = context;
+        _dbContextFactory = dbContextFactory;
     }
 
-    public override Task<IDatabaseUnitOfWork> CreateAsync(CancellationToken cancellationToken = default)
+    public async Task<IDatabaseUnitOfWork> CreateAsync(CancellationToken cancellationToken = default)
     {
-        return Task.FromResult((IDatabaseUnitOfWork)new MySqlDatabaseUnitOfWork(_context));
-    }
-
-    public override async Task<IDatabaseTransactionalUnitOfWork> CreateTransactionalAsync(CancellationToken cancellationToken = default)
-    {
-        ITransaction transaction = await TransactionProvider.BeginTransactionAsync(cancellationToken);
-        return new MySqlTransactionalDatabaseUnitOfWork(transaction, _context);
+        return new MySqlDatabaseUnitOfWork(await _dbContextFactory.CreateDbContextAsync(cancellationToken));
     }
 }

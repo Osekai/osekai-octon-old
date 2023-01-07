@@ -26,21 +26,10 @@ public class DefaultAuthenticationFilter: Attribute, IAsyncAuthorizationFilter
                 if (match.Success)
                 {
                     AuthenticationService authenticationService = context.HttpContext.RequestServices.GetService<AuthenticationService>()!;
-                    SessionService sessionService = context.HttpContext.RequestServices.GetService<SessionService>()!;
-                    
-                    SessionDto session = await authenticationService.LogInWithTokenAsync(match.Groups[1].Value, context.HttpContext.RequestAborted);
+                    OsuSessionContainer session = await authenticationService.LogInWithTokenAsync(match.Groups[1].Value, context.HttpContext.RequestAborted);
 
                     CurrentSession currentSession = context.HttpContext.RequestServices.GetService<CurrentSession>()!;
                     currentSession.Set(session);
-
-                    CachedAuthenticatedOsuApiV2Interface cachedAuthenticatedOsuApiV2Interface = context.HttpContext.RequestServices.GetService<CachedAuthenticatedOsuApiV2Interface>()!;
-                    OsuUser user = await cachedAuthenticatedOsuApiV2Interface.MeAsync(currentSession, cancellationToken: context.HttpContext.RequestAborted);
-
-                    if (user.IsRestricted)
-                        throw new OsuUserRestrictedException(user.Id);
-
-                    if (user.IsDeleted)
-                        throw new OsuUserDeletedException(user.Id);
                 }
                 else
                     throw new InvalidSessionTokenException(token);

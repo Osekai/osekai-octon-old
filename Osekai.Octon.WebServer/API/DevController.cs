@@ -58,7 +58,7 @@ public class DevController: Controller
     [HttpGet("sessionInfo")]
     public async Task<IActionResult> GetSessionInfo(CancellationToken cancellationToken)
     {
-        return Ok(await _currentSession.GetAsync(cancellationToken));
+        return Ok(new { AccessToken = await _currentSession.GetOsuApiV2TokenAsync(cancellationToken), UserId = await _currentSession.GetOsuApiV2UserIdAsync(cancellationToken) });
     }
     
     [HttpGet("getMedalsTest")]

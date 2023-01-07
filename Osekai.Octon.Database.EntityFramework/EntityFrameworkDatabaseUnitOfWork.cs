@@ -1,5 +1,7 @@
-﻿using System.Data;
+﻿
+using System.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Osekai.Octon.Database.Repositories;
 
 namespace Osekai.Octon.Database.EntityFramework;
@@ -21,6 +23,12 @@ public abstract class EntityFrameworkDatabaseUnitOfWork<T>: IDatabaseUnitOfWork 
     public virtual async Task SaveAsync(CancellationToken cancellationToken)
     {
         await Context.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<ITransaction> BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.Serializable, CancellationToken cancellationToken = default)
+    {
+        IDbContextTransaction transaction = await Context.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
+        return new EntityFrameworkTransaction(transaction);
     }
 
     public void DiscardChanges()
@@ -45,5 +53,27 @@ public abstract class EntityFrameworkDatabaseUnitOfWork<T>: IDatabaseUnitOfWork 
                     throw new ArgumentOutOfRangeException();
             }
         }
+    }
+
+    private volatile bool _disposed;
+    
+    public ValueTask DisposeAsync()
+    {
+        if (_disposed)
+            return ValueTask.CompletedTask;
+
+        _disposed = true;
+        
+        return Context.DisposeAsync();
+    }
+
+    public void Dispose()
+    {
+        if (_disposed)
+            return;
+
+        _disposed = true;
+        
+        Context.Dispose();
     }
 }

@@ -1,4 +1,5 @@
 ﻿@using System.Drawing
+@using Osekai.Octon.WebServer
 @using Osekai.Octon.WebServer.Helpers
 @using Osekai.Octon.WebServer.Drawing
 @using Osekai.Octon.WebServer.Extensions
@@ -6,19 +7,17 @@
 
 @{
     Layout = "BaseLayout";
+    
+    Color color = Model.AccentOvveride?.Color ?? Model.App.AppTheme!.Color;
+    Color darkColor = Model.AccentOvveride?.DarkColor ?? Model.App.AppTheme!.DarkColor;
+
+    Hsl colorHsl = color.ToHsl();
+    Hsl darkColorHsl = darkColor.ToHsl();
 }
  
 @section HeadExtension {
     <link rel="stylesheet" href="@StringWithVersionQueryHtmlContent.Create($"/static/{Model.App.SimpleName}/css/main.css")" />
     @if (Model.App.Experimental) {<link rel="stylesheet" href="@StringWithVersionQueryHtmlContent.Create($"/static/shared/css/experimental/main.css")" />}
-    
-    @{
-        Color color = Model.AccentOvveride?.Color ?? Model.App.AppTheme!.Color;
-        Color darkColor = Model.AccentOvveride?.DarkColor ?? Model.App.AppTheme!.DarkColor;
-
-        Hsl colorHsl = color.ToHsl();
-        Hsl darkColorHsl = darkColor.ToHsl();
-    }
     <style>
     html{
         --accentdark: @($"{darkColor.R},{darkColor.G},{darkColor.B}");
@@ -34,8 +33,13 @@
     }
     </style>
     <style id="custom_theme_container"></style>
-    <script>
+    <script>    
+        const christmas = "0";
         const medals = @(Json.Serialize(Model.Medals));
+        const nAppId = "@Model.App.Id";
+        const version = "@Constants.Version";
+        const nUserID = @(Model.CurrentOsuUser?.Id ?? -1);
+        const nUsername = "@(Model.CurrentOsuUser?.Username ?? "guest")";
     </script>
 }
 
