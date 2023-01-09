@@ -9,6 +9,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Osekai.Octon.Database.EntityFramework\Osekai.Octon.Database.EntityFramework.csproj" />
       <ProjectReference Include="..\Osekai.Octon.Database\Osekai.Octon.Database.csproj" />
+      <ProjectReference Include="..\Osekai.Octon\Osekai.Octon.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -18,6 +19,7 @@
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
       <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0-silver.1" />
+      <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Json.Microsoft" Version="7.0.0-silver.1" />
       <PackageReference Include="System.Linq.Async" Version="6.0.1" />
     </ItemGroup>
 

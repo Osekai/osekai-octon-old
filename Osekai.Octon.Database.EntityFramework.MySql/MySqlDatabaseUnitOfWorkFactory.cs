@@ -5,7 +5,7 @@ namespace Osekai.Octon.Database.EntityFramework.MySql;
 
 public class MySqlDatabaseUnitOfWorkFactory: IDatabaseUnitOfWorkFactory
 {
-    private IDbContextFactory<MySqlOsekaiDbContext> _dbContextFactory;
+    private readonly IDbContextFactory<MySqlOsekaiDbContext> _dbContextFactory;
     
     public MySqlDatabaseUnitOfWorkFactory(IDbContextFactory<MySqlOsekaiDbContext> dbContextFactory)
     {

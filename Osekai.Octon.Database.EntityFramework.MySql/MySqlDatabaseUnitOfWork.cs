@@ -11,12 +11,20 @@ public class MySqlDatabaseUnitOfWork: EntityFrameworkDatabaseUnitOfWork<MySqlOse
     private ISessionRepository? _sessionRepository;
     private IMedalRepository? _medalRepository;
     private ICacheEntryRepository? _cacheEntryRepository;
+    private IUserGroupRepository? _userGroupRepository;
+    private IUserPermissionsOverrideRepository? _userPermissionsOverrideRepository;
 
     public override IAppRepository AppRepository => 
         _appRepository ??= new MySqlEntityFrameworkAppRepository(Context);
     
     public override IMedalRepository MedalRepository => 
         _medalRepository ??= new MySqlEntityFrameworkMedalRepository(Context);
+
+    public override IUserGroupRepository UserGroupRepository =>
+        _userGroupRepository ??= new MySqlEntityFrameworkUserGroupRepository(Context);
+
+    public override IUserPermissionsOverrideRepository UserPermissionsOverrideRepository =>
+        _userPermissionsOverrideRepository ??= new MySqlEntityFrameworkUserPermissionsOverrideRepository(Context);
 
     public override ISessionRepository SessionRepository =>
         _sessionRepository ??= new MySqlEntityFrameworkSessionRepository(Context);

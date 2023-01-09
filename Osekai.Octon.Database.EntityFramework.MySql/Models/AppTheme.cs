@@ -14,19 +14,12 @@ namespace Osekai.Octon.Database.EntityFramework.MySql.Models
         public bool HasCover { get; set; }
         public App App { get; set; } = null!;
 
-        private static Color GetColorFromString(string str)
-        {
-            int r = int.Parse(str.GetSplitSubstringByIndex(',', out int index));
-            int g = int.Parse(str.GetSplitSubstringByIndex(',', out index, index + 1));
-            int b = int.Parse(str.GetSplitSubstringByIndex(',', out index, index + 1));
 
-            return System.Drawing.Color.FromArgb(r, g, b);
-        }
 
         public AppThemeDto ToDto()
         {
             return new AppThemeDto(Id, 
-                GetColorFromString(Color), GetColorFromString(DarkColor), HasCover, 
+                ColorFormatConversion.GetColorFromString(Color), ColorFormatConversion.GetColorFromString(DarkColor), HasCover, 
                 HslValueMultiplier, DarkHslValueMultiplier);
         }
     }

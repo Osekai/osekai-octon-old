@@ -15,6 +15,9 @@ namespace Osekai.Octon.Database.EntityFramework.MySql
         internal DbSet<BeatmapPackForMedal> BeatmapPacksForMedals { get; set; } = null!;
         internal DbSet<MedalSolution> MedalSolutions { get; set; } = null!;
         internal DbSet<MedalRarity> MedalRarities { get; set; } = null!;
+        internal DbSet<UserGroup> UserGroups { get; set; } = null!;
+        internal DbSet<UserGroupsForUsers> UserGroupsForUsers { get; set; } = null!;
+        internal DbSet<UserPermissionsOverride> UserPermissionsOverrides { get; set; } = null!;
 
         public MySqlOsekaiDbContext(DbContextOptions options) : base(options) {}
         
@@ -44,12 +47,12 @@ namespace Osekai.Octon.Database.EntityFramework.MySql
                 entity.HasIndex(e => e.AppId, "fk_AppId_idx");
 
                 entity.Property(e => e.Color)
-                    .HasMaxLength(Specifications.AppColorMaxLength)
+                    .HasMaxLength(11)
                     .UseCollation("ascii_general_ci")
                     .HasCharSet("ascii");
                 
                 entity.Property(e => e.DarkColor)
-                    .HasMaxLength(Specifications.AppColorMaxLength)
+                    .HasMaxLength(11)
                     .UseCollation("ascii_general_ci")
                     .HasCharSet("ascii");
 
@@ -145,7 +148,7 @@ namespace Osekai.Octon.Database.EntityFramework.MySql
 
                 entity.Property(e => e.Grouping)
                     .HasColumnType("varchar")
-                    .HasMaxLength(Specifications.GroupingMaxLength);
+                    .HasMaxLength(Specifications.MedalGroupingMaxLength);
             });
 
             modelBuilder.Entity<BeatmapPack>(entity =>
@@ -192,6 +195,46 @@ namespace Osekai.Octon.Database.EntityFramework.MySql
             {
                 entity.HasKey(e => e.Id);
                 entity.HasOne(e => e.Medal).WithOne(e => e.Settings).HasForeignKey<MedalSettings>(e => e.MedalId);
+            });
+
+            modelBuilder.Entity<UserGroup>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                
+                entity.Property(e => e.Description)
+                    .HasColumnType("text");
+                
+                entity.Property(e => e.Name)
+                    .HasMaxLength(Specifications.GroupNameMaxLength)
+                    .HasColumnType("varchar");
+                
+                entity.Property(e => e.ShortName)
+                    .HasMaxLength(Specifications.GroupShortNameMaxLength)
+                    .HasColumnType("varchar");
+
+                entity.Property(e => e.Permissions)
+                    .HasColumnType("json");
+                
+                entity.Property(e => e.Colour)
+                    .HasMaxLength(11);
+            });
+
+            modelBuilder.Entity<UserGroupsForUsers>(entity =>
+            {
+                entity.HasKey(e => new { UserGroupid = e.UserGroupId, e.UserId });
+                
+                entity.HasOne(e => e.UserGroup).WithMany(e => e.UserGroupForUsers)
+                    .HasForeignKey(e => e.UserGroupId).OnDelete(DeleteBehavior.Cascade);
+
+                entity.HasIndex(e => e.UserId);
+            });
+
+            modelBuilder.Entity<UserPermissionsOverride>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.Permissions).HasColumnType("json");
+                
+                entity.HasIndex(e => e.UserId).IsUnique();
             });
         }
     }

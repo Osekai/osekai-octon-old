@@ -35,6 +35,7 @@ public class OsekaiDataAdapter: IOsekaiDataAdapter
             OsuMod.NoFail => "NF",
             OsuMod.Relax => "RX",
             OsuMod.HardRock => "HR",
+            OsuMod.SpunOut => "SO",
             _ => null
         };
     }

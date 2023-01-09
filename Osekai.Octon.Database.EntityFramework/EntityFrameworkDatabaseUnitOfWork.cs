@@ -19,6 +19,8 @@ public abstract class EntityFrameworkDatabaseUnitOfWork<T>: IDatabaseUnitOfWork 
     public abstract ISessionRepository SessionRepository { get; }
     public abstract ICacheEntryRepository CacheEntryRepository { get; }
     public abstract IMedalRepository MedalRepository { get; }
+    public abstract IUserGroupRepository UserGroupRepository { get; }
+    public abstract IUserPermissionsOverrideRepository UserPermissionsOverrideRepository { get; }
 
     public virtual async Task SaveAsync(CancellationToken cancellationToken)
     {

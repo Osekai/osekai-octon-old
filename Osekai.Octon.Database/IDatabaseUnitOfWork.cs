@@ -10,6 +10,8 @@ public interface IDatabaseUnitOfWork: IAsyncDisposable, IDisposable
     ISessionRepository SessionRepository { get; }
     ICacheEntryRepository CacheEntryRepository { get; }
     IMedalRepository MedalRepository { get; }
+    IUserGroupRepository UserGroupRepository { get; }
+    IUserPermissionsOverrideRepository UserPermissionsOverrideRepository { get; }
     Task SaveAsync(CancellationToken cancellationToken = default);
     Task<ITransaction> BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.Serializable, CancellationToken cancellationToken = default);
 }

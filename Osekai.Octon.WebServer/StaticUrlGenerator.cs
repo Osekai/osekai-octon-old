@@ -5,7 +5,7 @@ namespace Osekai.Octon.WebServer;
 
 public class StaticUrlGenerator
 {
-    private OsuOAuthConfiguration _osuOAuthConfiguration;
+    private readonly OsuOAuthConfiguration _osuOAuthConfiguration;
     
     public StaticUrlGenerator(IOptions<OsuOAuthConfiguration> osuOAuthConfiguration)
     {

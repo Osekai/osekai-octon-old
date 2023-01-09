@@ -10,9 +10,7 @@ using Osekai.Octon.Caching.MsgPack;
 using Osekai.Octon.DataAdapter;
 using Osekai.Octon.OsuApi;
 using Osekai.Octon.Database;
-using Osekai.Octon.Database.EntityFramework;
 using Osekai.Octon.Database.EntityFramework.MySql;
-using Osekai.Octon.Database.Repositories;
 using Osekai.Octon.Options;
 using Osekai.Octon.Services;
 
@@ -20,9 +18,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<OsuOAuthConfiguration>(builder.Configuration.GetSection("OsuOAuthConfiguration"));
 
-builder.Services.AddDbContextFactory<MySqlOsekaiDbContext>(optionsBuilder => optionsBuilder.UseMySql(
+builder.Services.AddPooledDbContextFactory<MySqlOsekaiDbContext>(optionsBuilder => optionsBuilder.UseMySql(
     builder.Configuration.GetConnectionString("MySql")!, MySqlServerVersion.LatestSupportedServerVersion,
-    sqlOptions => sqlOptions.MigrationsAssembly("Osekai.Octon.Database.EntityFramework.MySql.Migrations")));
+    sqlOptions => sqlOptions.MigrationsAssembly("Osekai.Octon.Database.EntityFramework.MySql.Migrations").UseMicrosoftJson()));
 
 builder.Services.AddSingleton<IDatabaseUnitOfWorkFactory, MySqlDatabaseUnitOfWorkFactory>();
 
@@ -43,13 +41,13 @@ builder.Services.AddScoped<IAuthenticatedOsuApiV2Interface, AuthenticatedOsuApiV
 builder.Services.AddScoped<CachedAuthenticatedOsuApiV2Interface>();
 builder.Services.AddScoped<AuthenticatedOsuApiV2Interface>();
 builder.Services.AddScoped<CurrentSession>();
-builder.Services.AddScoped<IOsuApiV2SessionProvider>(provider => provider.GetService<CurrentSession>()!);
-builder.Services.AddScoped<DbContext>(provider => provider.GetService<MySqlOsekaiDbContext>()!);
+builder.Services.AddScoped<IOsuApiV2SessionProvider>(provider => provider.GetRequiredService<CurrentSession>());
 builder.Services.AddScoped<ITokenGenerator, RandomBytes128BitTokenGenerator>();
 builder.Services.AddSingleton<StaticUrlGenerator>();
 builder.Services.AddScoped<IOsekaiDataAdapter, OsekaiDataAdapter>();
 builder.Services.AddScoped<CachedOsekaiDataAdapter>();
 builder.Services.AddScoped<AuthenticationService>();
+builder.Services.AddScoped<PermissionService>();
 
 builder.Services.AddMemoryCache();
 
