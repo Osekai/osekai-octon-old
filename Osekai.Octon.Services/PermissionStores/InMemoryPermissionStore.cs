@@ -35,7 +35,7 @@ public class InMemoryPermissionStore: IPermissionStore
         => Root;
 
     public Task<IEnumerable<KeyValuePair<string, PermissionActionType>>> GetPermissionsAsync()
-        => Task.FromResult<>(GetPermissions());
+        => Task.FromResult(GetPermissions());
 
     private ValueTrie<PermissionActionType> Root { get; }
 
