@@ -8,6 +8,7 @@ using Osekai.Octon.OsuApi.Payloads;
 using Osekai.Octon.Persistence;
 using Osekai.Octon.Services;
 using Osekai.Octon.Services.Entities;
+using Osekai.Octon.Services.PermissionStores;
 
 namespace Osekai.Octon.WebServer;
 
@@ -30,7 +31,7 @@ public class DefaultAuthenticationFilter: Attribute, IAsyncAuthorizationFilter
                     CurrentSession currentSession = context.HttpContext.RequestServices.GetService<CurrentSession>()!;
 
                     OsuSessionContainer session = await authenticationService.LogInWithTokenAsync(match.Groups[1].Value, context.HttpContext.RequestAborted);
-                    PermissionStore permissionStore = await permissionService.GetPermissionStoreAsync(session.UserId);
+                    IPermissionStore permissionStore = await permissionService.GetPermissionStoreAsync(session.UserId);
                     
                     currentSession.Set(session, permissionStore);
                 }

@@ -5,6 +5,7 @@ using Osekai.Octon.OsuApi;
 using Osekai.Octon.Persistence;
 using Osekai.Octon.Services;
 using Osekai.Octon.Services.Entities;
+using Osekai.Octon.Services.PermissionStores;
 using Osekai.Octon.WebServer.API.V1.DataAdapter;
 
 namespace Osekai.Octon.WebServer.API.V1;
@@ -62,9 +63,9 @@ public class DevController: Controller
         if (_currentSession.IsNull())
             throw new NotAuthenticatedException();
 
-        PermissionStore permissionStore = _currentSession.PermissionStore!;
+        IPermissionStore permissionStore = _currentSession.PermissionStore!;
 
-        return Ok(permissionStore.GetPermissions().ToArray());
+        return Ok(await permissionStore.GetPermissionsAsync());
     }
 
     [HttpGet("getMedalsTest")]

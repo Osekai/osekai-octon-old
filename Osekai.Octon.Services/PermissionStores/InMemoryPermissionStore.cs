@@ -1,11 +1,9 @@
-﻿
-using Osekai.Octon.DataStructures;
+﻿using Osekai.Octon.DataStructures;
 using Osekai.Octon.Enums;
-using Osekai.Octon.Permissions;
 
-namespace Osekai.Octon.Services.Entities;
+namespace Osekai.Octon.Services.PermissionStores;
 
-public class PermissionStore
+public class InMemoryPermissionStore: IPermissionStore
 {
     public bool HasPermission(string path)
     {
@@ -30,12 +28,18 @@ public class PermissionStore
         Root.AddValueRecursive(path, type);
     }
 
+    public Task<bool> HasPermissionAsync(string path)
+        => Task.FromResult(HasPermission(path));
+
     public IEnumerable<KeyValuePair<string, PermissionActionType>> GetPermissions()
         => Root;
 
+    public Task<IEnumerable<KeyValuePair<string, PermissionActionType>>> GetPermissionsAsync()
+        => Task.FromResult<>(GetPermissions());
+
     private ValueTrie<PermissionActionType> Root { get; }
 
-    protected internal PermissionStore(
+    protected internal InMemoryPermissionStore(
         IEnumerable<IReadOnlyDictionary<string, PermissionActionType>> permissionDictionaries)
     {
         Root = new ValueTrie<PermissionActionType>();

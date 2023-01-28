@@ -2,6 +2,7 @@
 using Osekai.Octon.OsuApi;
 using Osekai.Octon.Services;
 using Osekai.Octon.Services.Entities;
+using Osekai.Octon.Services.PermissionStores;
 
 namespace Osekai.Octon.WebServer;
 
@@ -9,26 +10,26 @@ public class CurrentSession: IOsuApiV2SessionProvider
 {
     private readonly struct Inner
     {
-        public Inner(IOsuApiV2SessionProvider osuApiV2SessionProvider, PermissionStore permissionStore)
+        public Inner(IOsuApiV2SessionProvider osuApiV2SessionProvider, IPermissionStore permissionStore)
         {
             OsuApiV2SessionProvider = osuApiV2SessionProvider;
             PermissionStore = permissionStore;
         }
         
         public IOsuApiV2SessionProvider OsuApiV2SessionProvider { get; }
-        public PermissionStore PermissionStore { get; }
+        public IPermissionStore PermissionStore { get; }
     }
 
     private Inner? _inner;
 
-    public void Set(IOsuApiV2SessionProvider osuApiV2SessionProvider, PermissionStore permissionStore)
+    public void Set(IOsuApiV2SessionProvider osuApiV2SessionProvider, IPermissionStore permissionStore)
     {
         _inner = new Inner(osuApiV2SessionProvider, permissionStore);
     }
 
     public bool IsNull() => !_inner.HasValue;
 
-    public PermissionStore? PermissionStore => _inner?.PermissionStore; 
+    public IPermissionStore? PermissionStore => _inner?.PermissionStore; 
 
     public Task<string?> GetOsuApiV2TokenAsync(CancellationToken cancellationToken = default)
     {
