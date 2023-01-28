@@ -25,7 +25,7 @@ public partial class ValueTrie<T>: IEnumerable<KeyValuePair<string, T>> where T:
         return InternalGetNodeRecursive(path);
     }
 
-    public ValueTrie<T>? InternalGetNodeRecursive(string path)
+    private ValueTrie<T>? InternalGetNodeRecursive(string path)
     {
         if (path == string.Empty)
             return this;
