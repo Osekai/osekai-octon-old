@@ -24,9 +24,9 @@ public class OsuApiV2Interface
         HttpResponseMessage response = await client.PostAsync(
             "https://osu.ppy.sh/oauth/token", 
             JsonContent.Create(
-                new OsuAuthenticationPayload(
+                new OsuRefreshTokenAuthenticationPayload(
                     _osuOAuthConfiguration.ClientId, _osuOAuthConfiguration.ClientSecret, 
-                    refreshToken, "refresh_token", _osuOAuthConfiguration.RedirectUri)), 
+                    refreshToken, _osuOAuthConfiguration.RedirectUri)), 
             cancellationToken);
         
         response.EnsureSuccessStatusCode();
