@@ -1,0 +1,41 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Osekai.Octon.Persistence.EntityFramework\Osekai.Octon.Persistence.EntityFramework.csproj" />
+      <ProjectReference Include="..\Osekai.Octon.Persistence\Osekai.Octon.Persistence.csproj" />
+      <ProjectReference Include="..\Osekai.Octon\Osekai.Octon.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.1" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.1">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0-silver.1" />
+      <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Json.Microsoft" Version="7.0.0-silver.1" />
+      <PackageReference Include="System.Linq.Async" Version="6.0.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="MySqlDataPopulatorResources.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>MySqlDataPopulatorResources.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="MySqlDataPopulatorResources.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>MySqlDataPopulatorResources.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+</Project>

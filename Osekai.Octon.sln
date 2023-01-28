@@ -2,13 +2,13 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.WebServer", "Osekai.Octon.WebServer\Osekai.Octon.WebServer.csproj", "{42358FAB-20DC-40DB-806D-BF21650CB7D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Database", "Osekai.Octon.Database\Osekai.Octon.Database.csproj", "{0C0E50EC-C16A-4214-BBE1-25FAA295DD29}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Persistence", "Osekai.Octon.Persistence\Osekai.Octon.Persistence.csproj", "{0C0E50EC-C16A-4214-BBE1-25FAA295DD29}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Database.EntityFramework.MySql", "Osekai.Octon.Database.EntityFramework.MySql\Osekai.Octon.Database.EntityFramework.MySql.csproj", "{41573ED2-FC36-4D89-A99F-42B740F3D4A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Persistence.EntityFramework.MySql", "Osekai.Octon.Persistence.EntityFramework.MySql\Osekai.Octon.Persistence.EntityFramework.MySql.csproj", "{41573ED2-FC36-4D89-A99F-42B740F3D4A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Database.EntityFramework.MySql.Migrations", "Osekai.Octon.Database.EntityFramework.MySql.Migrations\Osekai.Octon.Database.EntityFramework.MySql.Migrations.csproj", "{C1B14FB9-CBBE-4B41-805A-A85AE4A200B2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Persistence.EntityFramework.MySql.Migrations", "Osekai.Octon.Persistence.EntityFramework.MySql.Migrations\Osekai.Octon.Persistence.EntityFramework.MySql.Migrations.csproj", "{C1B14FB9-CBBE-4B41-805A-A85AE4A200B2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Database.EntityFramework", "Osekai.Octon.Database.EntityFramework\Osekai.Octon.Database.EntityFramework.csproj", "{DE9BFCCB-73FC-43D9-A276-B1D1136DF677}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Persistence.EntityFramework", "Osekai.Octon.Persistence.EntityFramework\Osekai.Octon.Persistence.EntityFramework.csproj", "{DE9BFCCB-73FC-43D9-A276-B1D1136DF677}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Services", "Osekai.Octon.Services\Osekai.Octon.Services.csproj", "{F4A6ED15-F580-4F60-9C4D-7B5DA011D066}"
 EndProject

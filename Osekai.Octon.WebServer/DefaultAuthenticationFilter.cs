@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Osekai.Octon;
-using Osekai.Octon.Database;
-using Osekai.Octon.Database.Dtos;
 using Osekai.Octon.Exceptions;
 using Osekai.Octon.OsuApi;
 using Osekai.Octon.OsuApi.Payloads;
+using Osekai.Octon.Persistence;
 using Osekai.Octon.Services;
+using Osekai.Octon.Services.Entities;
 
 namespace Osekai.Octon.WebServer;
 
@@ -25,11 +25,14 @@ public class DefaultAuthenticationFilter: Attribute, IAsyncAuthorizationFilter
 
                 if (match.Success)
                 {
-                    AuthenticationService authenticationService = context.HttpContext.RequestServices.GetService<AuthenticationService>()!;
-                    OsuSessionContainer session = await authenticationService.LogInWithTokenAsync(match.Groups[1].Value, context.HttpContext.RequestAborted);
-
+                    AuthenticationService authenticationService = context.HttpContext.RequestServices.GetRequiredService<AuthenticationService>();
+                    PermissionService permissionService = context.HttpContext.RequestServices.GetRequiredService<PermissionService>();
                     CurrentSession currentSession = context.HttpContext.RequestServices.GetService<CurrentSession>()!;
-                    currentSession.Set(session);
+
+                    OsuSessionContainer session = await authenticationService.LogInWithTokenAsync(match.Groups[1].Value, context.HttpContext.RequestAborted);
+                    PermissionStore permissionStore = await permissionService.GetPermissionStoreAsync(session.UserId);
+                    
+                    currentSession.Set(session, permissionStore);
                 }
                 else
                     throw new InvalidSessionTokenException(token);

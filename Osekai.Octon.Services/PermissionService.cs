@@ -1,31 +1,30 @@
-﻿using Osekai.Octon.Database;
-using Osekai.Octon.Database.Dtos;
-using Osekai.Octon.Database.HelperTypes;
+﻿using Osekai.Octon.Enums;
 using Osekai.Octon.Permissions;
+using Osekai.Octon.Persistence;
+using Osekai.Octon.Persistence.Dtos;
+using Osekai.Octon.Services.Entities;
 
 namespace Osekai.Octon.Services;
 
 public class PermissionService
 {
-    private IDatabaseUnitOfWorkFactory _databaseUnitOfWorkFactory;
+    protected IDatabaseUnitOfWork UnitOfWork { get; }
     
-    public PermissionService(IDatabaseUnitOfWorkFactory databaseUnitOfWorkFactory)
+    public PermissionService(IDatabaseUnitOfWork unitOfWork)
     {
-        _databaseUnitOfWorkFactory = databaseUnitOfWorkFactory;
+        UnitOfWork = unitOfWork;
     }
-
-    public async Task<IPermissionCollection> GetUserPermissionsAsync(int userId, CancellationToken cancellationToken = default)
-    { 
-        await using IDatabaseUnitOfWork unitOfWork = await _databaseUnitOfWorkFactory.CreateAsync();
-        
-        IEnumerable<UserGroupDto> userGroups = await unitOfWork.UserGroupRepository.GetUserGroupOfUserAsync(userId, cancellationToken);
-        UserPermissionsOverrideDto? permissionsOverrideDto = await unitOfWork.UserPermissionsOverrideRepository.GetUserPermissionOverrideByUserId(userId, cancellationToken);
+    
+    public async Task<PermissionStore> GetPermissionStoreAsync(int userId, CancellationToken cancellationToken = default)
+    {
+        IEnumerable<UserGroupDto> userGroups = await UnitOfWork.UserGroupRepository.GetUserGroupsOfUserAsync(userId, cancellationToken);
+        UserPermissionsOverrideDto? permissionsOverrideDto = await UnitOfWork.UserPermissionsOverrideRepository.GetUserPermissionOverrideByUserId(userId, cancellationToken);
 
         IEnumerable<IReadOnlyDictionary<string, PermissionActionType>> permissionDictionaries = userGroups.Select(u => u.Permissions);
 
         if (permissionsOverrideDto != null)
             permissionDictionaries = permissionDictionaries.Concat(Enumerable.Repeat(permissionsOverrideDto.Permissions, 1));
 
-        return new InMemoryPermissionCollection(PermissionUtils.MergePermissionDictionaries(permissionDictionaries.Reverse()));
+        return new PermissionStore(permissionDictionaries);
     }
 }

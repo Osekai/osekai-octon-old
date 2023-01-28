@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Osekai.Octon.Persistence.EntityFramework.MySql</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.1" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.1">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0-silver.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Osekai.Octon.Persistence.EntityFramework.MySql\Osekai.Octon.Persistence.EntityFramework.MySql.csproj" />
+    </ItemGroup>
+
+</Project>

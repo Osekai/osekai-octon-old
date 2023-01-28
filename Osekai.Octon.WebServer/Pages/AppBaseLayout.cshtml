@@ -8,8 +8,8 @@
 @{
     Layout = "BaseLayout";
     
-    Color color = Model.AccentOvveride?.Color ?? Model.App.AppTheme!.Color;
-    Color darkColor = Model.AccentOvveride?.DarkColor ?? Model.App.AppTheme!.DarkColor;
+    Color color = Model.AccentOvveride?.Color ?? Model.AppTheme!.Color;
+    Color darkColor = Model.AccentOvveride?.DarkColor ?? Model.AppTheme!.DarkColor;
 
     Hsl colorHsl = color.ToHsl();
     Hsl darkColorHsl = darkColor.ToHsl();
@@ -28,8 +28,8 @@
         --accent_saturation: @(colorHsl.S)%;
         --accentdark_value: @(darkColorHsl.L)%;
         --accent_value: @(colorHsl.L)%;
-        --accentdark_valueoffset: @(Model.App.AppTheme!.DarkHslValueMultiplier);
-        --accent_valueoffset: @(Model.App.AppTheme!.HslValueMultiplier);
+        --accentdark_valueoffset: @(Model.AppTheme!.DarkHslValueMultiplier);
+        --accent_valueoffset: @(Model.AppTheme!.HslValueMultiplier);
     }
     </style>
     <style id="custom_theme_container"></style>

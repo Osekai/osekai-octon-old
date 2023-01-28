@@ -15,11 +15,10 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Osekai.Octon.Caching.MsgPack\Osekai.Octon.Caching.MsgPack.csproj" />
+      <ProjectReference Include="..\Osekai.Octon.Persistence.EntityFramework.MySql.Migrations\Osekai.Octon.Persistence.EntityFramework.MySql.Migrations.csproj" />
+      <ProjectReference Include="..\Osekai.Octon.Persistence.EntityFramework.MySql\Osekai.Octon.Persistence.EntityFramework.MySql.csproj" />
+      <ProjectReference Include="..\Osekai.Octon.Persistence.EntityFramework\Osekai.Octon.Persistence.EntityFramework.csproj" />
       <ProjectReference Include="..\Osekai.Octon\Osekai.Octon.csproj" />
-      <ProjectReference Include="..\Osekai.Octon.Database.EntityFramework.MySql\Osekai.Octon.Database.EntityFramework.MySql.csproj" />
-      <ProjectReference Include="..\Osekai.Octon.Database.EntityFramework\Osekai.Octon.Database.EntityFramework.csproj" />
-      <ProjectReference Include="..\Osekai.Octon.Database\Osekai.Octon.Database.csproj" />
-      <ProjectReference Include="..\Osekai.Octon.Database.EntityFramework.MySql.Migrations\Osekai.Octon.Database.EntityFramework.MySql.Migrations.csproj" />
       <ProjectReference Include="..\Osekai.Octon.Services\Osekai.Octon.Services.csproj" />
     </ItemGroup>
 

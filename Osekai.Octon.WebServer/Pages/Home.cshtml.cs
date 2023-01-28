@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Caching.Memory;
-using Osekai.Octon.DataAdapter;
-using Osekai.Octon.Database;
-using Osekai.Octon.Database.EntityFramework;
-using Osekai.Octon.Database.Repositories;
+using Osekai.Octon.Persistence;
+using Osekai.Octon.Persistence.EntityFramework;
 using Osekai.Octon.OsuApi;
+using Osekai.Octon.Services;
+using Osekai.Octon.WebServer.API.V1.DataAdapter;
 
 namespace Osekai.Octon.WebServer.Pages;
 
@@ -19,9 +19,9 @@ public class Home : AppBaseLayout
     public Home(
         CurrentSession currentSession, 
         CachedAuthenticatedOsuApiV2Interface cachedAuthenticatedOsuApiV2Interface, 
-        CachedOsekaiDataAdapter osekaiDataAdapter, 
-        IDatabaseUnitOfWorkFactory databaseUnitOfWorkFactory) 
-        : base(currentSession, cachedAuthenticatedOsuApiV2Interface, osekaiDataAdapter, databaseUnitOfWorkFactory, -1)
+        CachedOsekaiMedalDataGenerator osekaiMedalDataGenerator, 
+        AppService appService) 
+        : base(currentSession, cachedAuthenticatedOsuApiV2Interface, osekaiMedalDataGenerator, appService, -1)
     {
     }
 }

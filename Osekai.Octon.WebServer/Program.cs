@@ -7,22 +7,23 @@ using Microsoft.IO;
 using Osekai.Octon.WebServer;
 using Osekai.Octon;
 using Osekai.Octon.Caching.MsgPack;
-using Osekai.Octon.DataAdapter;
 using Osekai.Octon.OsuApi;
-using Osekai.Octon.Database;
-using Osekai.Octon.Database.EntityFramework.MySql;
+using Osekai.Octon.Persistence.EntityFramework.MySql;
 using Osekai.Octon.Options;
+using Osekai.Octon.Persistence;
+using Osekai.Octon.Persistence.Aggregators;
 using Osekai.Octon.Services;
+using Osekai.Octon.WebServer.API.V1.DataAdapter;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.Configure<OsuOAuthConfiguration>(builder.Configuration.GetSection("OsuOAuthConfiguration"));
 
-builder.Services.AddPooledDbContextFactory<MySqlOsekaiDbContext>(optionsBuilder => optionsBuilder.UseMySql(
+builder.Services.AddDbContext<MySqlOsekaiDbContext>(optionsBuilder => optionsBuilder.UseMySql(
     builder.Configuration.GetConnectionString("MySql")!, MySqlServerVersion.LatestSupportedServerVersion,
-    sqlOptions => sqlOptions.MigrationsAssembly("Osekai.Octon.Database.EntityFramework.MySql.Migrations").UseMicrosoftJson()));
+    sqlOptions => sqlOptions.MigrationsAssembly("Osekai.Octon.Persistence.EntityFramework.MySql.Migrations").UseMicrosoftJson()));
 
-builder.Services.AddSingleton<IDatabaseUnitOfWorkFactory, MySqlDatabaseUnitOfWorkFactory>();
+builder.Services.AddScoped<IDatabaseUnitOfWork, MySqlDatabaseUnitOfWork>();
 
 builder.Services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
 builder.Services.AddSingleton<ObjectPool<StringBuilder>>(serviceProvider =>
@@ -32,7 +33,6 @@ builder.Services.AddSingleton<ObjectPool<StringBuilder>>(serviceProvider =>
     return provider.Create(policy);
 });
 
-builder.Services.AddScoped<SessionService>();
 builder.Services.AddSingleton<RecyclableMemoryStreamManager>();
 builder.Services.AddScoped<ICache, MsgPackDatabaseCache>();
 builder.Services.AddHttpClient();
@@ -41,24 +41,29 @@ builder.Services.AddScoped<IAuthenticatedOsuApiV2Interface, AuthenticatedOsuApiV
 builder.Services.AddScoped<CachedAuthenticatedOsuApiV2Interface>();
 builder.Services.AddScoped<AuthenticatedOsuApiV2Interface>();
 builder.Services.AddScoped<CurrentSession>();
+builder.Services.AddScoped<AppService>();
 builder.Services.AddScoped<IOsuApiV2SessionProvider>(provider => provider.GetRequiredService<CurrentSession>());
 builder.Services.AddScoped<ITokenGenerator, RandomBytes128BitTokenGenerator>();
 builder.Services.AddSingleton<StaticUrlGenerator>();
-builder.Services.AddScoped<IOsekaiDataAdapter, OsekaiDataAdapter>();
-builder.Services.AddScoped<CachedOsekaiDataAdapter>();
+builder.Services.AddScoped<IMedalDataAggregator, MySqlEntityFrameworkMedalDataAggregator>();
+builder.Services.AddScoped<IOsekaiMedalDataGenerator, OsekaiMedalMedaDataGenerator>();
+builder.Services.AddScoped<CachedOsekaiMedalDataGenerator>();
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<PermissionService>();
 
 builder.Services.AddMemoryCache();
 
+IMvcBuilder mvcBuilder = builder.Services.AddRazorPages();
 #if DEBUG
-builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
-builder.Services.AddScoped<ITestDataPopulator, MySqlTestDataPopulator>();
-#else
-builder.Services.AddRazorPages();
+    mvcBuilder.AddRazorRuntimeCompilation();
+    builder.Services.AddScoped<ITestDataPopulator, MySqlTestDataPopulator>();
 #endif
 
+mvcBuilder.AddMvcOptions(
+    options => options.Filters.Add(new SaveUnitOfWorkChangesPageFilter()));
+
 builder.Services.AddControllers()
+    .AddMvcOptions(options => options.Filters.Add(new SaveUnitOfWorkChangesControllerFilter()))
     .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddRouting();
 
@@ -70,8 +75,7 @@ app.MapControllers();
 
 using (IServiceScope scope = app.Services.CreateScope())
 {
-    var contextFactory = scope.ServiceProvider.GetService<IDbContextFactory<MySqlOsekaiDbContext>>()!;
-    await using MySqlOsekaiDbContext context = await contextFactory.CreateDbContextAsync();
+    var context = scope.ServiceProvider.GetRequiredService<MySqlOsekaiDbContext>()!;
     await context.Database.MigrateAsync();
 }
 

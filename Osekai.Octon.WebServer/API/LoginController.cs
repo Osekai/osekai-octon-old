@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Osekai.Octon.Database.Dtos;
 using Osekai.Octon.Services;
 
 namespace Osekai.Octon.WebServer.API;
@@ -17,11 +16,11 @@ public class LoginController: Controller
     [HttpGet("/login")]
     public async Task<IActionResult> Login([FromQuery] string code, CancellationToken cancellationToken)
     {
-        SessionDto session = await _authenticationService.SignInWithCodeAsync(code, cancellationToken);
-            
+        var (_, token, expiresAt) = await _authenticationService.SignInWithCodeAsync(code, cancellationToken);
+        
         Response.Cookies.Append(
-            new [] { new KeyValuePair<string,string>("osekai_session_token", $"osekai_session_{session.Token}") }, 
-            new CookieOptions{ HttpOnly = true, Expires = session.ExpiresAt });
+            new [] { new KeyValuePair<string,string>("osekai_session_token", $"osekai_session_{token}") }, 
+            new CookieOptions{ HttpOnly = true, Expires = expiresAt });
         
         return Redirect("/");
     }

@@ -13,7 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Osekai.Octon.Database\Osekai.Octon.Database.csproj" />
+      <ProjectReference Include="..\Osekai.Octon.Exceptions\Osekai.Octon.Exceptions.csproj" />
       <ProjectReference Include="..\Osekai.Octon.Options\Osekai.Octon.Options.csproj" />
     </ItemGroup>
 
