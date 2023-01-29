@@ -1,0 +1,3 @@
+[submodule "OsekaiOld"]
+	path = OsekaiOld
+	url = https://github.com/Osekai/osekai.git

@@ -1,4 +1,5 @@
-﻿using Osekai.Octon.Exceptions;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Osekai.Octon.Exceptions;
 using Osekai.Octon.OsuApi;
 using Osekai.Octon.OsuApi.Payloads;
 using Osekai.Octon.Persistence;
@@ -12,42 +13,51 @@ public class AuthenticationService
     protected IUnitOfWork UnitOfWork { get; }
     protected OsuApiV2Interface OsuApiV2Interface { get; }
     protected ITokenGenerator TokenGenerator { get; }
+    protected IServiceScopeFactory ServiceScopeFactory { get; }
     protected CachedAuthenticatedOsuApiV2Interface AuthenticatedOsuApiV2Interface { get; }
     
     public AuthenticationService(
+        IServiceScopeFactory serviceScopeFactory,
         IUnitOfWork unitOfWork,
         ITokenGenerator tokenGenerator,
         CachedAuthenticatedOsuApiV2Interface authenticatedOsuApiV2Interface,
         OsuApiV2Interface osuApiV2Interface)
     {
+        ServiceScopeFactory = serviceScopeFactory;
         UnitOfWork = unitOfWork;
         OsuApiV2Interface = osuApiV2Interface; 
         TokenGenerator = tokenGenerator;
         AuthenticatedOsuApiV2Interface = authenticatedOsuApiV2Interface;
     }
 
-    private sealed class LocalOsuApiV2TokenUpdate : IOsuApiV2TokenUpdater
+    private sealed class LocalOsuApiV2TokenUpdater : IOsuApiV2TokenUpdater
     {
         private readonly OsuApiV2Interface _osuApiV2Interface;
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IServiceScopeFactory _serviceScopeFactory;
         private readonly string _token;
         
-        public LocalOsuApiV2TokenUpdate(IUnitOfWork unitOfWork, OsuApiV2Interface osuApiV2Interface, string token)
+        public LocalOsuApiV2TokenUpdater(IServiceScopeFactory unitOfWork, OsuApiV2Interface osuApiV2Interface, string token)
         {
             _token = token;
             _osuApiV2Interface = osuApiV2Interface;
-            _unitOfWork = unitOfWork;
+            _serviceScopeFactory = unitOfWork;
         }
         
         public async Task<(string NewAccessToken, string NewRefreshToken, DateTimeOffset ExpiresAt)> UpdateAsync(string refreshToken, CancellationToken cancellationToken = default)
         {
+            await using AsyncServiceScope scope = _serviceScopeFactory.CreateAsyncScope();
+
+            IUnitOfWork unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+            
             var (authenticationResultPayload, user, responseTime) = await _osuApiV2Interface.RefreshTokenAsync(refreshToken, cancellationToken);
             DateTimeOffset expiresAt = responseTime.AddSeconds(authenticationResultPayload.ExpiresIn);
             
-            await _unitOfWork.SessionRepository.UpdateSessionPayloadAsync(_token, 
+            await unitOfWork.SessionRepository.UpdateSessionPayloadAsync(_token, 
                 new SessionDtoPayload(authenticationResultPayload.Token, authenticationResultPayload.RefreshToken, expiresAt.UtcDateTime, user.Id), 
                 cancellationToken);
 
+            await unitOfWork.SaveChangesAsync(cancellationToken);
+            
             return (authenticationResultPayload.Token, authenticationResultPayload.RefreshToken, expiresAt);
         }
     }
@@ -74,7 +84,7 @@ public class AuthenticationService
              session.Payload.OsuUserId, session.Payload.OsuApiV2Token, 
              session.Payload.OsuApiV2RefreshToken, 
              session.Payload.ExpiresAt,
-             new LocalOsuApiV2TokenUpdate(UnitOfWork, OsuApiV2Interface, session.Token));
+             new LocalOsuApiV2TokenUpdater(ServiceScopeFactory, OsuApiV2Interface, session.Token));
 
         OsuUser user = await AuthenticatedOsuApiV2Interface.MeAsync(osuSessionContainer, cancellationToken: cancellationToken);
 
@@ -125,7 +135,7 @@ public class AuthenticationService
         return new SignInWithCodeResult(
             new OsuSessionContainer(
                 user.Id, session.Payload.OsuApiV2Token, session.Payload.OsuApiV2RefreshToken, session.Payload.ExpiresAt, 
-                new LocalOsuApiV2TokenUpdate(UnitOfWork, OsuApiV2Interface, session.Token)), 
+                new LocalOsuApiV2TokenUpdater(ServiceScopeFactory, OsuApiV2Interface, session.Token)), 
             session.Token,
             session.ExpiresAt);
     }

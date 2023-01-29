@@ -40,11 +40,9 @@ public abstract class AppBaseLayout : BaseLayout
     public App App { get; private set; } = null!;
 
     public AppTheme AppTheme { get; private set; } = null!;
-    
+
     public OsuUser? CurrentOsuUser { get; private set; }
-    
-    public bool? IsUserAdmin { get; private set; }
-    
+
     protected AppBaseLayout(
         CurrentSession currentSession,
         CachedAuthenticatedOsuApiV2Interface cachedAuthenticatedOsuApiV2Interface, 
@@ -73,10 +71,7 @@ public abstract class AppBaseLayout : BaseLayout
         UserGroups = await AppBaseLayoutUserGroupDataGenerator.GenerateAsync(cancellationToken);
 
         if (!CurrentSession.IsNull())
-        {
             CurrentOsuUser = await OsuApiV2Interface.MeAsync(CurrentSession, cancellationToken: cancellationToken);
-            IsUserAdmin = await CurrentSession.PermissionStore!.HasPermissionAsync("admin");
-        }
 
         return Page();
     }

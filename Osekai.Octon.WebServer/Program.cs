@@ -1,7 +1,9 @@
 
 using System.Text;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.ObjectPool;
 using Microsoft.IO;
 using Osekai.Octon.WebServer;
@@ -61,15 +63,39 @@ IMvcBuilder mvcBuilder = builder.Services.AddRazorPages();
     builder.Services.AddScoped<ITestDataPopulator, MySqlTestDataPopulator>();
 #endif
 
-mvcBuilder.AddMvcOptions(
-    options => options.Filters.Add(new SaveUnitOfWorkChangesPageFilter()));
-
-builder.Services.AddControllers()
-    .AddMvcOptions(options => options.Filters.Add(new SaveUnitOfWorkChangesControllerFilter()))
-    .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 builder.Services.AddRouting();
 
 var app = builder.Build();
+
+app.UseStaticFiles(new StaticFileOptions(new SharedOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "../OsekaiOld/global/css")),
+    RequestPath = "/static/shared/css"
+}));
+
+app.UseStaticFiles(new StaticFileOptions(new SharedOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "../OsekaiOld/global/js")),
+    RequestPath = "/static/shared/js"
+}));
+
+app.UseStaticFiles(new StaticFileOptions(new SharedOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "../OsekaiOld/home/js")),
+    RequestPath = "/static/home/js"
+}));
+
+
+app.UseStaticFiles(new StaticFileOptions(new SharedOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "../OsekaiOld/home/css")),
+    RequestPath = "/static/home/css"
+}));
+
 app.UseRouting();
 
 app.MapRazorPages();

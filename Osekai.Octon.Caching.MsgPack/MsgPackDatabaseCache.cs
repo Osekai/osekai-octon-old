@@ -1,4 +1,5 @@
 ﻿using MessagePack;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IO;
 using Osekai.Octon.Persistence;
 using Osekai.Octon.Persistence.Dtos;
@@ -17,21 +18,24 @@ public class MsgPackDatabaseCache: ICache
         public T? Content { get; }
     }
     
-    protected IUnitOfWork UnitOfWork { get; }
+    protected IServiceScopeFactory ServiceScopeFactory { get; }
     protected RecyclableMemoryStreamManager RecyclableMemoryStreamManager { get; }
     
     public MsgPackDatabaseCache(
-        IUnitOfWork unitOfWork,
+        IServiceScopeFactory serviceScopeFactory,
         RecyclableMemoryStreamManager recyclableMemoryStreamManager)
     {
-        UnitOfWork = unitOfWork;
+        ServiceScopeFactory = serviceScopeFactory;
         RecyclableMemoryStreamManager = recyclableMemoryStreamManager;
     }
 
     
     public async Task<T?> GetAsync<T>(string name, CancellationToken cancellationToken = default) where T: class
     {
-        CacheEntryDto? cacheEntry = await UnitOfWork.CacheEntryRepository.GetCacheEntryByNameAsync(name, cancellationToken);
+        await using AsyncServiceScope scope = ServiceScopeFactory.CreateAsyncScope();
+        IUnitOfWork unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+        
+        CacheEntryDto? cacheEntry = await unitOfWork.CacheEntryRepository.GetCacheEntryByNameAsync(name, cancellationToken);
 
         if (cacheEntry == null)
             return null;
@@ -42,19 +46,28 @@ public class MsgPackDatabaseCache: ICache
 
     public async Task SetAsync<T>(string name, T? data, long expiresAfter = 3600, CancellationToken cancellationToken = default) where T: class
     {
+        await using AsyncServiceScope scope = ServiceScopeFactory.CreateAsyncScope();
+        IUnitOfWork unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+        
         using MemoryStream memoryStream = RecyclableMemoryStreamManager.GetStream();
 
         await MessagePackSerializer.SerializeAsync(memoryStream, new MsgPackContainer<T>(data),
             MessagePack.Resolvers.ContractlessStandardResolver.Options, cancellationToken);
         
-        await UnitOfWork.CacheEntryRepository.AddOrUpdateCacheEntryAsync(
+        await unitOfWork.CacheEntryRepository.AddOrUpdateCacheEntryAsync(
             name, memoryStream.GetBuffer()[0..(int)memoryStream.Length], DateTimeOffset.Now.AddSeconds(expiresAfter),
             cancellationToken);
+
+        await unitOfWork.SaveChangesAsync(cancellationToken);
     }
 
 
     public async Task DeleteAsync(string name, CancellationToken cancellationToken = default)
     {
-        await UnitOfWork.CacheEntryRepository.DeleteCacheEntryAsync(name, cancellationToken);
+        await using AsyncServiceScope scope = ServiceScopeFactory.CreateAsyncScope();
+        IUnitOfWork unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+        
+        await unitOfWork.CacheEntryRepository.DeleteCacheEntryAsync(name, cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
     }
 }
