@@ -13,7 +13,7 @@ using Osekai.Octon.Options;
 using Osekai.Octon.Persistence;
 using Osekai.Octon.Persistence.Aggregators;
 using Osekai.Octon.Services;
-using Osekai.Octon.WebServer.API.V1.DataAdapter;
+using Osekai.Octon.WebServer.Presentation.AppBaseLayout;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +23,7 @@ builder.Services.AddDbContext<MySqlOsekaiDbContext>(optionsBuilder => optionsBui
     builder.Configuration.GetConnectionString("MySql")!, MySqlServerVersion.LatestSupportedServerVersion,
     sqlOptions => sqlOptions.MigrationsAssembly("Osekai.Octon.Persistence.EntityFramework.MySql.Migrations").UseMicrosoftJson()));
 
-builder.Services.AddScoped<IDatabaseUnitOfWork, MySqlDatabaseUnitOfWork>();
+builder.Services.AddScoped<IUnitOfWork, MySqlUnitOfWork>();
 
 builder.Services.AddSingleton<ObjectPoolProvider, DefaultObjectPoolProvider>();
 builder.Services.AddSingleton<ObjectPool<StringBuilder>>(serviceProvider =>
@@ -46,10 +46,12 @@ builder.Services.AddScoped<IOsuApiV2SessionProvider>(provider => provider.GetReq
 builder.Services.AddScoped<ITokenGenerator, RandomBytes128BitTokenGenerator>();
 builder.Services.AddSingleton<StaticUrlGenerator>();
 builder.Services.AddScoped<IMedalDataAggregator, MySqlEntityFrameworkMedalDataAggregator>();
-builder.Services.AddScoped<IOsekaiMedalDataGenerator, OsekaiMedalMedaDataGenerator>();
-builder.Services.AddScoped<CachedOsekaiMedalDataGenerator>();
+builder.Services.AddScoped<IAppBaseLayoutMedalDataGenerator, AppBaseLayoutMedaDataGenerator>();
+builder.Services.AddScoped<CachedAppBaseLayoutMedalDataGenerator>();
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<PermissionService>();
+builder.Services.AddScoped<UserGroupService>();
+builder.Services.AddScoped<IAppBaseLayoutUserGroupDataGenerator, AppBaseLayoutUserGroupDataGenerator>();
 
 builder.Services.AddMemoryCache();
 

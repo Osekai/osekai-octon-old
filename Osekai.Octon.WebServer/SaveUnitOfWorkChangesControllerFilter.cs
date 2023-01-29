@@ -7,7 +7,7 @@ public class SaveUnitOfWorkChangesControllerFilter: IAsyncActionFilter
 {
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
-        IDatabaseUnitOfWork unitOfWork = context.HttpContext.RequestServices.GetRequiredService<IDatabaseUnitOfWork>();
+        IUnitOfWork unitOfWork = context.HttpContext.RequestServices.GetRequiredService<IUnitOfWork>();
         ActionExecutedContext executedContext = await next.Invoke();
         
         if (executedContext.Exception == null)

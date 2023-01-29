@@ -6,11 +6,11 @@ using Osekai.Octon.Persistence.Repositories;
 
 namespace Osekai.Octon.Persistence.EntityFramework;
 
-public abstract class EntityFrameworkDatabaseUnitOfWork<T>: IDatabaseUnitOfWork where T: DbContext
+public abstract class EntityFrameworkUnitOfWork<T>: IUnitOfWork where T: DbContext
 {
     protected T Context { get; }
 
-    protected EntityFrameworkDatabaseUnitOfWork(T context)
+    protected EntityFrameworkUnitOfWork(T context)
     {
         Context = context;
     }

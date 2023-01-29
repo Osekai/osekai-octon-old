@@ -17,11 +17,11 @@ public class MsgPackDatabaseCache: ICache
         public T? Content { get; }
     }
     
-    protected IDatabaseUnitOfWork UnitOfWork { get; }
+    protected IUnitOfWork UnitOfWork { get; }
     protected RecyclableMemoryStreamManager RecyclableMemoryStreamManager { get; }
     
     public MsgPackDatabaseCache(
-        IDatabaseUnitOfWork unitOfWork,
+        IUnitOfWork unitOfWork,
         RecyclableMemoryStreamManager recyclableMemoryStreamManager)
     {
         UnitOfWork = unitOfWork;

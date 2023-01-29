@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace Osekai.Octon.DataStructures;
+namespace Osekai.Octon.DataStructures.Trie;
 
 
 public partial class ValueTrie<T>: IEnumerable<KeyValuePair<string, T>> where T: struct

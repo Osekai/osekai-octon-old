@@ -3,9 +3,9 @@ using Osekai.Octon.Persistence.Repositories;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql;
 
-public class MySqlDatabaseUnitOfWork: EntityFrameworkDatabaseUnitOfWork<MySqlOsekaiDbContext>
+public class MySqlUnitOfWork: EntityFrameworkUnitOfWork<MySqlOsekaiDbContext>
 {
-    public MySqlDatabaseUnitOfWork(MySqlOsekaiDbContext context) : base(context) { }
+    public MySqlUnitOfWork(MySqlOsekaiDbContext context) : base(context) { }
 
     private IAppRepository? _appRepository;
     private ISessionRepository? _sessionRepository;

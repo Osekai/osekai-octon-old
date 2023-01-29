@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace Osekai.Octon.DataStructures;
+namespace Osekai.Octon.DataStructures.Trie;
 
 public class TriePathValidatin
 {

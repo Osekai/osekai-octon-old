@@ -1,20 +1,18 @@
 ﻿using System.Collections.Immutable;
 using System.Text;
-using System.Text.Json;
 using Microsoft.Extensions.ObjectPool;
 using Osekai.Octon.Enums;
 using Osekai.Octon.Persistence.Aggregators;
 using Osekai.Octon.Persistence.Dtos;
-using Osekai.Octon.Services.Entities;
 
-namespace Osekai.Octon.WebServer.API.V1.DataAdapter;
+namespace Osekai.Octon.WebServer.Presentation.AppBaseLayout;
 
-public class OsekaiMedalMedaDataGenerator: IOsekaiMedalDataGenerator
+public class AppBaseLayoutMedaDataGenerator: IAppBaseLayoutMedalDataGenerator
 {   
     protected ObjectPool<StringBuilder> StringBuilderObjectPool { get; }
     protected IMedalDataAggregator MedalDataAggregator { get; }
 
-    public OsekaiMedalMedaDataGenerator(ObjectPool<StringBuilder> stringBuilderObjectPool, IMedalDataAggregator medalDataAggregator)
+    public AppBaseLayoutMedaDataGenerator(ObjectPool<StringBuilder> stringBuilderObjectPool, IMedalDataAggregator medalDataAggregator)
     {
         StringBuilderObjectPool = stringBuilderObjectPool;
         MedalDataAggregator = medalDataAggregator;
@@ -97,13 +95,13 @@ public class OsekaiMedalMedaDataGenerator: IOsekaiMedalDataGenerator
         }
     }
     
-    public async Task<IEnumerable<OsekaiMedalData>> GetOsekaiMedalDataAsync(CancellationToken cancellationToken)
+    public async Task<IEnumerable<AppBaseLayoutMedalData>> GenerateAsync(CancellationToken cancellationToken)
     {
         IEnumerable<IMedalDataAggregator.AggregatedMedalData> data = await MedalDataAggregator.AggregateAsync(cancellationToken);
 
         return data
             .Select(m =>
-                new OsekaiMedalData
+                new AppBaseLayoutMedalData
                 {
                     Date = m.Medal.Date?.UtcDateTime.ToShortDateString(),
                     Description = m.Medal.Description,

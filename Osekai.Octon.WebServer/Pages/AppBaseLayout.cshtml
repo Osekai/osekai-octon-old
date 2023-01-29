@@ -13,6 +13,14 @@
 
     Hsl colorHsl = color.ToHsl();
     Hsl darkColorHsl = darkColor.ToHsl();
+
+    int GetRight(bool? isUserAdmin)
+    {
+        if (isUserAdmin == null)
+            return -1;
+
+        return isUserAdmin.Value ? 1 : 0;
+    }
 }
  
 @section HeadExtension {
@@ -40,6 +48,8 @@
         const version = "@Constants.Version";
         const nUserID = @(Model.CurrentOsuUser?.Id ?? -1);
         const nUsername = "@(Model.CurrentOsuUser?.Username ?? "guest")";
+        const nRights = @(GetRight(Model.IsUserAdmin));
+        const userGroups = @(Json.Serialize(Model.UserGroups));
     </script>
 }
 

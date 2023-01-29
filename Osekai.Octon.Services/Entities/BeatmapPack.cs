@@ -7,9 +7,9 @@ namespace Osekai.Octon.Services.Entities;
 
 public class BeatmapPack
 {
-    protected internal IDatabaseUnitOfWork UnitOfWork { get; }
+    protected internal IUnitOfWork UnitOfWork { get; }
     
-    protected internal BeatmapPack(int id, int beatmapCount, IDatabaseUnitOfWork unitOfWork)
+    protected internal BeatmapPack(int id, int beatmapCount, IUnitOfWork unitOfWork)
     {
         Id = id;
         BeatmapCount = beatmapCount;

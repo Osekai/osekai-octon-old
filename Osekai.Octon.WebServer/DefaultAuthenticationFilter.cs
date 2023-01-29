@@ -18,22 +18,24 @@ public class DefaultAuthenticationFilter: Attribute, IAsyncAuthorizationFilter
     
     public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
     {
+        AuthenticationService authenticationService = context.HttpContext.RequestServices.GetRequiredService<AuthenticationService>();
+        string? token = null;
+
         try
         {
-            if (context.HttpContext.Request.Cookies.TryGetValue("osekai_session_token", out string? token))
+            if (context.HttpContext.Request.Cookies.TryGetValue("osekai_session_token", out token))
             {
                 Match match = Regex.Match(token);
 
                 if (match.Success)
                 {
-                    AuthenticationService authenticationService = context.HttpContext.RequestServices.GetRequiredService<AuthenticationService>();
                     PermissionService permissionService = context.HttpContext.RequestServices.GetRequiredService<PermissionService>();
                     CurrentSession currentSession = context.HttpContext.RequestServices.GetService<CurrentSession>()!;
 
-                    OsuSessionContainer session = await authenticationService.LogInWithTokenAsync(match.Groups[1].Value, context.HttpContext.RequestAborted);
-                    IPermissionStore permissionStore = await permissionService.GetPermissionStoreAsync(session.UserId);
+                    AuthenticationService.LogInWithCodeResult result = await authenticationService.LogInWithTokenAsync(match.Groups[1].Value, context.HttpContext.RequestAborted);
+                    IPermissionStore permissionStore = await permissionService.GetPermissionStoreAsync(result.OsuSessionContainer.UserId);
                     
-                    currentSession.Set(session, permissionStore);
+                    currentSession.Set(result.OsuSessionContainer, permissionStore);
                 }
                 else
                     throw new InvalidSessionTokenException(token);
@@ -42,6 +44,9 @@ public class DefaultAuthenticationFilter: Attribute, IAsyncAuthorizationFilter
         catch
         {
             context.HttpContext.Response.Cookies.Append("osekai_session_token", string.Empty, new CookieOptions{Expires = DateTimeOffset.MinValue});
+
+            if (token != null)
+                await authenticationService.RevokeTokenAsync(token, context.HttpContext.RequestAborted);
         }
     }
 }

@@ -6,7 +6,7 @@ using Osekai.Octon.Persistence;
 using Osekai.Octon.Services;
 using Osekai.Octon.Services.Entities;
 using Osekai.Octon.Services.PermissionStores;
-using Osekai.Octon.WebServer.API.V1.DataAdapter;
+using Osekai.Octon.WebServer.Presentation.AppBaseLayout;
 
 namespace Osekai.Octon.WebServer.API.V1;
 
@@ -19,13 +19,13 @@ public class DevController: Controller
     private readonly StaticUrlGenerator _staticUrlGenerator;
     private readonly CurrentSession _currentSession;
     private readonly CachedAuthenticatedOsuApiV2Interface _authenticatedOsuApiV2Interface;
-    private readonly CachedOsekaiMedalDataGenerator _osekaiMedalDataGenerator;
+    private readonly CachedAppBaseLayoutMedalDataGenerator _appBaseLayoutMedalDataGenerator;
     private readonly PermissionService _permissionService;
     
     public DevController(StaticUrlGenerator staticUrlGenerator,
         CurrentSession currentSession,
         CachedAuthenticatedOsuApiV2Interface authenticatedOsuApi,
-        CachedOsekaiMedalDataGenerator osekaiMedalDataGenerator,
+        CachedAppBaseLayoutMedalDataGenerator appBaseLayoutMedalDataGenerator,
         PermissionService permissionService,
         ITestDataPopulator testDataPopulator)
     {
@@ -33,7 +33,7 @@ public class DevController: Controller
         _currentSession = currentSession;
         _testDataPopulator = testDataPopulator;
         _staticUrlGenerator = staticUrlGenerator;
-        _osekaiMedalDataGenerator = osekaiMedalDataGenerator;
+        _appBaseLayoutMedalDataGenerator = appBaseLayoutMedalDataGenerator;
         _permissionService = permissionService;
     }
     
@@ -71,7 +71,7 @@ public class DevController: Controller
     [HttpGet("getMedalsTest")]
     public async Task<IActionResult> MeApiTest(CancellationToken cancellationToken)
     {
-        return Ok(await _osekaiMedalDataGenerator.GetOsekaiMedalDataAsync(cancellationToken));
+        return Ok(await _appBaseLayoutMedalDataGenerator.GenerateAsync(cancellationToken));
     }
     
     [HttpGet("meApiTest")]

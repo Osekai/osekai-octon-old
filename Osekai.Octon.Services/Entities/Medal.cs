@@ -9,11 +9,11 @@ namespace Osekai.Octon.Services.Entities;
 
 public class Medal
 {
-    protected internal IDatabaseUnitOfWork UnitOfWork { get; }
+    protected internal IUnitOfWork UnitOfWork { get; }
 
     protected internal Medal(int id, string name, Uri link, string description, string? restriction, string grouping, string? instructions,
         int ordering, string? video, DateTimeOffset? date, DateTimeOffset? firstAchievedDate, string? firstAchievedBy, float rarity, int timesOwned,
-        IDatabaseUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork)
     {
         Id = id;
         Name = name;

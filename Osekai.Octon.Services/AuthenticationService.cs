@@ -9,13 +9,13 @@ namespace Osekai.Octon.Services;
 
 public class AuthenticationService
 {
-    protected IDatabaseUnitOfWork UnitOfWork { get; }
+    protected IUnitOfWork UnitOfWork { get; }
     protected OsuApiV2Interface OsuApiV2Interface { get; }
     protected ITokenGenerator TokenGenerator { get; }
     protected CachedAuthenticatedOsuApiV2Interface AuthenticatedOsuApiV2Interface { get; }
     
     public AuthenticationService(
-        IDatabaseUnitOfWork unitOfWork,
+        IUnitOfWork unitOfWork,
         ITokenGenerator tokenGenerator,
         CachedAuthenticatedOsuApiV2Interface authenticatedOsuApiV2Interface,
         OsuApiV2Interface osuApiV2Interface)
@@ -29,10 +29,12 @@ public class AuthenticationService
     private sealed class LocalOsuApiV2TokenUpdate : IOsuApiV2TokenUpdater
     {
         private readonly OsuApiV2Interface _osuApiV2Interface;
-        private readonly IDatabaseUnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly string _token;
         
-        public LocalOsuApiV2TokenUpdate(IDatabaseUnitOfWork unitOfWork, OsuApiV2Interface osuApiV2Interface)
+        public LocalOsuApiV2TokenUpdate(IUnitOfWork unitOfWork, OsuApiV2Interface osuApiV2Interface, string token)
         {
+            _token = token;
             _osuApiV2Interface = osuApiV2Interface;
             _unitOfWork = unitOfWork;
         }
@@ -42,7 +44,7 @@ public class AuthenticationService
             var (authenticationResultPayload, user, responseTime) = await _osuApiV2Interface.RefreshTokenAsync(refreshToken, cancellationToken);
             DateTimeOffset expiresAt = responseTime.AddSeconds(authenticationResultPayload.ExpiresIn);
             
-            await _unitOfWork.SessionRepository.UpdateSessionPayloadAsync(refreshToken, 
+            await _unitOfWork.SessionRepository.UpdateSessionPayloadAsync(_token, 
                 new SessionDtoPayload(authenticationResultPayload.Token, authenticationResultPayload.RefreshToken, expiresAt.UtcDateTime, user.Id), 
                 cancellationToken);
 
@@ -50,9 +52,20 @@ public class AuthenticationService
         }
     }
     
-    public async Task<OsuSessionContainer> LogInWithTokenAsync(string token, CancellationToken cancellationToken = default)
+    
+    public readonly struct LogInWithCodeResult
     {
-        SessionDto? session = await UnitOfWork.SessionRepository.GetSessionFromTokenAsync(token);
+        public LogInWithCodeResult(OsuSessionContainer osuSessionContainer)
+        {
+            OsuSessionContainer = osuSessionContainer;
+        }
+
+        public OsuSessionContainer OsuSessionContainer { get; }
+    }
+    
+    public async Task<LogInWithCodeResult> LogInWithTokenAsync(string token, CancellationToken cancellationToken = default)
+    {
+        SessionDto? session = await UnitOfWork.SessionRepository.GetSessionFromTokenAsync(token, cancellationToken);
         
         if (session == null)
             throw new InvalidSessionTokenException(token);
@@ -61,7 +74,7 @@ public class AuthenticationService
              session.Payload.OsuUserId, session.Payload.OsuApiV2Token, 
              session.Payload.OsuApiV2RefreshToken, 
              session.Payload.ExpiresAt,
-             new LocalOsuApiV2TokenUpdate(UnitOfWork, OsuApiV2Interface));
+             new LocalOsuApiV2TokenUpdate(UnitOfWork, OsuApiV2Interface, session.Token));
 
         OsuUser user = await AuthenticatedOsuApiV2Interface.MeAsync(osuSessionContainer, cancellationToken: cancellationToken);
 
@@ -71,10 +84,24 @@ public class AuthenticationService
         if (user.IsRestricted)
             throw new OsuUserRestrictedException(user.Id);
         
-        return osuSessionContainer;
+        return new LogInWithCodeResult(osuSessionContainer);
+    }
+
+    public readonly struct SignInWithCodeResult
+    {
+        public SignInWithCodeResult(OsuSessionContainer osuSessionContainer, string token, DateTimeOffset expiresAt)
+        {
+            OsuSessionContainer = osuSessionContainer;
+            Token = token;
+            ExpiresAt = expiresAt;
+        }
+
+        public OsuSessionContainer OsuSessionContainer { get; }
+        public string Token { get; }
+        public DateTimeOffset ExpiresAt { get; }
     }
     
-    public async Task<(OsuSessionContainer OsuSessionContainer, string Token, DateTimeOffset ExpiresAt)> SignInWithCodeAsync(string code, CancellationToken cancellationToken = default)
+    public async Task<SignInWithCodeResult> SignInWithCodeAsync(string code, CancellationToken cancellationToken = default)
     {
         (OsuAuthenticationResultPayload payload, OsuUser user, DateTimeOffset responseDateTime) = await OsuApiV2Interface.AuthenticateWithCodeAsync(code, cancellationToken);
 
@@ -89,17 +116,20 @@ public class AuthenticationService
         do generatedToken = TokenGenerator.GenerateToken();
         while (await UnitOfWork.SessionRepository.SessionExists(generatedToken, cancellationToken));
 
-        SessionDto sessionDto = await UnitOfWork.SessionRepository.AddSessionAsync(
+        SessionDto session = await UnitOfWork.SessionRepository.AddSessionAsync(
             generatedToken,
             new SessionDtoPayload(payload.Token, payload.RefreshToken,
                 responseDateTime.AddSeconds(payload.ExpiresIn).UtcDateTime, user.Id),
-            DateTimeOffset.Now.AddSeconds(Specifications.SessionTokenMaxAgeInSeconds));
+            DateTimeOffset.Now.AddSeconds(Specifications.SessionTokenMaxAgeInSeconds), cancellationToken);
         
-        return (
+        return new SignInWithCodeResult(
             new OsuSessionContainer(
-                user.Id, sessionDto.Payload.OsuApiV2Token, sessionDto.Payload.OsuApiV2RefreshToken, sessionDto.Payload.ExpiresAt, 
-                new LocalOsuApiV2TokenUpdate(UnitOfWork, OsuApiV2Interface)), 
-            sessionDto.Token,
-            sessionDto.ExpiresAt);
+                user.Id, session.Payload.OsuApiV2Token, session.Payload.OsuApiV2RefreshToken, session.Payload.ExpiresAt, 
+                new LocalOsuApiV2TokenUpdate(UnitOfWork, OsuApiV2Interface, session.Token)), 
+            session.Token,
+            session.ExpiresAt);
     }
+
+    public Task RevokeTokenAsync(string token, CancellationToken cancellationToken = default) =>
+        UnitOfWork.SessionRepository.DeleteSessionAsync(token);
 }

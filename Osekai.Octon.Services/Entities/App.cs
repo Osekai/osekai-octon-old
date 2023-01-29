@@ -6,12 +6,12 @@ namespace Osekai.Octon.Services.Entities;
 
 public class App: ISavableEntity
 {
-    protected internal IDatabaseUnitOfWork UnitOfWork { get; }
+    protected internal IUnitOfWork UnitOfWork { get; }
 
     protected internal App(
         int id, int order, string name, string simpleName, 
         bool visible, bool experimental, 
-        IDatabaseUnitOfWork unitOfWork)
+        IUnitOfWork unitOfWork)
     {
         Id = id;
         Order = order;

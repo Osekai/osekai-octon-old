@@ -12,7 +12,7 @@ public class SaveUnitOfWorkChangesPageFilter: IAsyncPageFilter
 
     public async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
     {
-        IDatabaseUnitOfWork unitOfWork = context.HttpContext.RequestServices.GetRequiredService<IDatabaseUnitOfWork>();
+        IUnitOfWork unitOfWork = context.HttpContext.RequestServices.GetRequiredService<IUnitOfWork>();
         PageHandlerExecutedContext executedContext = await next.Invoke();
         
         if (executedContext.Exception == null)

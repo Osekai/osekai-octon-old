@@ -6,9 +6,9 @@ namespace Osekai.Octon.Services;
 
 public class AppService
 {
-    protected IDatabaseUnitOfWork UnitOfWork { get; }
+    protected IUnitOfWork UnitOfWork { get; }
     
-    public AppService(IDatabaseUnitOfWork unitOfWork)
+    public AppService(IUnitOfWork unitOfWork)
     {
         UnitOfWork = unitOfWork;
     }

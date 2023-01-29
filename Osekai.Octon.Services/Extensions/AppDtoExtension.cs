@@ -7,7 +7,7 @@ namespace Osekai.Octon.Services.Extensions;
 
 internal static class AppDtoExtension
 {
-    internal static App ToEntity(this AppDto appDto, IDatabaseUnitOfWork unitOfWork)
+    internal static App ToEntity(this AppDto appDto, IUnitOfWork unitOfWork)
     {
         return new App(
             appDto.Id, 

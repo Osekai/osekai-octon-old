@@ -1,4 +1,4 @@
-﻿namespace Osekai.Octon.DataStructures;
+﻿namespace Osekai.Octon.DataStructures.Trie;
 
 public partial class ValueTrie
 {

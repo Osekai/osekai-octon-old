@@ -16,7 +16,7 @@ public class MySqlEntityFrameworkUserGroupRepository: IUserGroupRepository
     
     public async Task<UserGroupDto?> GetUserGroupByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        UserGroup? userGroup = await Context.UserGroups.AsNoTracking().FirstOrDefaultAsync(group => group.Id == id);
+        UserGroup? userGroup = await Context.UserGroups.AsNoTracking().FirstOrDefaultAsync(group => group.Id == id, cancellationToken);
         return userGroup?.ToDto();
     }
 
@@ -28,8 +28,14 @@ public class MySqlEntityFrameworkUserGroupRepository: IUserGroupRepository
             .Where(e => e.UserId == userId)
             .Select(e => e.UserGroup)
             .OrderBy(e => e.Order)
-            .ToArrayAsync();
+            .ToArrayAsync(cancellationToken);
         
+        return userGroups.Select(e => e.ToDto());
+    }
+
+    public async Task<IEnumerable<UserGroupDto>> GetUserGroups(CancellationToken cancellationToken = default)
+    {
+        IEnumerable<UserGroup> userGroups = await Context.UserGroups.ToArrayAsync(cancellationToken);
         return userGroups.Select(e => e.ToDto());
     }
 }

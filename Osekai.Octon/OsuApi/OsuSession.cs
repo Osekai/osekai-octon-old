@@ -29,8 +29,11 @@ public class OsuSessionContainer: IOsuApiV2SessionProvider
         return AccessToken;
     }
 
-    public Task<int?> GetOsuApiV2UserIdAsync(CancellationToken cancellationToken = default)
+    public async Task<int?> GetOsuApiV2UserIdAsync(CancellationToken cancellationToken = default)
     {
-        return Task.FromResult<int?>(UserId);
+        if (DateTimeOffset.Now > ExpiresAt)
+            (AccessToken, RefreshToken, ExpiresAt) = await _tokenUpdater.UpdateAsync(RefreshToken, cancellationToken);
+
+        return UserId;
     }
 }

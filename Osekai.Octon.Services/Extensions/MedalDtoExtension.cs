@@ -6,7 +6,7 @@ namespace Osekai.Octon.Services.Extensions;
 
 internal static class MedalDtoExtension
 {
-    internal static Medal ToEntity(this MedalDto medalDto, IDatabaseUnitOfWork unitOfWork)
+    internal static Medal ToEntity(this MedalDto medalDto, IUnitOfWork unitOfWork)
     {
         return new Medal(
             medalDto.Id,

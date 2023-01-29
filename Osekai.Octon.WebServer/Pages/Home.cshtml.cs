@@ -5,7 +5,7 @@ using Osekai.Octon.Persistence;
 using Osekai.Octon.Persistence.EntityFramework;
 using Osekai.Octon.OsuApi;
 using Osekai.Octon.Services;
-using Osekai.Octon.WebServer.API.V1.DataAdapter;
+using Osekai.Octon.WebServer.Presentation.AppBaseLayout;
 
 namespace Osekai.Octon.WebServer.Pages;
 
@@ -16,12 +16,8 @@ public class Home : AppBaseLayout
     public override string MetadataThemeColor => "#353d55";
     public override string MetadataUrl => "https://osekai.net/home";
 
-    public Home(
-        CurrentSession currentSession, 
-        CachedAuthenticatedOsuApiV2Interface cachedAuthenticatedOsuApiV2Interface, 
-        CachedOsekaiMedalDataGenerator osekaiMedalDataGenerator, 
-        AppService appService) 
-        : base(currentSession, cachedAuthenticatedOsuApiV2Interface, osekaiMedalDataGenerator, appService, -1)
+    public Home(CurrentSession currentSession, CachedAuthenticatedOsuApiV2Interface cachedAuthenticatedOsuApiV2Interface, CachedAppBaseLayoutMedalDataGenerator appBaseLayoutMedalDataGenerator, IAppBaseLayoutUserGroupDataGenerator appBaseLayoutUserGroupDataGenerator, AppService appService) 
+        : base(currentSession, cachedAuthenticatedOsuApiV2Interface, appBaseLayoutMedalDataGenerator, appBaseLayoutUserGroupDataGenerator, appService, -1)
     {
     }
 }

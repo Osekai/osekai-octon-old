@@ -1,10 +1,10 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Osekai.Octon.WebServer.API.V1.DataAdapter;
+namespace Osekai.Octon.WebServer.Presentation.AppBaseLayout;
 
 #nullable disable
 
-public class OsekaiMedalData
+public class AppBaseLayoutMedalData
 {
     [JsonPropertyName("MedalID")]
     public long MedalId { get; set; }

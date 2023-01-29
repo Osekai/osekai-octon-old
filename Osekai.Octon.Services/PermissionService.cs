@@ -9,9 +9,9 @@ namespace Osekai.Octon.Services;
 
 public class PermissionService
 {
-    protected IDatabaseUnitOfWork UnitOfWork { get; }
+    protected IUnitOfWork UnitOfWork { get; }
     
-    public PermissionService(IDatabaseUnitOfWork unitOfWork)
+    public PermissionService(IUnitOfWork unitOfWork)
     {
         UnitOfWork = unitOfWork;
     }

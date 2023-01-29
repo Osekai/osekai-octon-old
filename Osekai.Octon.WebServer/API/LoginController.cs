@@ -16,11 +16,11 @@ public class LoginController: Controller
     [HttpGet("/login")]
     public async Task<IActionResult> Login([FromQuery] string code, CancellationToken cancellationToken)
     {
-        var (_, token, expiresAt) = await _authenticationService.SignInWithCodeAsync(code, cancellationToken);
+        AuthenticationService.SignInWithCodeResult result = await _authenticationService.SignInWithCodeAsync(code, cancellationToken);
         
         Response.Cookies.Append(
-            new [] { new KeyValuePair<string,string>("osekai_session_token", $"osekai_session_{token}") }, 
-            new CookieOptions{ HttpOnly = true, Expires = expiresAt });
+            new [] { new KeyValuePair<string,string>("osekai_session_token", $"osekai_session_{result.Token}") }, 
+            new CookieOptions{ HttpOnly = true, Expires = result.ExpiresAt });
         
         return Redirect("/");
     }
