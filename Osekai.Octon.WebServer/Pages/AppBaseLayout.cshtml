@@ -57,7 +57,8 @@
 <body>
     @if (Model.ShowNavbar)
     {
-        @await Html.PartialAsync("Partials/Navbar", new NavbarPartial(Model.Localizator, Model.CurrentApp, Model.Apps, Model.AppBaseLayoutApps, Model.CurrentOsuUser))
+        @await Html.PartialAsync("Partials/Navbar", 
+            new NavbarPartial(Model.Localizator, Model.CurrentApp, Model.Apps, Model.AppBaseLayoutApps, Model.CurrentOsuUser))
     }
 </body>
 

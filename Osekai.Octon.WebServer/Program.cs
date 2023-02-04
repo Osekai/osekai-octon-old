@@ -105,6 +105,20 @@ app.UseStaticFiles(new StaticFileOptions(new SharedOptions
     RequestPath = "/static/home/css"
 }));
 
+app.UseStaticFiles(new StaticFileOptions(new SharedOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "../OsekaiOld/global/img")),
+    RequestPath = "/global/img"
+}));
+
+app.UseStaticFiles(new StaticFileOptions(new SharedOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "../OsekaiOld/global/js")),
+    RequestPath = "/global/js"
+}));
+
 app.UseRouting();
 
 app.MapRazorPages();
