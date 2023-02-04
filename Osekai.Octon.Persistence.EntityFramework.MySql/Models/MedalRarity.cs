@@ -1,6 +1,6 @@
 ﻿namespace Osekai.Octon.Persistence.EntityFramework.MySql.Models;
 
-internal class MedalRarity
+internal sealed class MedalRarity
 {
     public int Id { get; set; }
     public int MedalId { get; set; }

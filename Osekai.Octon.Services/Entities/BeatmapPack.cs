@@ -1,5 +1,5 @@
-﻿using Osekai.Octon.Persistence;
-using Osekai.Octon.Persistence.Dtos;
+﻿using Osekai.Octon.Objects;
+using Osekai.Octon.Persistence;
 using Osekai.Octon.Persistence.Repositories;
 using Osekai.Octon.Services.Extensions;
 
@@ -21,7 +21,7 @@ public class BeatmapPack
 
     public async Task<IEnumerable<Medal>> GetMedalsAsync(CancellationToken cancellationToken)
     {
-        IEnumerable<MedalDto> medals = await UnitOfWork.MedalRepository.GetMedalsAsync(
+        IEnumerable<IReadOnlyMedal> medals = await UnitOfWork.MedalRepository.GetMedalsAsync(
             new IMedalRepository.MedalFilter(beatmapPackIds: new int[] { Id }), cancellationToken: cancellationToken);
         
         return medals.Select(m => m.ToEntity(UnitOfWork));

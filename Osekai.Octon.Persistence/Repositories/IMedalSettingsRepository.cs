@@ -1,8 +1,8 @@
-﻿using Osekai.Octon.Persistence.Dtos;
+﻿using Osekai.Octon.Objects;
 
 namespace Osekai.Octon.Persistence.Repositories;
 
 public interface IMedalSettingsRepository
 {
-    Task<MedalSettingsDto?> GetMedalSettingsByMedalIdAsync(int medalId, CancellationToken cancellationToken = default);
+    Task<IReadOnlyMedalSettings?> GetMedalSettingsByMedalIdAsync(int medalId, CancellationToken cancellationToken = default);
 }

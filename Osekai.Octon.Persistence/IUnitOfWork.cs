@@ -7,7 +7,6 @@ public interface IUnitOfWork: IAsyncDisposable, IDisposable
 {
     IAppRepository AppRepository { get; }
     ISessionRepository SessionRepository { get; }
-    ICacheEntryRepository CacheEntryRepository { get; }
     IMedalRepository MedalRepository { get; }
     IUserGroupRepository UserGroupRepository { get; }
     IAppThemeRepository AppThemeRepository { get; }

@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using Osekai.Octon.Persistence.Dtos;
+using Osekai.Octon.Objects;
+using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
 using Osekai.Octon.Persistence.EntityFramework.MySql.Models;
 using Osekai.Octon.Persistence.HelperTypes;
 using Osekai.Octon.Persistence.Repositories;
@@ -16,13 +17,13 @@ public class MySqlEntityFrameworkSessionRepository: ISessionRepository
         Context = context;
     }
 
-    public async Task<SessionDto?> GetSessionFromTokenAsync(string token, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlySession?> GetSessionFromTokenAsync(string token, CancellationToken cancellationToken = default)
     {
         Session? session = await Context.Sessions.AsNoTracking().Where(s => s.Token == token && DateTimeOffset.Now < s.ExpiresAt).FirstOrDefaultAsync(cancellationToken);
         return session?.ToDto();
     }
 
-    public Task<SessionDto> AddSessionAsync(string token, SessionDtoPayload payload, DateTimeOffset expiresAt, CancellationToken cancellationToken = default)
+    public Task<IReadOnlySession> AddSessionAsync(string token, SessionPayload payload, DateTimeOffset expiresAt, CancellationToken cancellationToken = default)
     {
         Context.Sessions.Add(new Session
         {
@@ -31,11 +32,11 @@ public class MySqlEntityFrameworkSessionRepository: ISessionRepository
             Payload = JsonSerializer.Serialize(payload)
         });
         
-        return Task.FromResult(new SessionDto(token, payload, expiresAt));
+        return Task.FromResult<IReadOnlySession>(new SessionDto(token, payload, expiresAt));
     }
 
     public async Task<bool> UpdateSessionPayloadAsync(
-        string token, SessionDtoPayload payload,
+        string token, SessionPayload payload,
         CancellationToken cancellationToken = default)
     {
         Session? session = await Context.Sessions.FindAsync(new object[] { token }, cancellationToken: cancellationToken);

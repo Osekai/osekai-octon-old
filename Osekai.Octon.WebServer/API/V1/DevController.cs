@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Osekai.Octon.Enums;
 using Osekai.Octon.Exceptions;
+using Osekai.Octon.Localization;
 using Osekai.Octon.OsuApi;
 using Osekai.Octon.Persistence;
 using Osekai.Octon.Services;
@@ -13,28 +14,26 @@ namespace Osekai.Octon.WebServer.API.V1;
 #if DEBUG
 [Route("/api/v1/dev")]
 [DefaultAuthenticationFilter]
-public class DevController: Controller
+public sealed class DevController: Controller
 {
     private readonly ITestDataPopulator _testDataPopulator;
+    private readonly ILocalizatorFactory _localizatorFactory;
     private readonly StaticUrlGenerator _staticUrlGenerator;
     private readonly CurrentSession _currentSession;
     private readonly CachedAuthenticatedOsuApiV2Interface _authenticatedOsuApiV2Interface;
-    private readonly CachedAppBaseLayoutMedalDataGenerator _appBaseLayoutMedalDataGenerator;
-    private readonly PermissionService _permissionService;
     
     public DevController(StaticUrlGenerator staticUrlGenerator,
         CurrentSession currentSession,
         CachedAuthenticatedOsuApiV2Interface authenticatedOsuApi,
-        CachedAppBaseLayoutMedalDataGenerator appBaseLayoutMedalDataGenerator,
         PermissionService permissionService,
+        ILocalizatorFactory localizatorFactory,
         ITestDataPopulator testDataPopulator)
     {
         _authenticatedOsuApiV2Interface = authenticatedOsuApi;
         _currentSession = currentSession;
         _testDataPopulator = testDataPopulator;
+        _localizatorFactory = localizatorFactory;
         _staticUrlGenerator = staticUrlGenerator;
-        _appBaseLayoutMedalDataGenerator = appBaseLayoutMedalDataGenerator;
-        _permissionService = permissionService;
     }
     
     [HttpGet("populateDatabaseWithTestData")]
@@ -67,12 +66,6 @@ public class DevController: Controller
 
         return Ok(await permissionStore.GetPermissionsAsync());
     }
-
-    [HttpGet("getMedalsTest")]
-    public async Task<IActionResult> MeApiTest(CancellationToken cancellationToken)
-    {
-        return Ok(await _appBaseLayoutMedalDataGenerator.GenerateAsync(cancellationToken));
-    }
     
     [HttpGet("meApiTest")]
     public async Task<IActionResult> GetMedalsTest(CancellationToken cancellationToken)
@@ -84,6 +77,14 @@ public class DevController: Controller
     public async Task<IActionResult> UserApiTest([FromQuery] string user, CancellationToken cancellationToken)
     {
         return Ok(await _authenticatedOsuApiV2Interface.SearchUserAsync(_currentSession, user, cancellationToken: cancellationToken));
+    }
+    
+        
+    [HttpGet("localizationTest")]
+    public async Task<IActionResult> LocalizationTest([FromQuery] string user, CancellationToken cancellationToken)
+    {
+        ILocalizator localizator = _localizatorFactory.CreateLocalizator();
+        return Ok(await localizator.LocalizeStringAsync("??apps.home.slogan??", cancellationToken: cancellationToken));
     }
 }
 #endif

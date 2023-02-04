@@ -10,7 +10,6 @@ public class MySqlUnitOfWork: EntityFrameworkUnitOfWork<MySqlOsekaiDbContext>
     private IAppRepository? _appRepository;
     private ISessionRepository? _sessionRepository;
     private IMedalRepository? _medalRepository;
-    private ICacheEntryRepository? _cacheEntryRepository;
     private IUserGroupRepository? _userGroupRepository;
     private IUserPermissionsOverrideRepository? _userPermissionsOverrideRepository;
     private IAppThemeRepository? _appThemeRepository;
@@ -44,7 +43,4 @@ public class MySqlUnitOfWork: EntityFrameworkUnitOfWork<MySqlOsekaiDbContext>
 
     public override ISessionRepository SessionRepository =>
         _sessionRepository ??= new MySqlEntityFrameworkSessionRepository(Context);
-
-    public override ICacheEntryRepository CacheEntryRepository =>
-        _cacheEntryRepository ??= new MySqlEntityFrameworkCacheEntryRepository(Context);
 }

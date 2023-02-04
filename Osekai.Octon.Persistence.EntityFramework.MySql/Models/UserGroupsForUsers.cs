@@ -1,6 +1,6 @@
 ﻿namespace Osekai.Octon.Persistence.EntityFramework.MySql.Models;
 
-public class UserGroupsForUsers
+internal sealed class UserGroupsForUsers
 {
     public int UserId { get; set; }
     public int UserGroupId { get; set; }

@@ -1,6 +1,5 @@
 
 using System.Text;
-using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
@@ -8,12 +7,16 @@ using Microsoft.Extensions.ObjectPool;
 using Microsoft.IO;
 using Osekai.Octon.WebServer;
 using Osekai.Octon;
+using Osekai.Octon.Caching;
 using Osekai.Octon.Caching.MsgPack;
+using Osekai.Octon.Localization;
+using Osekai.Octon.Localization.File;
+using Osekai.Octon.Objects;
+using Osekai.Octon.Objects.Aggregators;
 using Osekai.Octon.OsuApi;
 using Osekai.Octon.Persistence.EntityFramework.MySql;
 using Osekai.Octon.Options;
 using Osekai.Octon.Persistence;
-using Osekai.Octon.Persistence.Aggregators;
 using Osekai.Octon.Services;
 using Osekai.Octon.WebServer.Presentation.AppBaseLayout;
 
@@ -36,7 +39,7 @@ builder.Services.AddSingleton<ObjectPool<StringBuilder>>(serviceProvider =>
 });
 
 builder.Services.AddSingleton<RecyclableMemoryStreamManager>();
-builder.Services.AddScoped<ICache, MsgPackDatabaseCache>();
+builder.Services.AddSingleton<ICache, InMemoryCache>();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<OsuApiV2Interface>();
 builder.Services.AddScoped<IAuthenticatedOsuApiV2Interface, AuthenticatedOsuApiV2Interface>();
@@ -47,13 +50,19 @@ builder.Services.AddScoped<AppService>();
 builder.Services.AddScoped<IOsuApiV2SessionProvider>(provider => provider.GetRequiredService<CurrentSession>());
 builder.Services.AddScoped<ITokenGenerator, RandomBytes128BitTokenGenerator>();
 builder.Services.AddSingleton<StaticUrlGenerator>();
-builder.Services.AddScoped<IMedalDataAggregator, MySqlEntityFrameworkMedalDataAggregator>();
-builder.Services.AddScoped<IAppBaseLayoutMedalDataGenerator, AppBaseLayoutMedaDataGenerator>();
-builder.Services.AddScoped<CachedAppBaseLayoutMedalDataGenerator>();
+builder.Services.AddScoped<IAggregator<IReadOnlyMedalWithInfo>, MySqlEntityFrameworkMedalWithInfoAggregator>();
+builder.Services.AddScoped<IAggregator<IReadOnlyAppWithAppTheme>, MySqlEntityFrameworkAppWithAppThemeAggregator>();
+builder.Services.AddScoped<IAdapter<IReadOnlyAppWithAppTheme, AppBaseLayoutApp>, AppBaseLayoutAppFromAppWithAppThemeAdapter>();
+builder.Services.AddScoped<IAdapter<IReadOnlyMedalWithInfo, AppBaseLayoutMedal>, AppBaseLayoutMedalFromMedalWithInfoAdapter>();
+builder.Services.AddScoped<IAdapter<IReadOnlyUserGroup, AppBaseLayoutUserGroup>, AppBaseLayoutUserGroupAdapter>();
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<PermissionService>();
 builder.Services.AddScoped<UserGroupService>();
-builder.Services.AddScoped<IAppBaseLayoutUserGroupDataGenerator, AppBaseLayoutUserGroupDataGenerator>();
+builder.Services.AddScoped<CurrentLocale>();
+
+builder.Services.AddSingleton<ILocalizatorFactory, CachedLocalizatorFactory>(serviceProvider => 
+    new CachedLocalizatorFactory(
+        new FileLocalizatorFactory(serviceProvider.GetRequiredService<ObjectPool<StringBuilder>>(), "../OsekaiOld/global/lang/")));
 
 builder.Services.AddMemoryCache();
 

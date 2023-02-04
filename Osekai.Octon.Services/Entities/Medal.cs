@@ -1,8 +1,7 @@
 ﻿using System.Diagnostics;
 using Osekai.Octon.Enums;
+using Osekai.Octon.Objects;
 using Osekai.Octon.Persistence;
-using Osekai.Octon.Persistence.Dtos;
-using Osekai.Octon.Persistence.Repositories;
 using Osekai.Octon.Services.Extensions;
 
 namespace Osekai.Octon.Services.Entities;
@@ -175,19 +174,19 @@ public class Medal
 
     public async Task<MedalSettings?> GetSettingsAsync(CancellationToken cancellationToken = default)
     {
-        MedalSettingsDto? medalSettingsDto = await UnitOfWork.MedalSettingsRepository.GetMedalSettingsByMedalIdAsync(Id, cancellationToken);
+        IReadOnlyMedalSettings? medalSettingsDto = await UnitOfWork.MedalSettingsRepository.GetMedalSettingsByMedalIdAsync(Id, cancellationToken);
         return medalSettingsDto?.ToEntity();
     }
     
     public async Task<MedalSolution?> GetSolutionAsync(CancellationToken cancellationToken = default)
     {
-        MedalSolutionDto? medalSettingsDto = await UnitOfWork.MedalSolutionRepository.GetMedalSolutionByMedalIdAsync(Id, cancellationToken);
+        IReadOnlyMedalSolution? medalSettingsDto = await UnitOfWork.MedalSolutionRepository.GetMedalSolutionByMedalIdAsync(Id, cancellationToken);
         return medalSettingsDto?.ToEntity();
     }
 
     public async Task<IReadOnlyDictionary<OsuGamemode, BeatmapPack>> GetBeatmapPacks(CancellationToken cancellationToken = default)
     {
-        IReadOnlyDictionary<OsuGamemode, BeatmapPackDto>? beatmapPacks = 
+        IReadOnlyDictionary<OsuGamemode, IReadOnlyBeatmapPack>? beatmapPacks = 
             await UnitOfWork.BeatmapPackRepository.GetBeatmapPacksByMedalId(Id, cancellationToken);
         
         Debug.Assert(beatmapPacks != null);

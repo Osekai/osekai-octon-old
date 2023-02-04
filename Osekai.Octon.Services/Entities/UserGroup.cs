@@ -1,11 +1,12 @@
 ﻿using System.Collections.Immutable;
 using System.Drawing;
 using Osekai.Octon.Enums;
+using Osekai.Octon.Objects;
 using Osekai.Octon.Persistence;
 
 namespace Osekai.Octon.Services.Entities;
 
-public class UserGroup
+public class UserGroup: IReadOnlyUserGroup
 {
     protected internal IUnitOfWork UnitOfWork { get; }
     

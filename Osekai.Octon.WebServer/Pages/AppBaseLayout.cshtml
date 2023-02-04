@@ -1,23 +1,25 @@
 ﻿@using System.Drawing
+@using Osekai.Octon.Drawing
 @using Osekai.Octon.WebServer
 @using Osekai.Octon.WebServer.Helpers
-@using Osekai.Octon.WebServer.Drawing
 @using Osekai.Octon.WebServer.Extensions
+@using Osekai.Octon.WebServer.Pages.Partials
 @model Osekai.Octon.WebServer.Pages.AppBaseLayout
 
 @{
     Layout = "BaseLayout";
     
-    Color color = Model.AccentOvveride?.Color ?? Model.AppTheme!.Color;
-    Color darkColor = Model.AccentOvveride?.DarkColor ?? Model.AppTheme!.DarkColor;
+    Color color = Model.AccentOvveride?.Color ?? Model.CurrentAppTheme!.Color;
+    Color darkColor = Model.AccentOvveride?.DarkColor ?? Model.CurrentAppTheme!.DarkColor;
 
     Hsl colorHsl = color.ToHsl();
     Hsl darkColorHsl = darkColor.ToHsl();
 }
  
-@section HeadExtension {
-    <link rel="stylesheet" href="@StringWithVersionQueryHtmlContent.Create($"/static/{Model.App.SimpleName}/css/main.css")" />
-    @if (Model.App.Experimental) {<link rel="stylesheet" href="@StringWithVersionQueryHtmlContent.Create($"/static/shared/css/experimental/main.css")" />}
+@section HeadExtension 
+{
+    <link rel="stylesheet" href="@StringWithVersionQueryHtmlContent.Create($"/static/{Model.CurrentApp.SimpleName}/css/main.css")" />
+    @if (Model.CurrentApp.Experimental) {<link rel="stylesheet" href="@StringWithVersionQueryHtmlContent.Create($"/static/shared/css/experimental/main.css")" />}
     <style>
     html{
         --accentdark: @($"{darkColor.R},{darkColor.G},{darkColor.B}");
@@ -28,22 +30,35 @@
         --accent_saturation: @(colorHsl.S)%;
         --accentdark_value: @(darkColorHsl.L)%;
         --accent_value: @(colorHsl.L)%;
-        --accentdark_valueoffset: @(Model.AppTheme!.DarkHslValueMultiplier);
-        --accent_valueoffset: @(Model.AppTheme!.HslValueMultiplier);
+        --accentdark_valueoffset: @(Model.CurrentAppTheme!.DarkHslValueMultiplier);
+        --accent_valueoffset: @(Model.CurrentAppTheme!.HslValueMultiplier);
     }
     </style>
     <style id="custom_theme_container"></style>
     <script>    
         const christmas = "0";
-        const medals = @(Json.Serialize(Model.Medals));
-        const nAppId = "@Model.App.Id";
+        const medals = @(Json.Serialize(Model.AppBaseLayoutMedals));
+        const nAppId = "@Model.CurrentApp.Id";
         const version = "@Constants.Version";
         const nUserID = @(Model.CurrentOsuUser?.Id ?? -1);
         const nUsername = "@(Model.CurrentOsuUser?.Username ?? "guest")";
         const nRights = 2;
-        const userGroups = @(Json.Serialize(Model.UserGroups));
+        const userGroups = @(Json.Serialize(Model.AppBaseLayoutUserGroups));
+        const currentlyApp = "@(Model.CurrentApp.SimpleName)";
+        const apps = @(Json.Serialize(Model.AppBaseLayoutApps));
     </script>
     
+    @if (IsSectionDefined("AppHeadExtension"))
+    {
+        @await RenderSectionAsync("AppHeadExtension")
+    }
 }
+
+<body>
+    @if (Model.ShowNavbar)
+    {
+        @await Html.PartialAsync("Partials/Navbar", new NavbarPartial(Model.Localizator, Model.CurrentApp, Model.Apps, Model.AppBaseLayoutApps, Model.CurrentOsuUser))
+    }
+</body>
 
 @RenderBody()

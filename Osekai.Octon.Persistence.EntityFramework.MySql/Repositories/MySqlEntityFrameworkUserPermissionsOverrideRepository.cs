@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Osekai.Octon.Persistence.Dtos;
+using Osekai.Octon.Objects;
+using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
 using Osekai.Octon.Persistence.EntityFramework.MySql.Models;
 using Osekai.Octon.Persistence.Repositories;
 
@@ -14,7 +15,7 @@ public class MySqlEntityFrameworkUserPermissionsOverrideRepository: IUserPermiss
         Context = context;
     }
     
-    public async Task<UserPermissionsOverrideDto?> GetUserPermissionOverrideByUserId(int userId, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyUserPermissionOverride?> GetUserPermissionOverrideByUserId(int userId, CancellationToken cancellationToken = default)
     {
         UserPermissionsOverride? userPermissionsOverride = await Context.UserPermissionsOverrides.AsNoTracking().FirstOrDefaultAsync(e => e.UserId == userId);
         return userPermissionsOverride?.ToDto();

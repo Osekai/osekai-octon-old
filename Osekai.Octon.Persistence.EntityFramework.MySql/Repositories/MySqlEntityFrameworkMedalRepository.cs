@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Osekai.Octon.Persistence.Dtos;
+using Osekai.Octon.Objects;
+using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
 using Osekai.Octon.Persistence.EntityFramework.MySql.Models;
 using Osekai.Octon.Persistence.Repositories;
 
@@ -14,7 +15,7 @@ public class MySqlEntityFrameworkMedalRepository: IMedalRepository
         Context = context;
     }
     
-    public async Task<IEnumerable<MedalDto>> GetMedalsAsync(
+    public async Task<IEnumerable<IReadOnlyMedal>> GetMedalsAsync(
         IMedalRepository.MedalFilter filter = default,
         int offset  = 0, 
         int limit = int.MaxValue,
@@ -32,7 +33,7 @@ public class MySqlEntityFrameworkMedalRepository: IMedalRepository
         return await medals.Select(medal => medal.ToDto()).ToArrayAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<MedalDto>> GetMedalsByBeatmapPackIdAsync(int beatmapPackId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<IReadOnlyMedal>> GetMedalsByBeatmapPackIdAsync(int beatmapPackId, CancellationToken cancellationToken = default)
     {
         IEnumerable<Medal> medal = await Context.BeatmapPacksForMedals
             .Include(e => e.Medal)

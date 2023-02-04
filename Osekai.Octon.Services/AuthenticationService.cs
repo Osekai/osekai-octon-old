@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Osekai.Octon.Exceptions;
+using Osekai.Octon.Objects;
 using Osekai.Octon.OsuApi;
 using Osekai.Octon.OsuApi.Payloads;
 using Osekai.Octon.Persistence;
-using Osekai.Octon.Persistence.Dtos;
 using Osekai.Octon.Persistence.HelperTypes;
 
 namespace Osekai.Octon.Services;
@@ -53,7 +53,7 @@ public class AuthenticationService
             DateTimeOffset expiresAt = responseTime.AddSeconds(authenticationResultPayload.ExpiresIn);
             
             await unitOfWork.SessionRepository.UpdateSessionPayloadAsync(_token, 
-                new SessionDtoPayload(authenticationResultPayload.Token, authenticationResultPayload.RefreshToken, expiresAt.UtcDateTime, user.Id), 
+                new SessionPayload(authenticationResultPayload.Token, authenticationResultPayload.RefreshToken, expiresAt.UtcDateTime, user.Id), 
                 cancellationToken);
 
             await unitOfWork.SaveChangesAsync(cancellationToken);
@@ -75,7 +75,7 @@ public class AuthenticationService
     
     public async Task<LogInWithCodeResult> LogInWithTokenAsync(string token, CancellationToken cancellationToken = default)
     {
-        SessionDto? session = await UnitOfWork.SessionRepository.GetSessionFromTokenAsync(token, cancellationToken);
+        IReadOnlySession? session = await UnitOfWork.SessionRepository.GetSessionFromTokenAsync(token, cancellationToken);
         
         if (session == null)
             throw new InvalidSessionTokenException(token);
@@ -126,18 +126,18 @@ public class AuthenticationService
         do generatedToken = TokenGenerator.GenerateToken();
         while (await UnitOfWork.SessionRepository.SessionExists(generatedToken, cancellationToken));
 
-        SessionDto session = await UnitOfWork.SessionRepository.AddSessionAsync(
+        IReadOnlySession sessionDto = await UnitOfWork.SessionRepository.AddSessionAsync(
             generatedToken,
-            new SessionDtoPayload(payload.Token, payload.RefreshToken,
+            new SessionPayload(payload.Token, payload.RefreshToken,
                 responseDateTime.AddSeconds(payload.ExpiresIn).UtcDateTime, user.Id),
             DateTimeOffset.Now.AddSeconds(Specifications.SessionTokenMaxAgeInSeconds), cancellationToken);
         
         return new SignInWithCodeResult(
             new OsuSessionContainer(
-                user.Id, session.Payload.OsuApiV2Token, session.Payload.OsuApiV2RefreshToken, session.Payload.ExpiresAt, 
-                new LocalOsuApiV2TokenUpdater(ServiceScopeFactory, OsuApiV2Interface, session.Token)), 
-            session.Token,
-            session.ExpiresAt);
+                user.Id, sessionDto.Payload.OsuApiV2Token, sessionDto.Payload.OsuApiV2RefreshToken, sessionDto.Payload.ExpiresAt, 
+                new LocalOsuApiV2TokenUpdater(ServiceScopeFactory, OsuApiV2Interface, sessionDto.Token)), 
+            sessionDto.Token,
+            sessionDto.ExpiresAt);
     }
 
     public Task RevokeTokenAsync(string token, CancellationToken cancellationToken = default) =>

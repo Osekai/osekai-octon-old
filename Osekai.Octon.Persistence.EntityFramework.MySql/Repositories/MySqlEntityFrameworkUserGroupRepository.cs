@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Osekai.Octon.Persistence.Dtos;
+using Osekai.Octon.Objects;
+using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
 using Osekai.Octon.Persistence.EntityFramework.MySql.Models;
 using Osekai.Octon.Persistence.Repositories;
 
@@ -14,13 +15,13 @@ public class MySqlEntityFrameworkUserGroupRepository: IUserGroupRepository
         Context = context;
     }
     
-    public async Task<UserGroupDto?> GetUserGroupByIdAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyUserGroup?> GetUserGroupByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         UserGroup? userGroup = await Context.UserGroups.AsNoTracking().FirstOrDefaultAsync(group => group.Id == id, cancellationToken);
         return userGroup?.ToDto();
     }
 
-    public async Task<IEnumerable<UserGroupDto>> GetUserGroupsOfUserAsync(int userId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<IReadOnlyUserGroup>> GetUserGroupsOfUserAsync(int userId, CancellationToken cancellationToken = default)
     {
         IEnumerable<UserGroup> userGroups = await Context.UserGroupsForUsers
             .AsNoTracking()
@@ -33,7 +34,7 @@ public class MySqlEntityFrameworkUserGroupRepository: IUserGroupRepository
         return userGroups.Select(e => e.ToDto());
     }
 
-    public async Task<IEnumerable<UserGroupDto>> GetUserGroups(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<IReadOnlyUserGroup>> GetUserGroups(CancellationToken cancellationToken = default)
     {
         IEnumerable<UserGroup> userGroups = await Context.UserGroups.ToArrayAsync(cancellationToken);
         return userGroups.Select(e => e.ToDto());

@@ -1,5 +1,5 @@
 ﻿using System.Drawing;
-using Osekai.Octon.WebServer.Drawing;
+using Osekai.Octon.Drawing;
 
 namespace Osekai.Octon.WebServer.Extensions;
 

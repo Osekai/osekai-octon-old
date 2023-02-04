@@ -1,8 +1,9 @@
-﻿using Osekai.Octon.Persistence.Dtos;
+﻿using Osekai.Octon.Objects;
+using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql.Models;
 
-internal sealed class BeatmapPack
+internal sealed class BeatmapPack: IReadOnlyBeatmapPack
 {
     public int Id { get; set; }
     public int BeatmapCount { get; set; }

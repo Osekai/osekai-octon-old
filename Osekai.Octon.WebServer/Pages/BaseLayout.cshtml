@@ -21,8 +21,10 @@
     <meta property="og:url" content="@Model.MetadataUrl"/>
     @await Html.PartialAsync("Partials/Fonts")
     @await Html.PartialAsync("Partials/Stylesheets")
+  
     @if (IsSectionDefined("HeadExtension"))
-    {@await RenderSectionAsync("HeadExtension")
+    {
+        @await RenderSectionAsync("HeadExtension")
     }
 </head>
 @RenderBody()

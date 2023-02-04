@@ -1,8 +1,8 @@
-﻿using Osekai.Octon.Persistence.Dtos;
+﻿using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql.Models;
 
-internal class MedalSettings
+internal sealed class MedalSettings
 {
     public int Id { get; set; }
     public int MedalId { get; set; }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Osekai.Octon.Persistence.Dtos;
+using Osekai.Octon.Objects;
+using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
 using Osekai.Octon.Persistence.EntityFramework.MySql.Models;
 using Osekai.Octon.Persistence.Repositories;
 
@@ -14,7 +15,7 @@ public class MySqlEntityFrameworkAppThemeRepository: IAppThemeRepository
         Context = context;
     }
     
-    public async Task<AppThemeDto?> GetAppThemeByAppIdAsync(int appId, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyAppTheme?> GetAppThemeByAppIdAsync(int appId, CancellationToken cancellationToken = default)
     {
         AppTheme? theme = await Context.AppThemes.Where(e => e.AppId == appId).FirstOrDefaultAsync(cancellationToken);
         return theme?.ToDto();

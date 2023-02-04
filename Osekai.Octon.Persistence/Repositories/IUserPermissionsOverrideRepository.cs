@@ -1,8 +1,8 @@
-﻿using Osekai.Octon.Persistence.Dtos;
+﻿using Osekai.Octon.Objects;
 
 namespace Osekai.Octon.Persistence.Repositories;
 
 public interface IUserPermissionsOverrideRepository
 {
-    Task<UserPermissionsOverrideDto?> GetUserPermissionOverrideByUserId(int userId, CancellationToken cancellationToken = default);
+    Task<IReadOnlyUserPermissionOverride?> GetUserPermissionOverrideByUserId(int userId, CancellationToken cancellationToken = default);
 }

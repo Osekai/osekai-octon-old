@@ -1,4 +1,4 @@
-﻿using Osekai.Octon.Persistence.Dtos;
+﻿using Osekai.Octon.Objects;
 
 namespace Osekai.Octon.Persistence.Repositories;
 
@@ -26,12 +26,12 @@ public interface IMedalRepository
         public string? Name { get; }
     } 
     
-    Task<IEnumerable<MedalDto>> GetMedalsAsync(
+    Task<IEnumerable<IReadOnlyMedal>> GetMedalsAsync(
         MedalFilter filter = default, 
         int offset  = 0, 
         int limit = int.MaxValue, 
         CancellationToken cancellationToken = default
     );
 
-    Task<IEnumerable<MedalDto>> GetMedalsByBeatmapPackIdAsync(int beatmapPackId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<IReadOnlyMedal>> GetMedalsByBeatmapPackIdAsync(int beatmapPackId, CancellationToken cancellationToken = default);
 }   

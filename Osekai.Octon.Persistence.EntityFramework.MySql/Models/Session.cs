@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using Osekai.Octon.Persistence.Dtos;
+using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
 using Osekai.Octon.Persistence.HelperTypes;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql.Models;
@@ -12,7 +12,7 @@ internal sealed class Session
 
     public SessionDto ToDto()
     {
-        SessionDtoPayload payload = JsonSerializer.Deserialize<SessionDtoPayload>(Payload) ?? throw new InvalidDataException();
+        SessionPayload payload = JsonSerializer.Deserialize<SessionPayload>(Payload) ?? throw new InvalidDataException();
         return new SessionDto(Token, payload, ExpiresAt);
     }
 }

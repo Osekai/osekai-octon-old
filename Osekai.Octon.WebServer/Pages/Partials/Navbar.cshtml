@@ -1,0 +1,517 @@
+@using Osekai.Octon.Objects.Aggregators
+@using Osekai.Octon.WebServer
+@using Osekai.Octon.WebServer.Helpers
+@using Osekai.Octon.WebServer.Presentation.AppBaseLayout
+@model Osekai.Octon.WebServer.Pages.Partials.NavbarPartial
+
+@{
+    AppBaseLayoutApp currentAppBaseLayoutApp = Model.AppBaseLayoutApps[Model.App.SimpleName];
+    IEnumerable<AppBaseLayoutApp> orderedVisibleApps = Model.Apps.Values.Where(a => a.App.Visible).Select(a => Model.AppBaseLayoutApps[a.App.SimpleName]).ToArray();
+}
+
+<img src="https://osu.ppy.sh/assets/images/mod_hidden.cfc32448.png?t=@DateTimeOffset.Now.ToUnixTimeSeconds()" onerror="cantContactOsu()" hidden class="hidden">
+
+<div id="osekai__popup_overlay"></div>
+<div class="osekai__blur-overlay" id="blur_overlay" onclick="hide_dropdowns()"></div>
+<h1 style="display: none;">@Model.App.Name</h1>
+
+<div class="osekai__navbar-container">
+    <div class="osekai__navbar">
+        <div class="osekai__navbar-warning hidden" id="cantContactOsu">
+            @await Model.Localizator.GetStringAsync("navbar.misc.cantContactOsu");
+        </div>
+        <!--
+        <div class="osekai__navbar-restriction">
+            <div class="osekai__navbar-restriction-icon">
+                <i class="fas fa-user-slash"></i>
+            </div>n 
+                <h3>@await Model.Localizator.GetStringAsync("navbar.misc.restriction")</h3>
+                <p>@await Model.Localizator.GetStringAsync("navbar.misc.description")</p>
+            </div>
+        </div>
+        -->
+        <div class="osekai__navbar-bottom">
+            <div class="osekai__navbar-left">
+
+                <div onclick="apps_dropdown()" class="osekai__navbar__app-container">
+
+                    <div class="osekai__navbar__app-logo">
+                        <img rel="preload" alt="@Model.App.Name" 
+                             src="@StringWithVersionQueryHtmlContent.Create($"/global/img/branding/vector/{currentAppBaseLayoutApp.Logo}.svg")">
+                    </div>
+                    <i class="fas fa-caret-down nav_chevron" id="nav_chevron"></i>
+                </div>
+            </div>
+            <div class="osekai__navbar-right">
+                <?php if (loggedin()) { ?>
+                    <div class="osekai__navbar-button tooltip-v2" id="notif__bell__button" tooltip-content="@await Model.Localizator.GetStringAsync("navbar.tooltip.notifications")">
+                        <i class="fas fa-bell"></i>
+                        <div class="osekai__notification-counter hidden" id="NotificationCountIcon">0</div>
+                    </div>
+                <?php } ?>
+
+                <div id="navbar_searchbut" onclick='openSearch(this)' class="osekai__navbar-button tooltip-v2" tooltip-content="@await Model.Localizator.GetStringAsync("navbar.misc.search")">
+                    <i class="fas fa-search"></i>
+                </div>
+
+                <img alt="Your profile picture" src="@ProfilePictureRetriever.GetProfilePictureFromOsuUser(Model.AuthenticatedUser)" onclick='dropdown("osekai__nav-dropdown-hidden", "dropdown__user", 1)' 
+                     class="osekai__navbar-pfp @(Model.App.Experimental ? "osekai__navbar-pfp-experimental" : string.Empty)">
+            </div>
+        </div>
+    </div>
+    <div class="osekai__navbar-alerts-container" id="alerts_container">
+
+    </div>
+</div>
+
+<div class="graceful__loading-overlay"></div>
+
+<style id="cardstyle">
+    .osekai__apps-dropdown-applist-right-card {
+        background-size: cover;
+        background: linear-gradient(92.75deg, rgba(var(--appColour), 0.5) 0%, rgba(var(--appColour), 0.25) 100%) linear-gradient(92.75deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.25) 100%) center;
+    }
+</style>
+
+<style id="extra_style"></style>
+
+<!-- <?php
+$showable_apps = [];
+
+
+foreach ($apps as $a) {
+
+    $cover = ROOT_URL . "/global/img/" . $a['cover'] . ".jpg";
+
+    $show = true;
+    if ($a['experimental'] == true) {
+        if (!isExperimental()) {
+            $show = false;
+        } else {
+            $show = true;
+        }
+    }
+    if ($a['visible'] == false) {
+        $show = false;
+    }
+    $currentApp = false;
+    if ($a['simplename'] == $app) {
+        $currentApp = true;
+    }
+    $url = ROOT_URL . "/" . $a['simplename'];
+
+
+    $app_x = [
+        "url" => $url,
+        "cover" => $cover,
+        "show" => $show,
+        "app" => $a
+    ];
+    if ($show == true) {
+        $showable_apps[] = $app_x;
+    }
+}
+?> -->
+
+
+<div id="dropdown__apps_mobile" class="osekai__apps-dropdown-mobile-hidden osekai__apps-dropdown-mobile mobile">
+    <div id="dropdown__apps-mobile-base" class="osekai__apps-dropdown-mobile-inner">
+        <div class="osekai__apps-dropdown-mobile-section" style="--height: 76px;">
+            @foreach (AppBaseLayoutApp app in orderedVisibleApps) {
+                <a class="osekai__apps-dropdown-mobile-button osekai__apps-dropdown-mobile-app" href="/@app.SimpleName">
+                    <img alt="Logo for @app.SimpleName" src="@StringWithVersionQueryHtmlContent.Create($"/global/img/branding/vector/{app.Logo}.svg")">
+                    <div class="osekai__apps-dropdown-mobile-app-texts">
+                        <h2>osekai <strong>@app.Name</strong></h2>
+                        <h3>@app.Slogan</h3>
+                    </div>
+                </a>
+            }
+        </div>
+
+        <div class="osekai__apps-dropdown-mobile-section" style="--height: 59px;">
+            <a class="osekai__apps-dropdown-mobile-button" onclick="showOtherApps()">
+                <p>@await Model.Localizator.GetStringAsync("navbar.otherApps.title")</p>
+            </a>
+        </div>
+
+        <div class="osekai__apps-dropdown-mobile-section" style="--height: 46px;">
+            <a class="osekai__apps-dropdown-mobile-button" href="/donate">
+                <i class="fas fa-heart"></i>
+                <p>@await Model.Localizator.GetStringAsync("navbar.apps.support")</p>
+            </a>
+            <a class="osekai__apps-dropdown-mobile-button" href="https://twitter.com/osekaiapp">
+                <i class="fab fa-twitter"></i>
+                <p>@await Model.Localizator.GetStringAsync("navbar.apps.twitter")</p>
+            </a>
+            <a class="osekai__apps-dropdown-mobile-button" href="https://discord.com/invite/8qpNTs6">
+                <i class="fab fa-discord"></i>
+                <p>@await Model.Localizator.GetStringAsync("navbar.apps.discord")</p>
+            </a>
+            <a class="osekai__apps-dropdown-mobile-button" href="https://discord.gg/uZ9CsQBvqM">
+                <i class="fab fa-discord"></i>
+                <p>@await Model.Localizator.GetStringAsync("navbar.apps.developmentDiscord")</p>
+            </a>
+        </div>
+
+        <div class="osekai__apps-dropdown-mobile-section" style="--height: 38px;">
+            <a class="osekai__apps-dropdown-mobile-button" href="/legal/privacy">
+                <p>@await Model.Localizator.GetStringAsync("navbar.apps.privacy")</p>
+            </a>
+            <a class="osekai__apps-dropdown-mobile-button" href="/legal/contact">
+                <p>@await Model.Localizator.GetStringAsync("navbar.apps.contact")</p>
+            </a>
+            <a class="osekai__apps-dropdown-mobile-button" href="/legal/licences">
+                <p>@await Model.Localizator.GetStringAsync("navbar.apps.licences")</p>
+            </a>
+        </div>
+
+        <div class="osekai__apps-dropdown-mobile-copyright">
+            © Osekai 2019-@DateTime.UtcNow.Year
+        </div>
+        <div class="extra-space"></div>
+    </div>
+    <div id="dropdown__apps-mobile-other" class="osekai__apps-dropdown-mobile-inner osekai__apps-dropdown-mobile-inner-hidden osekai__apps-dropdown-mobile-hidden">
+        <div class="osekai__apps-dropdown-mobile-section" style="--height: 59px;">
+            <a class="osekai__apps-dropdown-mobile-button" onclick="hideOtherApps()">
+                <i class="fas fa-chevron-left"></i>
+                <p>@await Model.Localizator.GetStringAsync("navbar.otherApps.back")</p>
+            </a>
+        </div>
+        <div class="osekai__apps-dropdown-mobile-section" style="--height: 70px;">
+            <!-- <?php
+            foreach ($otherApps as $oapp) {
+                // would name this $app but for whatever fucking reason php decides that it's
+                // a great idea to replace the variable "$app" with it and never put it 
+                // back globally across the entire project if you dare to do that so we
+                // have to kinda just be careful not to?? i hate this
+                echo "<a class=\"osekai__apps-dropdown-mobile-button\" href=\"{$oapp['link']}\">
+                    <i class=\"{$oapp['icon']}\"></i><p>{$oapp['name']}</p>
+                </a>";
+            }
+            ?> -->
+        </div>
+    </div>
+</div>
+
+
+<div id="dropdown__apps" class="osekai__apps-dropdown-hidden osekai__apps-dropdown desktop">
+    <div class="osekai__apps-dropdown-image" id="background_image">
+
+    </div>
+    <div id="otherapplist" class="osekai__apps-dropdown-applist osekai__apps-dropdown-applist-other osekai__apps-dropdown-hidden">
+        <div class="osekai__apps-dropdown-applist-left">
+
+            <div class="osekai__apps-dropdown-applist-left-top">
+                <div class="osekai__apps-dropdown-applist-left-bottom" onclick="hideOtherApps()">
+                    <p><i class="fas fa-chevron-left"></i> @await Model.Localizator.GetStringAsync("navbar.otherApps.back")</p>
+                </div>
+                <div class="osekai__apps-dropdown-other-content">
+                    <!-- <?php
+                    foreach ($otherApps as $oapp) {
+                        // would name this $app but for whatever fucking reason php decides that it's
+                        // a great idea to replace the variable "$app" with it and never put it 
+                        // back globally across the entire project if you dare to do that so we
+                        // have to kinda just be careful not to?? i hate this
+                        echo "<a class=\"osekai__apps-dropdown-other-content-button\" href=\"{$oapp['link']}\">
+                            <p><i class=\"{$oapp['icon']}\"></i> {$oapp['name']}</p>
+                        </a>";
+                    }
+                    ?> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="osekai__apps-dropdown-applist" id="outer-app-list">
+        <div id="applist" class="osekai__apps-dropdown-applist-left">
+            <div class="osekai__apps-dropdown-applist-left-top">
+                @foreach (AppBaseLayoutApp app in orderedVisibleApps) {
+                    <a onmouseover="setCardDetails('@app.SimpleName')" href="/@app.SimpleName" class="osekai__apps-dropdown-applist-app @(app)">
+                        <div class="osekai__apps-dropdown-applist-app-icon">
+                            <img alt="Logo for @app.SimpleName" src="/global/img/branding/vector/@(app.Logo).svg">
+                        </div>
+                        <p>osekai <strong>@app.SimpleName</strong></p>
+                    </a>
+                }
+            </div>
+
+            <div class="osekai__apps-dropdown-applist-left-bottom" onclick="showOtherApps()">
+                @await Model.Localizator.GetStringAsync("navbar.otherApps.title")
+            </div>
+
+        </div>
+        <div class="osekai__apps-dropdown-applist-right">
+            <div id="dropdown_card" class="osekai__apps-dropdown-applist-right-card">
+                <div class="osekai__apps-dropdown-applist-right-card-inner">
+                    <img id="dropdown_card_icon" alt="Logo" src="/global/img/branding/vector/@(currentAppBaseLayoutApp.Logo).svg">
+                    <div class="osekai__apps-dropdown-applist-right-card-texts">
+                        <h3 id="dropdown_card_title">osekai <strong>@currentAppBaseLayoutApp.SimpleName</strong></h3>
+                        <p id="dropdown_card_content">@currentAppBaseLayoutApp.Slogan</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="osekai__apps-dropdown-bottomleft">
+        <!-- support -->
+        <a class="osekai__apps-dropdown-bottomleft-extra" href="/donate">
+            <p>@await Model.Localizator.GetStringAsync("navbar.apps.support")</p>
+            <div class="osekai__apps-dropdown-bottomleft-extra-icon">
+                <i class="fas fa-heart"></i>
+            </div>
+        </a>
+        <a class="osekai__apps-dropdown-bottomleft-extra" href="https://twitter.com/osekaiapp">
+            <p>@await Model.Localizator.GetStringAsync("navbar.apps.twitter")</p>
+            <div class="osekai__apps-dropdown-bottomleft-extra-icon">
+                <i class="fab fa-twitter"></i>
+            </div>
+        </a>
+        <a rel="me" href="https://mastodon.world/@@osekai" class="osekai__apps-dropdown-bottomleft-extra">
+            <p>@await Model.Localizator.GetStringAsync("navbar.apps.mastodon")</p>
+            <div class="osekai__apps-dropdown-bottomleft-extra-icon">
+                <i class="fab fa-mastodon"></i>
+            </div>
+        </a>
+        <a class="osekai__apps-dropdown-bottomleft-extra" href="https://discord.com/invite/8qpNTs6">
+            <p>@await Model.Localizator.GetStringAsync("navbar.apps.discord")</p>
+            <div class="osekai__apps-dropdown-bottomleft-extra-icon">
+                <i class="fab fa-discord"></i>
+            </div>
+        </a>
+        <a class="osekai__apps-dropdown-bottomleft-extra" href="https://discord.gg/uZ9CsQBvqM">
+            <p>@await Model.Localizator.GetStringAsync("navbar.apps.developmentDiscord")</p>
+            <div class="osekai__apps-dropdown-bottomleft-extra-icon">
+                <i class="fab fa-discord"></i>
+            </div>
+        </a>
+    </div>
+
+    <div class="osekai__apps-dropdown-bottomright">
+        <div class="links">
+            <a href="https://github.com/Osekai/osekai">@await Model.Localizator.GetStringAsync("navbar.apps.github")</a>
+            <a href="https://github.com/Osekai/api-docs/wiki">@await Model.Localizator.GetStringAsync("navbar.apps.apiDocumentation")</a>
+            <a href="/legal/contact">@await Model.Localizator.GetStringAsync("navbar.apps.contact")</a>
+            <a href="/legal/licences">@await Model.Localizator.GetStringAsync("navbar.apps.licences")</a>
+            <a href="/legal/privacy">@await Model.Localizator.GetStringAsync("navbar.apps.privacy")</a>
+        </div>
+        <div class="osekai__apps-dropdown-bottomright-copyright">
+            © Osekai 2019-@DateTime.UtcNow.Year
+        </div>
+    </div>
+</div>
+
+<div id="dropdown__user" class="osekai__nav-dropdown-v2 osekai__nav-dropdown-hidden">
+    @if (Model.AuthenticatedUser != null) {
+        <div class="osekai__nav-dropdown-v2-mainpanel">
+            <a href="/profiles?user=@Model.AuthenticatedUser.Id"><img class="osekai__nav-dropdown-v2-mainpanel-avatar" src="@ProfilePictureRetriever.GetProfilePictureFromOsuUser(Model.AuthenticatedUser)"></a>
+            <div class="osekai__nav-dropdown-v2-mainpanel-texts osekai__nav-dropdown-v2-mainpanel-texts-loading" id="userdropdown_texts-loading">
+                <svg viewBox="0 0 50 50" class="spinner">
+                    <circle class="ring" cx="25" cy="25" r="22.5"></circle>
+                    <circle class="line" cx="25" cy="25" r="22.5"></circle>
+                </svg>
+            </div>
+            <div class="osekai__nav-dropdown-v2-mainpanel-texts hidden" id="userdropdown_texts">
+                <div class="osekai__nav-dropdown-v2-mainpanel-texts-top">
+                    <p class="osekai__nav-dropdown-v2-mainpanel-texts-left">@Model.AuthenticatedUser.Username</p>
+                    <p class="osekai__nav-dropdown-v2-mainpanel-texts-right" id="userdropdown_club">0% Club</p>
+                </div>
+                <div class="osekai__progress-bar">
+                    <div class="osekai__progessbar-inner" id="userdropdown__bar" style="width: 82.32%;"></div>
+                </div>
+                <div class="osekai__nav-dropdown-v2-mainpanel-texts-bottom">
+                    <p class="osekai__nav-dropdown-v2-mainpanel-texts-left" id="userdropdown_pp">0pp</p>
+                    <p class="osekai__nav-dropdown-v2-mainpanel-texts-right" id="userdropdown_medals">0 medals</p>
+                </div>
+            </div>
+        </div>
+        <div class="osekai__nav-dropdown-v2-lowerpanel">
+            <?php if (isExperimental()) { ?>
+                <!-- <div class="osekai__nav-dropdown-user-v2-lowerpanel-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p><?= GetStringRaw("navbar", "profile.experimentalMode"); ?></p>
+                </div> -->
+                <div class="osekai__generic-warning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <p>@await Model.Localizator.GetStringAsync("navbar.profile.experimentalMode")</p>
+                </div>
+                <a class="osekai__nav-dropdown-v2-lowerpanel-button" style="--col: 255, 100, 0" onclick="ExperimentalOff()">
+                    <div class="osekai__nav-dropdown-v2-lowerpanel-button-bar"></div>
+                    <p>
+                        Turn Experimental Mode Off
+                    </p>
+                </a>
+            <?php } ?>
+            <a class="osekai__nav-dropdown-v2-lowerpanel-button" style="--col: 104, 143, 255" href="/profiles?user=@Model.AuthenticatedUser.Id">
+                <div class="osekai__nav-dropdown-v2-lowerpanel-button-bar"></div>
+                <i class="oif-app-profiles"></i>
+                <p>
+                   @await Model.Localizator.GetStringAsync("navbar.profile.viewOnOsekaiProfiles")
+                </p>
+            </a>
+            <a class="osekai__nav-dropdown-v2-lowerpanel-button" style="--col: 255, 102, 170" href="https://osu.ppy.sh/users/@Model.AuthenticatedUser.Id">
+                <div class="osekai__nav-dropdown-v2-lowerpanel-button-bar"></div>
+                <i class="oif-osu-logo"></i>
+                <p>
+                   @await Model.Localizator.GetStringAsync("navbar.profile.viewOnOsu")
+                </p>
+            </a>
+            <a class="osekai__nav-dropdown-v2-lowerpanel-button" style="--col: 240, 240, 255" onclick='dropdown("osekai__dropdown-settings-hidden", "dropdown-settings-new", 1)'>
+                <div class="osekai__nav-dropdown-v2-lowerpanel-button-bar"></div>
+                <i class="fas fa-cog"></i>
+                <p>
+                   @await Model.Localizator.GetStringAsync("navbar.tooltip.settings")
+                </p>
+            </a>
+            <a class="osekai__nav-dropdown-v2-lowerpanel-button" style="--col: 255, 0, 0" href="/logout">
+                <div class="osekai__nav-dropdown-v2-lowerpanel-button-bar"></div>
+                <p>@await Model.Localizator.GetStringAsync("navbar.profile.logOut")</p>
+            </a>
+        </div>
+    } else {
+        <div class="osekai__nav-dropdown-v2-lowerpanel">
+            <a class="osekai__nav-dropdown-v2-lowerpanel-button" style="--col: 255, 102, 170" href="/login" onclick="openLoader('Logging you in...'); hide_dropdowns();">
+                <div class="osekai__nav-dropdown-v2-lowerpanel-button-bar"></div>
+                <p>@await Model.Localizator.GetStringAsync("navbar.profile.logIn")</p>
+            </a>
+
+        </div>
+    }
+</div>
+
+<div class="osekai__dropdown-settings osekai__dropdown-settings-hidden" id="dropdown-settings-new">
+    <div class="osekai__dropdown-settings-loader">
+    <svg viewBox='0 0 50 50' class='spinner'><circle class='ring' cx='25' cy='25' r='22.5' /><circle class='line' cx='25' cy='25' r='22.5' /></svg>
+    <p>Loading...</p>
+    </div>
+    <div class="osekai__dropdown-settings-pages">
+        <h1 class="osekai__dropdown-settings-pages-header">Settings <span onclick="hide_dropdowns()"><i class="fas fa-times-circle"></i> Close</span></h1>
+        <div class="osekai__dropdown-settings-pages-list" id="settings-page-list">
+            
+        </div>
+    </div>
+    <div class="osekai__dropdown-settings-content" id="settings-content">
+
+    </div>
+</div>
+
+<div id="dropdown__notifs" class="osekai__nav-dropdown-v2 osekai__nav-dropdown-v2-generic osekai__nav-dropdown-v2-notifications osekai__nav-dropdown-hidden">
+    <div class="osekai__nav-dropdown-v2-mainpanel">
+        <i class="fas fa-bell"></i>
+        <div class="osekai__nav-dropdown-v2-mainpanel-texts">
+            <h2>@await Model.Localizator.GetStringAsync("navbar.notifications.title")</h2>
+            <p>@await Model.Localizator.GetStringAsync("navbar.notifications.subtitle")</p>
+        </div>
+    </div>
+    <div class="osekai__nav-dropdown-v2-lowerpanel">
+        <div class="osekai__nav-dropdown-v2-notifications-header">
+            <div class="osekai__nav-dropdown-v2-notifications-header-left">
+                <p id="NotificationCount">@await Model.Localizator.GetStringAsync("navbar.notifications.count")</p>
+            </div>
+            <div id="ClearAll" class="osekai__nav-dropdown-v2-notifications-header-right">
+                <p>@await Model.Localizator.GetStringAsync("navbar.notifications.clearAll")</p> <i class="far fa-times-circle"></i>
+            </div>
+        </div>
+        <div id="notification__list__v2" class="osekai__nav-dropdown-v2-notifications-list">
+        </div>
+    </div>
+</div>
+
+<div id="loading_overlay">
+</div>
+
+<div id="other_overlays">
+</div>
+
+<div id="css_cont"></div>
+
+
+<script>
+    if ((@(Model.App.Experimental ? "1" : "0")) === 1) toggleExperimental();
+</script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+    /* customizable snowflake styling */
+    .snowflake {
+        color: #fff;
+        font-size: 1em;
+        font-family: Arial, sans-serif;
+        text-shadow: 0 0 5px #0005, 0px 0px 25px #fffa;
+        opacity: 1;
+        pointer-events: none;
+    }
+
+    @@-webkit-keyframes snowflakes-fall {
+        0% {
+            top: -10%
+        }
+
+        100% {
+            top: 100%
+        }
+    }
+
+    @@-webkit-keyframes snowflakes-shake {
+
+        0%,
+        100% {
+            -webkit-transform: translateX(0);
+            transform: translateX(0)
+        }
+
+        50% {
+            -webkit-transform: translateX(80px);
+            transform: translateX(80px)
+        }
+    }
+
+    @@keyframes snowflakes-fall {
+        0% {
+            top: -10%
+        }
+
+        100% {
+            top: 100%
+        }
+    }
+
+    @@keyframes snowflakes-shake {
+
+        0%,
+        100% {
+            transform: translateX(0)
+        }
+
+        50% {
+            transform: translateX(80px) translatey(40px)
+        }
+    }
+
+    .snowflake {
+        position: fixed;
+        top: -10%;
+        z-index: 9999;
+        opacity: 0.8;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        cursor: default;
+        -webkit-animation-name: snowflakes-fall, snowflakes-shake;
+        -webkit-animation-duration: 10s, 3s;
+        -webkit-animation-timing-function: linear, ease-in-out;
+        -webkit-animation-iteration-count: infinite, infinite;
+        -webkit-animation-play-state: running, running;
+        animation-name: snowflakes-fall, snowflakes-shake;
+        animation-duration: 10s, 3s;
+        animation-timing-function: linear, ease-in-out;
+        animation-iteration-count: infinite, infinite;
+        animation-play-state: running, running
+    }
+</style>
+
+<script type="text/javascript" src="@StringWithVersionQueryHtmlContent.Create("/global/js/variables.js")"></script>
+<script rel="preload" type="text/javascript" src="@StringWithVersionQueryHtmlContent.Create("/global/js/main.js")"></script>
+
+<script src="@StringWithVersionQueryHtmlContent.Create("/global/js/navbar.js")"></script>

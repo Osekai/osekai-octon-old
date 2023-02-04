@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Osekai.Octon.Persistence.Dtos;
+using Osekai.Octon.Objects;
+using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
 using Osekai.Octon.Persistence.EntityFramework.MySql.Models;
 using Osekai.Octon.Persistence.Repositories;
 
@@ -14,7 +15,7 @@ public class MySqlEntityFrameworkMedalSolutionRepository: IMedalSolutionReposito
         Context = context;
     }
     
-    public async Task<MedalSolutionDto?> GetMedalSolutionByMedalIdAsync(int medalId, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyMedalSolution?> GetMedalSolutionByMedalIdAsync(int medalId, CancellationToken cancellationToken = default)
     {
         MedalSolution? medalSolution = await Context.MedalSolutions.FirstOrDefaultAsync(e => e.MedalId == medalId);
         return medalSolution?.ToDto();

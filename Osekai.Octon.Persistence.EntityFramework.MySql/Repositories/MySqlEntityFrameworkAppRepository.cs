@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Osekai.Octon.Persistence.Dtos;
+using Osekai.Octon.Objects;
+using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
 using Osekai.Octon.Persistence.EntityFramework.MySql.Models;
 using Osekai.Octon.Persistence.Repositories;
 
@@ -13,7 +14,7 @@ public class MySqlEntityFrameworkAppRepository: IAppRepository
         Context = context;
     }
 
-    public async Task<AppDto?> GetAppByIdAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyApp?> GetAppByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         App? app = await Context.Apps.FindAsync(new object[] {id}, cancellationToken);
         
@@ -23,7 +24,7 @@ public class MySqlEntityFrameworkAppRepository: IAppRepository
     public async Task<bool> PatchAppAsync(int id, int order, string name, string simpleName, bool visible,
         bool experimental, CancellationToken cancellationToken = default)
     {
-        App? app = await Context.Apps.Where(app => app.Id == id).FirstOrDefaultAsync(cancellationToken);
+        App? app = await Context.Apps.FindAsync(new object?[] { id }, cancellationToken);
         if (app == null)
             return false;
         
@@ -34,5 +35,11 @@ public class MySqlEntityFrameworkAppRepository: IAppRepository
         app.Experimental = experimental;
         
         return true;
+    }
+
+    public async Task<IEnumerable<IReadOnlyApp>> GetAppsAsync(CancellationToken cancellationToken = default)
+    {
+        IEnumerable<App> app = await Context.Apps.ToArrayAsync(cancellationToken);
+        return app.Select(app => app.ToDto());
     }
 }

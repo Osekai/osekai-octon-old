@@ -17,7 +17,6 @@ public abstract class EntityFrameworkUnitOfWork<T>: IUnitOfWork where T: DbConte
 
     public abstract IAppRepository AppRepository { get; }
     public abstract ISessionRepository SessionRepository { get; }
-    public abstract ICacheEntryRepository CacheEntryRepository { get; }
     public abstract IMedalRepository MedalRepository { get; }
     public abstract IUserGroupRepository UserGroupRepository { get; }
     public abstract IAppThemeRepository AppThemeRepository { get; }

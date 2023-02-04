@@ -1,10 +1,10 @@
-﻿using Osekai.Octon.Persistence.Dtos;
+﻿using Osekai.Octon.Objects;
 
 namespace Osekai.Octon.Persistence.Repositories;
 
 public interface IUserGroupRepository
 {
-    Task<UserGroupDto?> GetUserGroupByIdAsync(int id, CancellationToken cancellationToken = default);
-    Task<IEnumerable<UserGroupDto>> GetUserGroupsOfUserAsync(int userId, CancellationToken cancellationToken = default);
-    Task<IEnumerable<UserGroupDto>> GetUserGroups(CancellationToken cancellationToken = default);
+    Task<IReadOnlyUserGroup?> GetUserGroupByIdAsync(int id, CancellationToken cancellationToken = default);
+    Task<IEnumerable<IReadOnlyUserGroup>> GetUserGroupsOfUserAsync(int userId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<IReadOnlyUserGroup>> GetUserGroups(CancellationToken cancellationToken = default);
 }
