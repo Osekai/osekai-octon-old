@@ -42,7 +42,7 @@ public abstract class AppBaseLayout : BaseLayout
     public IReadOnlyCollection<AppBaseLayoutMedal> AppBaseLayoutMedals { get; private set; } = null!;
     public IReadOnlyCollection<AppBaseLayoutUserGroup> AppBaseLayoutUserGroups { get; private set; } = null!;
     public IReadOnlyDictionary<string, AppBaseLayoutApp> AppBaseLayoutApps { get; private set; } = null!;
-    public ILocalizator Localizator { get; }
+    public CurrentLocale CurrentLocale { get; }
     public IReadOnlyDictionary<int, IReadOnlyAppWithAppTheme> Apps { get; private set; } = null!;
     public IReadOnlyCollection<IReadOnlyUserGroup> UserGroups { get; private set; } = null!;
     public IReadOnlyCollection<IReadOnlyMedalWithInfo> Medals { get; private set; } = null!;
@@ -72,7 +72,7 @@ public abstract class AppBaseLayout : BaseLayout
         AppBaseLayoutMedalAdapter = appBaseLayoutMedalAdapter;
         AppBaseLayoutUserGroupAdapter = appBaseLayoutUserGroupAdapter;
         AppBaseLayoutAppAdapter = appBaseLayoutAppAdapter;
-        Localizator = currentLocale.Localizator;
+        CurrentLocale = currentLocale;
         UserGroupService = userGroupService;
         AppId = appId;
         Cache = cache;

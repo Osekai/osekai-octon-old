@@ -46,6 +46,7 @@
         const userGroups = @(Json.Serialize(Model.AppBaseLayoutUserGroups));
         const currentlyApp = "@(Model.CurrentApp.SimpleName)";
         const apps = @(Json.Serialize(Model.AppBaseLayoutApps));
+        const currentLocale = "@(Model.CurrentLocale.LanguageCode)";
     </script>
     
     @if (IsSectionDefined("AppHeadExtension"))
@@ -58,7 +59,7 @@
     @if (Model.ShowNavbar)
     {
         @await Html.PartialAsync("Partials/Navbar", 
-            new NavbarPartial(Model.Localizator, Model.CurrentApp, Model.Apps, Model.AppBaseLayoutApps, Model.CurrentOsuUser))
+            new NavbarPartial(Model.CurrentLocale.Localizator, Model.CurrentApp, Model.Apps, Model.AppBaseLayoutApps, Model.CurrentOsuUser))
     }
 </body>
 
