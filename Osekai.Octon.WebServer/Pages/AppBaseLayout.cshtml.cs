@@ -31,8 +31,8 @@ public abstract class AppBaseLayout : BaseLayout
     protected IAdapter<IReadOnlyAppAggregateQueryResult, AppBaseLayoutApp> AppBaseLayoutAppAdapter { get; }
     protected CachedAuthenticatedOsuApiV2Interface OsuApiV2Interface { get; }
     protected CurrentSession CurrentSession { get; }
-    protected IQuery<IReadOnlyAppAggregateQueryResult> AppQuery { get; }
-    protected IQuery<IReadOnlyMedalAggregateQueryResult> MedalQuery { get; }
+    protected IQuery<IReadOnlyAppAggregateQueryResult> AppAggregateQuery { get; }
+    protected IQuery<IReadOnlyMedalAggregateQueryResult> MedalAggregateQuery { get; }
     protected UserGroupService UserGroupService { get; }
     protected LocaleService LocaleService { get; }
     protected ICache Cache { get; }
@@ -61,8 +61,8 @@ public abstract class AppBaseLayout : BaseLayout
         IAdapter<IReadOnlyMedalAggregateQueryResult, AppBaseLayoutMedal> appBaseLayoutMedalAdapter, 
         IAdapter<IReadOnlyUserGroup, AppBaseLayoutUserGroup> appBaseLayoutUserGroupAdapter,
         IAdapter<IReadOnlyAppAggregateQueryResult, AppBaseLayoutApp> appBaseLayoutAppAdapter,
-        IQuery<IReadOnlyAppAggregateQueryResult> appQuery,
-        IQuery<IReadOnlyMedalAggregateQueryResult> medalQuery,
+        IQuery<IReadOnlyAppAggregateQueryResult> appAggregateQuery,
+        IQuery<IReadOnlyMedalAggregateQueryResult> medalAggregateQuery,
         ICache cache,
         UserGroupService userGroupService,
         LocaleService localeService,
@@ -70,8 +70,8 @@ public abstract class AppBaseLayout : BaseLayout
     {
         CurrentSession = currentSession;
         OsuApiV2Interface = cachedAuthenticatedOsuApiV2Interface;
-        AppQuery = appQuery;
-        MedalQuery = medalQuery;
+        AppAggregateQuery = appAggregateQuery;
+        MedalAggregateQuery = medalAggregateQuery;
         AppBaseLayoutMedalAdapter = appBaseLayoutMedalAdapter;
         AppBaseLayoutUserGroupAdapter = appBaseLayoutUserGroupAdapter;
         AppBaseLayoutAppAdapter = appBaseLayoutAppAdapter;
@@ -92,8 +92,6 @@ public abstract class AppBaseLayout : BaseLayout
         public IReadOnlyCollection<AppBaseLayoutMedal> AppBaseLayoutMedals { get; init; } = null!;
         public IReadOnlyDictionary<string, AppBaseLayoutLocale> AppBaseLayoutLocales { get; init; } = null!;
     }
-
-    
     
     public virtual async Task<IActionResult> OnGet(CancellationToken cancellationToken)
     {
@@ -101,8 +99,8 @@ public abstract class AppBaseLayout : BaseLayout
 
         if (appBaseLayoutCacheEntry == null)
         {
-            Apps = (await AppQuery.ExecuteAsync(cancellationToken)).ToDictionary(k => k.App.Id, e => e);
-            Medals = (await MedalQuery.ExecuteAsync(cancellationToken)).ToArray();
+            Apps = (await AppAggregateQuery.ExecuteAsync(cancellationToken)).ToDictionary(k => k.App.Id, e => e);
+            Medals = (await MedalAggregateQuery.ExecuteAsync(cancellationToken)).ToArray();
             UserGroups = (await UserGroupService.GetUserGroupsAsync(cancellationToken)).ToArray();
 
             AppBaseLayoutLocales = (await LocaleService.GetLocalesAsync(cancellationToken))
@@ -131,7 +129,7 @@ public abstract class AppBaseLayout : BaseLayout
                 AppBaseLayoutMedals = AppBaseLayoutMedals,
                 AppBaseLayoutUserGroups = AppBaseLayoutUserGroups,
                 AppBaseLayoutLocales = AppBaseLayoutLocales
-            });
+            }, cancellationToken: cancellationToken);
         }
         else
         {

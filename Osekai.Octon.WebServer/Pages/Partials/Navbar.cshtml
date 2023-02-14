@@ -17,15 +17,15 @@
 <div class="osekai__navbar-container">
     <div class="osekai__navbar">
         <div class="osekai__navbar-warning hidden" id="cantContactOsu">
-            @await Model.Localizator.GetStringAsync("navbar.misc.cantContactOsu");
+            @Html.Raw(await Model.Localizator.GetStringAsync("navbar.misc.cantContactOsu"));
         </div>
         <!--
         <div class="osekai__navbar-restriction">
             <div class="osekai__navbar-restriction-icon">
                 <i class="fas fa-user-slash"></i>
             </div>n 
-                <h3>@await Model.Localizator.GetStringAsync("navbar.misc.restriction")</h3>
-                <p>@await Model.Localizator.GetStringAsync("navbar.misc.description")</p>
+                <h3>@Html.Raw(await Model.Localizator.GetStringAsync("navbar.misc.restriction"))</h3>
+                <p>@Html.Raw(await Model.Localizator.GetStringAsync("navbar.misc.description"))</p>
             </div>
         </div>
         -->
@@ -43,13 +43,13 @@
             </div>
             <div class="osekai__navbar-right">
                 <?php if (loggedin()) { ?>
-                    <div class="osekai__navbar-button tooltip-v2" id="notif__bell__button" tooltip-content="@await Model.Localizator.GetStringAsync("navbar.tooltip.notifications", new object[] { 0 })">
+                    <div class="osekai__navbar-button tooltip-v2" id="notif__bell__button" tooltip-content="@Html.Raw(await Model.Localizator.GetStringAsync("navbar.tooltip.notifications", new object[] { 0 }))">
                         <i class="fas fa-bell"></i>
                         <div class="osekai__notification-counter hidden" id="NotificationCountIcon">0</div>
                     </div>
                 <?php } ?>
 
-                <div id="navbar_searchbut" onclick='openSearch(this)' class="osekai__navbar-button tooltip-v2" tooltip-content="@await Model.Localizator.GetStringAsync("navbar.misc.search")">
+                <div id="navbar_searchbut" onclick='openSearch(this)' class="osekai__navbar-button tooltip-v2" tooltip-content="@Html.Raw(await Model.Localizator.GetStringAsync("navbar.misc.search"))">
                     <i class="fas fa-search"></i>
                 </div>
 
@@ -129,38 +129,38 @@ foreach ($apps as $a) {
 
         <div class="osekai__apps-dropdown-mobile-section" style="--height: 59px;">
             <a class="osekai__apps-dropdown-mobile-button" onclick="showOtherApps()">
-                <p>@await Model.Localizator.GetStringAsync("navbar.otherApps.title")</p>
+                <p>@Html.Raw(await Model.Localizator.GetStringAsync("navbar.otherApps.title"))</p>
             </a>
         </div>
 
         <div class="osekai__apps-dropdown-mobile-section" style="--height: 46px;">
             <a class="osekai__apps-dropdown-mobile-button" href="/donate">
                 <i class="fas fa-heart"></i>
-                <p>@await Model.Localizator.GetStringAsync("navbar.apps.support")</p>
+                <p>@Html.Raw(await Model.Localizator.GetStringAsync("navbar.apps.support"))</p>
             </a>
             <a class="osekai__apps-dropdown-mobile-button" href="https://twitter.com/osekaiapp">
                 <i class="fab fa-twitter"></i>
-                <p>@await Model.Localizator.GetStringAsync("navbar.apps.twitter")</p>
+                <p>@Html.Raw(await Model.Localizator.GetStringAsync("navbar.apps.twitter"))</p>
             </a>
             <a class="osekai__apps-dropdown-mobile-button" href="https://discord.com/invite/8qpNTs6">
                 <i class="fab fa-discord"></i>
-                <p>@await Model.Localizator.GetStringAsync("navbar.apps.discord")</p>
+                <p>@Html.Raw(await Model.Localizator.GetStringAsync("navbar.apps.discord"))</p>
             </a>
             <a class="osekai__apps-dropdown-mobile-button" href="https://discord.gg/uZ9CsQBvqM">
                 <i class="fab fa-discord"></i>
-                <p>@await Model.Localizator.GetStringAsync("navbar.apps.developmentDiscord")</p>
+                <p>@Html.Raw(await Model.Localizator.GetStringAsync("navbar.apps.developmentDiscord"))</p>
             </a>
         </div>
 
         <div class="osekai__apps-dropdown-mobile-section" style="--height: 38px;">
             <a class="osekai__apps-dropdown-mobile-button" href="/legal/privacy">
-                <p>@await Model.Localizator.GetStringAsync("navbar.apps.privacy")</p>
+                <p>@Html.Raw(await Model.Localizator.GetStringAsync("navbar.apps.privacy"))</p>
             </a>
             <a class="osekai__apps-dropdown-mobile-button" href="/legal/contact">
-                <p>@await Model.Localizator.GetStringAsync("navbar.apps.contact")</p>
+                <p>@Html.Raw(await Model.Localizator.GetStringAsync("navbar.apps.contact"))</p>
             </a>
             <a class="osekai__apps-dropdown-mobile-button" href="/legal/licences">
-                <p>@await Model.Localizator.GetStringAsync("navbar.apps.licences")</p>
+                <p>@Html.Raw(await Model.Localizator.GetStringAsync("navbar.apps.licences"))</p>
             </a>
         </div>
 
@@ -173,7 +173,7 @@ foreach ($apps as $a) {
         <div class="osekai__apps-dropdown-mobile-section" style="--height: 59px;">
             <a class="osekai__apps-dropdown-mobile-button" onclick="hideOtherApps()">
                 <i class="fas fa-chevron-left"></i>
-                <p>@await Model.Localizator.GetStringAsync("navbar.otherApps.back")</p>
+                <p>@Html.Raw(await Model.Localizator.GetStringAsync("navbar.otherApps.back"))</p>
             </a>
         </div>
         <div class="osekai__apps-dropdown-mobile-section" style="--height: 70px;">
@@ -202,7 +202,7 @@ foreach ($apps as $a) {
 
             <div class="osekai__apps-dropdown-applist-left-top">
                 <div class="osekai__apps-dropdown-applist-left-bottom" onclick="hideOtherApps()">
-                    <p><i class="fas fa-chevron-left"></i> @await Model.Localizator.GetStringAsync("navbar.otherApps.back")</p>
+                    <p><i class="fas fa-chevron-left"></i> @Html.Raw(await Model.Localizator.GetStringAsync("navbar.otherApps.back"))</p>
                 </div>
                 <div class="osekai__apps-dropdown-other-content">
                     <!-- <?php
@@ -234,7 +234,7 @@ foreach ($apps as $a) {
             </div>
 
             <div class="osekai__apps-dropdown-applist-left-bottom" onclick="showOtherApps()">
-                @await Model.Localizator.GetStringAsync("navbar.otherApps.title")
+                @Html.Raw(await Model.Localizator.GetStringAsync("navbar.otherApps.title"))
             </div>
 
         </div>
@@ -254,31 +254,31 @@ foreach ($apps as $a) {
     <div class="osekai__apps-dropdown-bottomleft">
         <!-- support -->
         <a class="osekai__apps-dropdown-bottomleft-extra" href="/donate">
-            <p>@await Model.Localizator.GetStringAsync("navbar.apps.support")</p>
+            <p>@Html.Raw(await Model.Localizator.GetStringAsync("navbar.apps.support"))</p>
             <div class="osekai__apps-dropdown-bottomleft-extra-icon">
                 <i class="fas fa-heart"></i>
             </div>
         </a>
         <a class="osekai__apps-dropdown-bottomleft-extra" href="https://twitter.com/osekaiapp">
-            <p>@await Model.Localizator.GetStringAsync("navbar.apps.twitter")</p>
+            <p>@Html.Raw(await Model.Localizator.GetStringAsync("navbar.apps.twitter"))</p>
             <div class="osekai__apps-dropdown-bottomleft-extra-icon">
                 <i class="fab fa-twitter"></i>
             </div>
         </a>
         <a rel="me" href="https://mastodon.world/@@osekai" class="osekai__apps-dropdown-bottomleft-extra">
-            <p>@await Model.Localizator.GetStringAsync("navbar.apps.mastodon")</p>
+            <p>@Html.Raw(await Model.Localizator.GetStringAsync("navbar.apps.mastodon"))</p>
             <div class="osekai__apps-dropdown-bottomleft-extra-icon">
                 <i class="fab fa-mastodon"></i>
             </div>
         </a>
         <a class="osekai__apps-dropdown-bottomleft-extra" href="https://discord.com/invite/8qpNTs6">
-            <p>@await Model.Localizator.GetStringAsync("navbar.apps.discord")</p>
+            <p>@Html.Raw(await Model.Localizator.GetStringAsync("navbar.apps.discord"))</p>
             <div class="osekai__apps-dropdown-bottomleft-extra-icon">
                 <i class="fab fa-discord"></i>
             </div>
         </a>
         <a class="osekai__apps-dropdown-bottomleft-extra" href="https://discord.gg/uZ9CsQBvqM">
-            <p>@await Model.Localizator.GetStringAsync("navbar.apps.developmentDiscord")</p>
+            <p>@Html.Raw(await Model.Localizator.GetStringAsync("navbar.apps.developmentDiscord"))</p>
             <div class="osekai__apps-dropdown-bottomleft-extra-icon">
                 <i class="fab fa-discord"></i>
             </div>
@@ -287,11 +287,11 @@ foreach ($apps as $a) {
 
     <div class="osekai__apps-dropdown-bottomright">
         <div class="links">
-            <a href="https://github.com/Osekai/osekai">@await Model.Localizator.GetStringAsync("navbar.apps.github")</a>
-            <a href="https://github.com/Osekai/api-docs/wiki">@await Model.Localizator.GetStringAsync("navbar.apps.apiDocumentation")</a>
-            <a href="/legal/contact">@await Model.Localizator.GetStringAsync("navbar.apps.contact")</a>
-            <a href="/legal/licences">@await Model.Localizator.GetStringAsync("navbar.apps.licences")</a>
-            <a href="/legal/privacy">@await Model.Localizator.GetStringAsync("navbar.apps.privacy")</a>
+            <a href="https://github.com/Osekai/osekai">@Html.Raw(await Model.Localizator.GetStringAsync("navbar.apps.github"))</a>
+            <a href="https://github.com/Osekai/api-docs/wiki">@Html.Raw(await Model.Localizator.GetStringAsync("navbar.apps.apiDocumentation"))</a>
+            <a href="/legal/contact">@Html.Raw(await Model.Localizator.GetStringAsync("navbar.apps.contact"))</a>
+            <a href="/legal/licences">@Html.Raw(await Model.Localizator.GetStringAsync("navbar.apps.licences"))</a>
+            <a href="/legal/privacy">@Html.Raw(await Model.Localizator.GetStringAsync("navbar.apps.privacy"))</a>
         </div>
         <div class="osekai__apps-dropdown-bottomright-copyright">
             © Osekai 2019-@DateTime.UtcNow.Year
@@ -331,7 +331,7 @@ foreach ($apps as $a) {
                 </div> -->
                 <div class="osekai__generic-warning">
                     <i class="fas fa-exclamation-triangle"></i>
-                    <p>@await Model.Localizator.GetStringAsync("navbar.profile.experimentalMode")</p>
+                    <p>@Html.Raw(await Model.Localizator.GetStringAsync("navbar.profile.experimentalMode"))</p>
                 </div>
                 <a class="osekai__nav-dropdown-v2-lowerpanel-button" style="--col: 255, 100, 0" onclick="ExperimentalOff()">
                     <div class="osekai__nav-dropdown-v2-lowerpanel-button-bar"></div>
@@ -344,33 +344,33 @@ foreach ($apps as $a) {
                 <div class="osekai__nav-dropdown-v2-lowerpanel-button-bar"></div>
                 <i class="oif-app-profiles"></i>
                 <p>
-                   @await Model.Localizator.GetStringAsync("navbar.profile.viewOnOsekaiProfiles")
+                   @Html.Raw(await Model.Localizator.GetStringAsync("navbar.profile.viewOnOsekaiProfiles"))
                 </p>
             </a>
             <a class="osekai__nav-dropdown-v2-lowerpanel-button" style="--col: 255, 102, 170" href="https://osu.ppy.sh/users/@Model.AuthenticatedUser.Id">
                 <div class="osekai__nav-dropdown-v2-lowerpanel-button-bar"></div>
                 <i class="oif-osu-logo"></i>
                 <p>
-                   @await Model.Localizator.GetStringAsync("navbar.profile.viewOnOsu")
+                   @Html.Raw(await Model.Localizator.GetStringAsync("navbar.profile.viewOnOsu"))
                 </p>
             </a>
             <a class="osekai__nav-dropdown-v2-lowerpanel-button" style="--col: 240, 240, 255" onclick='dropdown("osekai__dropdown-settings-hidden", "dropdown-settings-new", 1)'>
                 <div class="osekai__nav-dropdown-v2-lowerpanel-button-bar"></div>
                 <i class="fas fa-cog"></i>
                 <p>
-                   @await Model.Localizator.GetStringAsync("navbar.tooltip.settings")
+                   @Html.Raw(await Model.Localizator.GetStringAsync("navbar.tooltip.settings"))
                 </p>
             </a>
             <a class="osekai__nav-dropdown-v2-lowerpanel-button" style="--col: 255, 0, 0" href="/logout">
                 <div class="osekai__nav-dropdown-v2-lowerpanel-button-bar"></div>
-                <p>@await Model.Localizator.GetStringAsync("navbar.profile.logOut")</p>
+                <p>@Html.Raw(await Model.Localizator.GetStringAsync("navbar.profile.logOut"))</p>
             </a>
         </div>
     } else {
         <div class="osekai__nav-dropdown-v2-lowerpanel">
             <a class="osekai__nav-dropdown-v2-lowerpanel-button" style="--col: 255, 102, 170" href="/login" onclick="openLoader('Logging you in...'); hide_dropdowns();">
                 <div class="osekai__nav-dropdown-v2-lowerpanel-button-bar"></div>
-                <p>@await Model.Localizator.GetStringAsync("navbar.profile.logIn")</p>
+                <p>@Html.Raw(await Model.Localizator.GetStringAsync("navbar.profile.logIn"))</p>
             </a>
 
         </div>
@@ -397,17 +397,17 @@ foreach ($apps as $a) {
     <div class="osekai__nav-dropdown-v2-mainpanel">
         <i class="fas fa-bell"></i>
         <div class="osekai__nav-dropdown-v2-mainpanel-texts">
-            <h2>@await Model.Localizator.GetStringAsync("navbar.notifications.title")</h2>
-            <p>@await Model.Localizator.GetStringAsync("navbar.notifications.subtitle")</p>
+            <h2>@Html.Raw(await Model.Localizator.GetStringAsync("navbar.notifications.title"))</h2>
+            <p>@Html.Raw(await Model.Localizator.GetStringAsync("navbar.notifications.subtitle"))</p>
         </div>
     </div>
     <div class="osekai__nav-dropdown-v2-lowerpanel">
         <div class="osekai__nav-dropdown-v2-notifications-header">
             <div class="osekai__nav-dropdown-v2-notifications-header-left">
-                <p id="NotificationCount">@await Model.Localizator.GetStringAsync("navbar.notifications.count", new object[] {0})</p>
+                <p id="NotificationCount">@Html.Raw(await Model.Localizator.GetStringAsync("navbar.notifications.count", new object[] {0}))</p>
             </div>
             <div id="ClearAll" class="osekai__nav-dropdown-v2-notifications-header-right">
-                <p>@await Model.Localizator.GetStringAsync("navbar.notifications.clearAll")</p> <i class="far fa-times-circle"></i>
+                <p>@Html.Raw(await Model.Localizator.GetStringAsync("navbar.notifications.clearAll"))</p> <i class="far fa-times-circle"></i>
             </div>
         </div>
         <div id="notification__list__v2" class="osekai__nav-dropdown-v2-notifications-list">

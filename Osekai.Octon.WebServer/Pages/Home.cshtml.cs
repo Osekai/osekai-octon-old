@@ -14,8 +14,8 @@ public class Home : AppBaseLayout
     public override string MetadataThemeColor => "#353d55";
     public override string MetadataUrl => "https://osekai.net/home";
 
-    public Home(CurrentSession currentSession, CurrentLocale currentLocale, CachedAuthenticatedOsuApiV2Interface cachedAuthenticatedOsuApiV2Interface, IAdapter<IReadOnlyMedalAggregateQueryResult, AppBaseLayoutMedal> appBaseLayoutMedalAdapter, IAdapter<IReadOnlyUserGroup, AppBaseLayoutUserGroup> appBaseLayoutUserGroupAdapter, IAdapter<IReadOnlyAppAggregateQueryResult, AppBaseLayoutApp> appBaseLayoutAppAdapter, IQuery<IReadOnlyAppAggregateQueryResult> appQuery, IQuery<IReadOnlyMedalAggregateQueryResult> medalQuery, ICache cache, UserGroupService userGroupService, LocaleService localeService) 
-        : base(currentSession, currentLocale, cachedAuthenticatedOsuApiV2Interface, appBaseLayoutMedalAdapter, appBaseLayoutUserGroupAdapter, appBaseLayoutAppAdapter, appQuery, medalQuery, cache, userGroupService, localeService, -1)
+    public Home(CurrentSession currentSession, CurrentLocale currentLocale, CachedAuthenticatedOsuApiV2Interface cachedAuthenticatedOsuApiV2Interface, IAdapter<IReadOnlyMedalAggregateQueryResult, AppBaseLayoutMedal> appBaseLayoutMedalAdapter, IAdapter<IReadOnlyUserGroup, AppBaseLayoutUserGroup> appBaseLayoutUserGroupAdapter, IAdapter<IReadOnlyAppAggregateQueryResult, AppBaseLayoutApp> appBaseLayoutAppAdapter, IQuery<IReadOnlyAppAggregateQueryResult> appAggregateQuery, IQuery<IReadOnlyMedalAggregateQueryResult> medalAggregateQuery, ICache cache, UserGroupService userGroupService, LocaleService localeService) 
+        : base(currentSession, currentLocale, cachedAuthenticatedOsuApiV2Interface, appBaseLayoutMedalAdapter, appBaseLayoutUserGroupAdapter, appBaseLayoutAppAdapter, appAggregateQuery, medalAggregateQuery, cache, userGroupService, localeService, -1)
     {
     }
 }

@@ -53,7 +53,6 @@
         const locales = @(Json.Serialize(Model.AppBaseLayoutLocales));
         const sourcesNames = ["groups","report","apps","badges","comments","faq","general","home","medals","navbar","profiles","rankings","snapshots","donate","contact","misc/translators","misc/groups","misc/global"];
         const currentLocale = locales["@(Model.CurrentLocale.LanguageCode)"];
-        const mobile = @(Model.Mobile ? "true" : "false");
     </script>
     
     @if (IsSectionDefined("AppHeadExtension"))
