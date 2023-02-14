@@ -34,6 +34,9 @@
         --accent_valueoffset: @(Model.CurrentReadOnlyAppTheme!.HslValueMultiplier);
     }
     </style>
+    
+    @Html.Partial("Partials/Tippy")
+
     <style id="custom_theme_container"></style>
     <script>    
         const christmas = "0";
@@ -46,9 +49,11 @@
         const userGroups = @(Json.Serialize(Model.AppBaseLayoutUserGroups));
         const currentlyApp = "@(Model.CurrentApp.SimpleName)";
         const apps = @(Json.Serialize(Model.AppBaseLayoutApps));
+        const experimental = false;
         const locales = @(Json.Serialize(Model.AppBaseLayoutLocales));
         const sourcesNames = ["groups","report","apps","badges","comments","faq","general","home","medals","navbar","profiles","rankings","snapshots","donate","contact","misc/translators","misc/groups","misc/global"];
         const currentLocale = locales["@(Model.CurrentLocale.LanguageCode)"];
+        const mobile = @(Model.Mobile ? "true" : "false");
     </script>
     
     @if (IsSectionDefined("AppHeadExtension"))

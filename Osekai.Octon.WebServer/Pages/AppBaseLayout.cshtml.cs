@@ -1,11 +1,9 @@
 ﻿using System.Drawing;
 using Microsoft.AspNetCore.Mvc;
-using Osekai.Octon.Localization;
 using Osekai.Octon.Models;
 using Osekai.Octon.Persistence;
 using Osekai.Octon.OsuApi;
 using Osekai.Octon.OsuApi.Payloads;
-using Osekai.Octon.Persistence.EntityFramework.MySql.Entities;
 using Osekai.Octon.Persistence.QueryResults;
 using Osekai.Octon.Services;
 using Osekai.Octon.WebServer.Presentation.AppBaseLayout;
@@ -38,6 +36,7 @@ public abstract class AppBaseLayout : BaseLayout
     protected UserGroupService UserGroupService { get; }
     protected LocaleService LocaleService { get; }
     protected ICache Cache { get; }
+    
 
     public virtual AccentOverride? AccentOvveride => null;
     public IReadOnlyCollection<AppBaseLayoutMedal> AppBaseLayoutMedals { get; private set; } = null!;
@@ -51,7 +50,8 @@ public abstract class AppBaseLayout : BaseLayout
     public IReadOnlyApp CurrentApp { get; private set; } = null!;
     public IReadOnlyAppTheme CurrentReadOnlyAppTheme { get; private set; } = null!;
     public OsuUser? CurrentOsuUser { get; private set; }
-
+    public bool Mobile { get; private set; }
+    
     public virtual bool ShowNavbar => true;
 
     protected AppBaseLayout(
@@ -93,6 +93,8 @@ public abstract class AppBaseLayout : BaseLayout
         public IReadOnlyDictionary<string, AppBaseLayoutLocale> AppBaseLayoutLocales { get; init; } = null!;
     }
 
+    
+    
     public virtual async Task<IActionResult> OnGet(CancellationToken cancellationToken)
     {
         AppBaseLayoutCacheEntry? appBaseLayoutCacheEntry = await Cache.GetAsync<AppBaseLayoutCacheEntry>("app_base_layout_cache_entry", cancellationToken);
@@ -150,6 +152,9 @@ public abstract class AppBaseLayout : BaseLayout
         
         if (!CurrentSession.IsNull())
             CurrentOsuUser = await OsuApiV2Interface.MeAsync(CurrentSession, cancellationToken: cancellationToken);
+
+        if (MobileUserAgentMatcher.IsMatch(HttpContext.Request.Headers.UserAgent.ToString()))
+            Mobile = true;    
 
         return Page();
     }
