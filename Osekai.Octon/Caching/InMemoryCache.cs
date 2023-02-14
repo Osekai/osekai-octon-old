@@ -18,7 +18,7 @@ public class InMemoryCache: ICache
     }
 
     private readonly ReaderWriterLockSlim _dictionaryRwLock;
-    private object _cleanTaskLock;
+    private readonly object _cleanTaskLock;
     
     private readonly Dictionary<string, Entry> _objects;
     private Task? _cleanTask;

@@ -51,7 +51,7 @@ public class FileLocalizator: AbstractLocalizator
         {
             if (!SourceCache.TryGetValue(source, out keys))
             {
-                Task<IDisposable> newLockTask = _lock.WriterLockAsync(cancellationToken);
+                AwaitableDisposable<IDisposable> newLockTask = _lock.WriterLockAsync(cancellationToken);
                 lockHandle.Dispose();
                 lockHandle = await newLockTask;
 

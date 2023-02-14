@@ -22,7 +22,7 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql.Migrations
 
             MySqlModelBuilderExtensions.HasCharSet(modelBuilder, "utf8mb4");
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Models.App", b =>
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.App", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -57,7 +57,7 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql.Migrations
                     MySqlEntityTypeBuilderExtensions.UseCollation(b, "utf8mb4_general_ci");
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Models.AppTheme", b =>
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.AppTheme", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -101,7 +101,7 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql.Migrations
                     b.ToTable("AppThemes", (string)null);
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Models.BeatmapPack", b =>
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.BeatmapPack", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -115,7 +115,7 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql.Migrations
                     b.ToTable("BeatmapPacks");
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Models.BeatmapPackForMedal", b =>
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.BeatmapPackForMedal", b =>
                 {
                     b.Property<int>("MedalId")
                         .HasColumnType("int");
@@ -133,7 +133,7 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql.Migrations
                     b.ToTable("BeatmapPacksForMedals");
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Models.CacheEntry", b =>
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.CacheEntry", b =>
                 {
                     b.Property<string>("Name")
                         .HasMaxLength(255)
@@ -161,7 +161,7 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql.Migrations
                     MySqlEntityTypeBuilderExtensions.UseCollation(b, "utf8mb4_general_ci");
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Models.HomeFaq", b =>
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.HomeFaq", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -190,7 +190,48 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql.Migrations
                     MySqlEntityTypeBuilderExtensions.UseCollation(b, "utf8mb4_general_ci");
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Models.Medal", b =>
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.Locale", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(5)
+                        .HasColumnType("char");
+
+                    b.Property<bool>("Experimental")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("ExtraCss")
+                        .HasColumnType("text");
+
+                    b.Property<string>("ExtraHtml")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Flag")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("char");
+
+                    b.Property<bool>("Rtl")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("Short")
+                        .IsRequired()
+                        .HasMaxLength(2)
+                        .HasColumnType("char");
+
+                    b.Property<bool>("Wip")
+                        .HasColumnType("tinyint(1)");
+
+                    b.HasKey("Name");
+
+                    b.ToTable("Locales");
+                });
+
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.Medal", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -243,7 +284,7 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql.Migrations
                     MySqlEntityTypeBuilderExtensions.UseCollation(b, "utf8mb4_general_ci");
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Models.MedalRarity", b =>
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.MedalRarity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -266,7 +307,7 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql.Migrations
                     b.ToTable("MedalRarities");
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Models.MedalSettings", b =>
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.MedalSettings", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -286,7 +327,7 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql.Migrations
                     b.ToTable("MedalSettings");
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Models.MedalSolution", b =>
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.MedalSolution", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -318,7 +359,7 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql.Migrations
                     b.ToTable("MedalSolutions");
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Models.Session", b =>
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.Session", b =>
                 {
                     b.Property<string>("Token")
                         .HasMaxLength(32)
@@ -343,7 +384,7 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql.Migrations
                     MySqlEntityTypeBuilderExtensions.UseCollation(b, "utf8mb4_general_ci");
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Models.UserGroup", b =>
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.UserGroup", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -386,7 +427,7 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql.Migrations
                     b.ToTable("UserGroups");
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Models.UserGroupsForUsers", b =>
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.UserGroupsForUsers", b =>
                 {
                     b.Property<int>("UserGroupId")
                         .HasColumnType("int");
@@ -401,7 +442,7 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql.Migrations
                     b.ToTable("UserGroupsForUsers");
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Models.UserPermissionsOverride", b =>
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.UserPermissionsOverride", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -422,11 +463,11 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql.Migrations
                     b.ToTable("UserPermissionsOverrides");
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Models.AppTheme", b =>
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.AppTheme", b =>
                 {
-                    b.HasOne("Osekai.Octon.Persistence.EntityFramework.MySql.Models.App", "App")
+                    b.HasOne("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.App", "App")
                         .WithOne("AppTheme")
-                        .HasForeignKey("Osekai.Octon.Persistence.EntityFramework.MySql.Models.AppTheme", "AppId")
+                        .HasForeignKey("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.AppTheme", "AppId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_AppId");
@@ -434,15 +475,15 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql.Migrations
                     b.Navigation("App");
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Models.BeatmapPackForMedal", b =>
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.BeatmapPackForMedal", b =>
                 {
-                    b.HasOne("Osekai.Octon.Persistence.EntityFramework.MySql.Models.BeatmapPack", "BeatmapPack")
+                    b.HasOne("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.BeatmapPack", "BeatmapPack")
                         .WithMany("MedalsForBeatmapPack")
                         .HasForeignKey("BeatmapPackId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Osekai.Octon.Persistence.EntityFramework.MySql.Models.Medal", "Medal")
+                    b.HasOne("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.Medal", "Medal")
                         .WithMany("BeatmapPacksForMedal")
                         .HasForeignKey("MedalId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -453,42 +494,42 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql.Migrations
                     b.Navigation("Medal");
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Models.MedalRarity", b =>
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.MedalRarity", b =>
                 {
-                    b.HasOne("Osekai.Octon.Persistence.EntityFramework.MySql.Models.Medal", "Medal")
+                    b.HasOne("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.Medal", "Medal")
                         .WithOne("Rarity")
-                        .HasForeignKey("Osekai.Octon.Persistence.EntityFramework.MySql.Models.MedalRarity", "MedalId")
+                        .HasForeignKey("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.MedalRarity", "MedalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Medal");
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Models.MedalSettings", b =>
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.MedalSettings", b =>
                 {
-                    b.HasOne("Osekai.Octon.Persistence.EntityFramework.MySql.Models.Medal", "Medal")
+                    b.HasOne("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.Medal", "Medal")
                         .WithOne("Settings")
-                        .HasForeignKey("Osekai.Octon.Persistence.EntityFramework.MySql.Models.MedalSettings", "MedalId")
+                        .HasForeignKey("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.MedalSettings", "MedalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Medal");
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Models.MedalSolution", b =>
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.MedalSolution", b =>
                 {
-                    b.HasOne("Osekai.Octon.Persistence.EntityFramework.MySql.Models.Medal", "Medal")
+                    b.HasOne("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.Medal", "Medal")
                         .WithOne("Solution")
-                        .HasForeignKey("Osekai.Octon.Persistence.EntityFramework.MySql.Models.MedalSolution", "MedalId")
+                        .HasForeignKey("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.MedalSolution", "MedalId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Medal");
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Models.UserGroupsForUsers", b =>
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.UserGroupsForUsers", b =>
                 {
-                    b.HasOne("Osekai.Octon.Persistence.EntityFramework.MySql.Models.UserGroup", "UserGroup")
+                    b.HasOne("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.UserGroup", "UserGroup")
                         .WithMany("UserGroupForUsers")
                         .HasForeignKey("UserGroupId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -497,17 +538,17 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql.Migrations
                     b.Navigation("UserGroup");
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Models.App", b =>
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.App", b =>
                 {
                     b.Navigation("AppTheme");
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Models.BeatmapPack", b =>
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.BeatmapPack", b =>
                 {
                     b.Navigation("MedalsForBeatmapPack");
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Models.Medal", b =>
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.Medal", b =>
                 {
                     b.Navigation("BeatmapPacksForMedal");
 
@@ -518,7 +559,7 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql.Migrations
                     b.Navigation("Solution");
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Models.UserGroup", b =>
+            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.UserGroup", b =>
                 {
                     b.Navigation("UserGroupForUsers");
                 });

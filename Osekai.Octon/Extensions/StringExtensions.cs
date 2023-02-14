@@ -1,4 +1,4 @@
-﻿namespace Osekai.Octon;
+﻿namespace Osekai.Octon.Extensions;
 
 public static class StringExtensions
 {

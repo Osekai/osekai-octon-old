@@ -1,12 +1,10 @@
-﻿using Osekai.Octon.Objects;
+﻿using Osekai.Octon.Models;
 
 namespace Osekai.Octon.Persistence.Repositories;
 
 public interface IAppRepository
 {
     Task<IReadOnlyApp?> GetAppByIdAsync(int id, CancellationToken cancellationToken = default);
-    Task<bool> PatchAppAsync(int id, int order, string name, string simpleName, bool visible,
-        bool experimental, CancellationToken cancellationToken = default);
-
+    Task<bool> SaveAppAsync(IReadOnlyApp app, CancellationToken cancellationToken = default);
     Task<IEnumerable<IReadOnlyApp>> GetAppsAsync(CancellationToken cancellationToken = default);
 }

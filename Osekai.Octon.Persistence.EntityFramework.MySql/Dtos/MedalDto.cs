@@ -1,4 +1,4 @@
-﻿using Osekai.Octon.Objects;
+﻿using Osekai.Octon.Models;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
 

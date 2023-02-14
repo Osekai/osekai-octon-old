@@ -11,12 +11,12 @@ using Osekai.Octon.Caching;
 using Osekai.Octon.Caching.MsgPack;
 using Osekai.Octon.Localization;
 using Osekai.Octon.Localization.File;
-using Osekai.Octon.Objects;
-using Osekai.Octon.Objects.Aggregators;
+using Osekai.Octon.Models;
 using Osekai.Octon.OsuApi;
 using Osekai.Octon.Persistence.EntityFramework.MySql;
 using Osekai.Octon.Options;
 using Osekai.Octon.Persistence;
+using Osekai.Octon.Persistence.QueryResults;
 using Osekai.Octon.Services;
 using Osekai.Octon.WebServer.Presentation.AppBaseLayout;
 
@@ -50,14 +50,15 @@ builder.Services.AddScoped<AppService>();
 builder.Services.AddScoped<IOsuApiV2SessionProvider>(provider => provider.GetRequiredService<CurrentSession>());
 builder.Services.AddScoped<ITokenGenerator, RandomBytes128BitTokenGenerator>();
 builder.Services.AddSingleton<StaticUrlGenerator>();
-builder.Services.AddScoped<IAggregator<IReadOnlyMedalWithInfo>, MySqlEntityFrameworkMedalWithInfoAggregator>();
-builder.Services.AddScoped<IAggregator<IReadOnlyAppWithAppTheme>, MySqlEntityFrameworkAppWithAppThemeAggregator>();
-builder.Services.AddScoped<IAdapter<IReadOnlyAppWithAppTheme, AppBaseLayoutApp>, AppBaseLayoutAppFromAppWithAppThemeAdapter>();
-builder.Services.AddScoped<IAdapter<IReadOnlyMedalWithInfo, AppBaseLayoutMedal>, AppBaseLayoutMedalFromMedalWithInfoAdapter>();
+builder.Services.AddScoped<IQuery<IReadOnlyMedalAggregateQueryResult>, MySqlEntityFrameworkMedalAggregateQuery>();
+builder.Services.AddScoped<IQuery<IReadOnlyAppAggregateQueryResult>, MySqlEntityFrameworkAppAggregateQuery>();
+builder.Services.AddScoped<IAdapter<IReadOnlyAppAggregateQueryResult, AppBaseLayoutApp>, AppBaseLayoutAppFromAppAggregateQueryResultAdapter>();
+builder.Services.AddScoped<IAdapter<IReadOnlyMedalAggregateQueryResult, AppBaseLayoutMedal>, AppBaseLayoutMedalFromMedalAggregateQueryResultAdapter>();
 builder.Services.AddScoped<IAdapter<IReadOnlyUserGroup, AppBaseLayoutUserGroup>, AppBaseLayoutUserGroupAdapter>();
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<PermissionService>();
 builder.Services.AddScoped<UserGroupService>();
+builder.Services.AddScoped<LocaleService>();
 builder.Services.AddScoped<CurrentLocale>();
 
 builder.Services.AddSingleton<ILocalizatorFactory, CachedLocalizatorFactory>(serviceProvider => 

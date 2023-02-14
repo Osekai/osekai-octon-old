@@ -1,11 +1,11 @@
-﻿using Osekai.Octon.Objects;
+﻿using Osekai.Octon.Models;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
 
 internal sealed class AppDto: IReadOnlyApp
 {
     public AppDto(int id, int order, string name, string simpleName, 
-        bool visible = true, bool experimental = false, AppThemeDto? appThemeDto = null)
+        bool visible = true, bool experimental = false, ReadOnlyAppThemeDto? appThemeDto = null)
     {
         Id = id;
         Order = order;

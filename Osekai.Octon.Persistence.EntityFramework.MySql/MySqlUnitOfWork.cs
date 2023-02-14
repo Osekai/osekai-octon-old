@@ -16,6 +16,7 @@ public class MySqlUnitOfWork: EntityFrameworkUnitOfWork<MySqlOsekaiDbContext>
     private IMedalSettingsRepository? _medalSettingsRepository;
     private IBeatmapPackRepository? _beatmapPackRepository;
     private IMedalSolutionRepository? _medalSolutionRepository;
+    private ILocaleRepository? _localeRepository;
 
     public override IAppRepository AppRepository => 
         _appRepository ??= new MySqlEntityFrameworkAppRepository(Context);
@@ -40,6 +41,9 @@ public class MySqlUnitOfWork: EntityFrameworkUnitOfWork<MySqlOsekaiDbContext>
 
     public override IBeatmapPackRepository BeatmapPackRepository =>
         _beatmapPackRepository ??= new MySqlEntityFrameworkBeatmapPackRepository(Context);
+
+    public override ILocaleRepository LocaleRepository =>
+        _localeRepository ??= new MySqlEntityFrameworkLocaleRepository(Context);
 
     public override ISessionRepository SessionRepository =>
         _sessionRepository ??= new MySqlEntityFrameworkSessionRepository(Context);

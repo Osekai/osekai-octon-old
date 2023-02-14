@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using Osekai.Octon.Extensions;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql;
 

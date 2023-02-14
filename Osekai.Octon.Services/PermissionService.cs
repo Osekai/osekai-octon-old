@@ -1,9 +1,8 @@
 ﻿using Osekai.Octon.Enums;
-using Osekai.Octon.Objects;
+using Osekai.Octon.Models;
 using Osekai.Octon.Permissions;
+using Osekai.Octon.Permissions.PermissionStores;
 using Osekai.Octon.Persistence;
-using Osekai.Octon.Services.Entities;
-using Osekai.Octon.Services.PermissionStores;
 
 namespace Osekai.Octon.Services;
 

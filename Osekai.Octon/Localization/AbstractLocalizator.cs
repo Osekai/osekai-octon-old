@@ -18,7 +18,7 @@ public abstract class AbstractLocalizator: ILocalizator
     
     protected string FormatStringAsync(string value, object[] variables, CancellationToken cancellationToken = default)
     {
-        MatchCollection matches = LocalizeStringRegex.Matches(value);
+        MatchCollection matches = FormatStringRegex.Matches(value);
 
         if (matches.Count == 0)
             return value;

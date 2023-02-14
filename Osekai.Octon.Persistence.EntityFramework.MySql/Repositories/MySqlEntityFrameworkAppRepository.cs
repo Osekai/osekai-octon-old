@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Osekai.Octon.Objects;
+using Osekai.Octon.Models;
 using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
-using Osekai.Octon.Persistence.EntityFramework.MySql.Models;
+using Osekai.Octon.Persistence.EntityFramework.MySql.Entities;
 using Osekai.Octon.Persistence.Repositories;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql.Repositories;
@@ -21,18 +21,17 @@ public class MySqlEntityFrameworkAppRepository: IAppRepository
         return app?.ToDto();
     }
 
-    public async Task<bool> PatchAppAsync(int id, int order, string name, string simpleName, bool visible,
-        bool experimental, CancellationToken cancellationToken = default)
+    public async Task<bool> SaveAppAsync(IReadOnlyApp app, CancellationToken cancellationToken = default)
     {
-        App? app = await Context.Apps.FindAsync(new object?[] { id }, cancellationToken);
-        if (app == null)
+        App? appEntity = await Context.Apps.FindAsync(new object?[] { app.Id }, cancellationToken);
+        if (appEntity == null)
             return false;
         
-        app.Name = name;
-        app.SimpleName = simpleName;
-        app.Order = order;
-        app.Visible = visible;
-        app.Experimental = experimental;
+        appEntity.Name = app.Name;
+        appEntity.SimpleName = app.SimpleName;
+        appEntity.Order = app.Order;
+        appEntity.Visible = app.Visible;
+        appEntity.Experimental = app.Experimental;
         
         return true;
     }

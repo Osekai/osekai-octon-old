@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Osekai.Octon.Persistence.EntityFramework.MySql.Models;
+using Osekai.Octon.Persistence.EntityFramework.MySql.Entities;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql
 {
@@ -19,6 +19,7 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql
         internal DbSet<UserGroup> UserGroups { get; set; } = null!;
         internal DbSet<UserGroupsForUsers> UserGroupsForUsers { get; set; } = null!;
         internal DbSet<UserPermissionsOverride> UserPermissionsOverrides { get; set; } = null!;
+        internal DbSet<Locale> Locales { get; set; } = null!;
 
         public MySqlOsekaiDbContext(DbContextOptions options) : base(options) {}
         
@@ -236,6 +237,19 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql
                 entity.Property(e => e.Permissions).HasColumnType("json");
                 
                 entity.HasIndex(e => e.UserId).IsUnique();
+            });
+
+            modelBuilder.Entity<Locale>(entity =>
+            {
+                entity.HasKey(e => e.Name);
+
+                entity.Property(e => e.Code).HasColumnType("char").HasMaxLength(Specifications.LocaleCodeLength);
+                entity.Property(e => e.Name).HasColumnType("varchar").HasMaxLength(Specifications.LocaleNameMaxLength);
+                entity.Property(e => e.Short).HasColumnType("char").HasMaxLength(Specifications.LocaleShortLength);
+                entity.Property(e => e.Flag).HasColumnType("char").HasMaxLength(Specifications.LocaleFlagMaxLength);
+
+                entity.Property(e => e.ExtraCss).HasColumnType("text");
+                entity.Property(e => e.ExtraHtml).HasColumnType("text");
             });
         }
     }

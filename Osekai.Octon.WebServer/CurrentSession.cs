@@ -1,9 +1,6 @@
-﻿using Osekai.Octon.Exceptions;
-using Osekai.Octon.OsuApi;
+﻿using Osekai.Octon.OsuApi;
+using Osekai.Octon.Permissions;
 using Osekai.Octon.Services;
-using Osekai.Octon.Services.Entities;
-using Osekai.Octon.Services.PermissionStores;
-
 namespace Osekai.Octon.WebServer;
 
 public class CurrentSession: IOsuApiV2SessionProvider

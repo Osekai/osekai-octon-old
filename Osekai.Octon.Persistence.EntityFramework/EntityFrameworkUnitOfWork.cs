@@ -24,18 +24,13 @@ public abstract class EntityFrameworkUnitOfWork<T>: IUnitOfWork where T: DbConte
     public abstract IMedalSettingsRepository MedalSettingsRepository { get; }
     public abstract IMedalSolutionRepository MedalSolutionRepository { get; }
     public abstract IBeatmapPackRepository BeatmapPackRepository { get; }
+    public abstract ILocaleRepository LocaleRepository { get; }
 
     public virtual async Task SaveChangesAsync(CancellationToken cancellationToken)
     {
         await Context.SaveChangesAsync(cancellationToken);
     }
-
-    public async Task<ITransaction> BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.Serializable, CancellationToken cancellationToken = default)
-    {
-        IDbContextTransaction transaction = await Context.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
-        return new EntityFrameworkTransaction(transaction);
-    }
-
+    
     public void DiscardChanges()
     {
         foreach (var entry in Context.ChangeTracker.Entries())
@@ -58,27 +53,5 @@ public abstract class EntityFrameworkUnitOfWork<T>: IUnitOfWork where T: DbConte
                     throw new ArgumentOutOfRangeException();
             }
         }
-    }
-
-    private volatile bool _disposed;
-    
-    public ValueTask DisposeAsync()
-    {
-        if (_disposed)
-            return ValueTask.CompletedTask;
-
-        _disposed = true;
-        
-        return Context.DisposeAsync();
-    }
-
-    public void Dispose()
-    {
-        if (_disposed)
-            return;
-
-        _disposed = true;
-        
-        Context.Dispose();
     }
 }

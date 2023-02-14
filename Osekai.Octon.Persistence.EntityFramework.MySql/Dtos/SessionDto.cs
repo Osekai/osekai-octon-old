@@ -1,5 +1,5 @@
-﻿using Osekai.Octon.Objects;
-using Osekai.Octon.Persistence.HelperTypes;
+﻿using Osekai.Octon.HelperTypes;
+using Osekai.Octon.Models;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
 

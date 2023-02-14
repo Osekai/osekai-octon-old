@@ -1,4 +1,3 @@
-@using Osekai.Octon.Objects.Aggregators
 @using Osekai.Octon.WebServer
 @using Osekai.Octon.WebServer.Helpers
 @using Osekai.Octon.WebServer.Presentation.AppBaseLayout
@@ -44,7 +43,7 @@
             </div>
             <div class="osekai__navbar-right">
                 <?php if (loggedin()) { ?>
-                    <div class="osekai__navbar-button tooltip-v2" id="notif__bell__button" tooltip-content="@await Model.Localizator.GetStringAsync("navbar.tooltip.notifications")">
+                    <div class="osekai__navbar-button tooltip-v2" id="notif__bell__button" tooltip-content="@await Model.Localizator.GetStringAsync("navbar.tooltip.notifications", new object[] { 0 })">
                         <i class="fas fa-bell"></i>
                         <div class="osekai__notification-counter hidden" id="NotificationCountIcon">0</div>
                     </div>
@@ -405,7 +404,7 @@ foreach ($apps as $a) {
     <div class="osekai__nav-dropdown-v2-lowerpanel">
         <div class="osekai__nav-dropdown-v2-notifications-header">
             <div class="osekai__nav-dropdown-v2-notifications-header-left">
-                <p id="NotificationCount">@await Model.Localizator.GetStringAsync("navbar.notifications.count")</p>
+                <p id="NotificationCount">@await Model.Localizator.GetStringAsync("navbar.notifications.count", new object[] {0})</p>
             </div>
             <div id="ClearAll" class="osekai__nav-dropdown-v2-notifications-header-right">
                 <p>@await Model.Localizator.GetStringAsync("navbar.notifications.clearAll")</p> <i class="far fa-times-circle"></i>

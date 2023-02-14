@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Osekai.Octon.Enums;
-using Osekai.Octon.Objects;
+using Osekai.Octon.Models;
 using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
-using Osekai.Octon.Persistence.EntityFramework.MySql.Models;
+using Osekai.Octon.Persistence.EntityFramework.MySql.Entities;
 using Osekai.Octon.Persistence.Repositories;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql.Repositories;

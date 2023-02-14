@@ -1,4 +1,5 @@
-﻿using Osekai.Octon.Persistence.HelperTypes;
+﻿using Osekai.Octon.HelperTypes;
+using Osekai.Octon.Models;
 
 namespace Osekai.Octon.Services;
 
