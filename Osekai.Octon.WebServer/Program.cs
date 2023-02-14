@@ -120,6 +120,15 @@ app.UseStaticFiles(new StaticFileOptions(new SharedOptions
     RequestPath = "/global/js"
 }));
 
+app.UseStaticFiles(new StaticFileOptions(new SharedOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "../OsekaiOld/global/lang")),
+    RequestPath = "/global/lang"
+}));
+
+
+
 app.UseRouting();
 
 app.MapRazorPages();
