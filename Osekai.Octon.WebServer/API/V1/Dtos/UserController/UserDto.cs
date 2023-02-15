@@ -61,7 +61,7 @@ public class UserDto
     public DateTimeOffset JoinDate { get; set; }
 
     [JsonPropertyName("kudosu")]
-    public Kudosu Kudosu { get; set; }
+    public UserDtoKudosu Kudosu { get; set; }
 
     [JsonPropertyName("location")]
     public object Location { get; set; }
@@ -221,7 +221,7 @@ public partial class UserDtoGroup
     public string Colour { get; set; }
 }
 
-public partial class Kudosu
+public partial class UserDtoKudosu
 {
     [JsonPropertyName("total")]
     public long Total { get; set; }
@@ -260,7 +260,7 @@ public partial class UserDtoRankHistory
 public partial class UserDtoStatistics
 {
     [JsonPropertyName("level")]
-    public Level Level { get; set; }
+    public UserDtoLevel Level { get; set; }
 
     [JsonPropertyName("pp")]
     public double Pp { get; set; }
@@ -296,13 +296,13 @@ public partial class UserDtoStatistics
     public bool IsRanked { get; set; }
 
     [JsonPropertyName("grade_counts")]
-    public GradeCounts GradeCounts { get; set; }
+    public UserDtoGradeCounts GradeCounts { get; set; }
 
     [JsonPropertyName("rank")]
-    public Rank Rank { get; set; }
+    public UserDtoRank Rank { get; set; }
 }
 
-public partial class GradeCounts
+public partial class UserDtoGradeCounts
 {
     [JsonPropertyName("ss")]
     public long Ss { get; set; }
@@ -320,7 +320,7 @@ public partial class GradeCounts
     public long A { get; set; }
 }
 
-public partial class Level
+public partial class UserDtoLevel
 {
     [JsonPropertyName("current")]
     public long Current { get; set; }
@@ -329,7 +329,7 @@ public partial class Level
     public long Progress { get; set; }
 }
 
-public partial class Rank
+public partial class UserDtoRank
 {
     [JsonPropertyName("global")]
     public long? Global { get; set; }
