@@ -65,8 +65,6 @@ builder.Services.AddSingleton<ILocalizatorFactory, CachedLocalizatorFactory>(ser
     new CachedLocalizatorFactory(
         new FileLocalizatorFactory(serviceProvider.GetRequiredService<ObjectPool<StringBuilder>>(), "../OsekaiOld/global/lang/")));
 
-builder.Services.AddMemoryCache();
-
 IMvcBuilder mvcBuilder = builder.Services.AddRazorPages();
 #if DEBUG
     mvcBuilder.AddRazorRuntimeCompilation();
@@ -127,7 +125,12 @@ app.UseStaticFiles(new StaticFileOptions(new SharedOptions
     RequestPath = "/global/lang"
 }));
 
-
+app.UseStaticFiles(new StaticFileOptions(new SharedOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "../OsekaiOld/global/lang")),
+    RequestPath = "/global/lang"
+}));
 
 app.UseRouting();
 

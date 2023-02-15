@@ -49,6 +49,7 @@
         const userGroups = @(Json.Serialize(Model.AppBaseLayoutUserGroups));
         const currentlyApp = "@(Model.CurrentApp.SimpleName)";
         const apps = @(Json.Serialize(Model.AppBaseLayoutApps));
+        const medalAmount = medals.length;
         const experimental = false;
         const locales = @(Json.Serialize(Model.AppBaseLayoutLocales));
         const sourcesNames = ["groups","report","apps","badges","comments","faq","general","home","medals","navbar","profiles","rankings","snapshots","donate","contact","misc/translators","misc/groups","misc/global"];
