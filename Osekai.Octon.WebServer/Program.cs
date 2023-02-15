@@ -15,9 +15,12 @@ using Osekai.Octon.Models;
 using Osekai.Octon.OsuApi;
 using Osekai.Octon.Persistence.EntityFramework.MySql;
 using Osekai.Octon.Options;
+using Osekai.Octon.OsuApi.Payloads;
 using Osekai.Octon.Persistence;
 using Osekai.Octon.Persistence.QueryResults;
 using Osekai.Octon.Services;
+using Osekai.Octon.WebServer.API.V1.Dtos.UserController;
+using Osekai.Octon.WebServer.Presentation;
 using Osekai.Octon.WebServer.Presentation.AppBaseLayout;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -55,6 +58,7 @@ builder.Services.AddScoped<IQuery<IReadOnlyAppAggregateQueryResult>, MySqlEntity
 builder.Services.AddScoped<IAdapter<IReadOnlyAppAggregateQueryResult, AppBaseLayoutApp>, AppBaseLayoutAppFromAppAggregateQueryResultAdapter>();
 builder.Services.AddScoped<IAdapter<IReadOnlyMedalAggregateQueryResult, AppBaseLayoutMedal>, AppBaseLayoutMedalFromMedalAggregateQueryResultAdapter>();
 builder.Services.AddScoped<IAdapter<IReadOnlyUserGroup, AppBaseLayoutUserGroup>, AppBaseLayoutUserGroupAdapter>();
+builder.Services.AddSingleton<IAdapter<OsuUser, UserDto>, UserDtoFromOsuUserAdapter>();
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<PermissionService>();
 builder.Services.AddScoped<UserGroupService>();

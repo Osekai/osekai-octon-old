@@ -2,8 +2,8 @@
 /shelf/
 /workspace.xml
 # Rider ignored files
-/contentModel.xml
 /modules.xml
+/contentModel.xml
 /projectSettingsUpdater.xml
 /.idea.Osekai.Octon.iml
 # Editor-based HTTP Client requests

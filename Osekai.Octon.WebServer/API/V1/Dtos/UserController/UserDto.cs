@@ -1,9 +1,11 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace Osekai.Octon.WebServer.API.V1.Dtos.UserController;
 
 #nullable disable
 
+[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Global")]
 public class UserDto
 {
     [JsonPropertyName("avatar_url")]
