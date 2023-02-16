@@ -4,7 +4,8 @@ using Osekai.Octon.Models;
 using Osekai.Octon.Persistence;
 using Osekai.Octon.OsuApi;
 using Osekai.Octon.OsuApi.Payloads;
-using Osekai.Octon.Persistence.QueryResults;
+using Osekai.Octon.Query;
+using Osekai.Octon.Query.QueryResults;
 using Osekai.Octon.Services;
 using Osekai.Octon.WebServer.Presentation.AppBaseLayout;
 
@@ -31,8 +32,8 @@ public abstract class AppBaseLayout : BaseLayout
     protected IAdapter<IReadOnlyAppAggregateQueryResult, AppBaseLayoutApp> AppBaseLayoutAppAdapter { get; }
     protected CachedAuthenticatedOsuApiV2Interface OsuApiV2Interface { get; }
     protected CurrentSession CurrentSession { get; }
-    protected IQuery<IReadOnlyAppAggregateQueryResult> AppAggregateQuery { get; }
-    protected IQuery<IReadOnlyMedalAggregateQueryResult> MedalAggregateQuery { get; }
+    protected IQuery<IEnumerable<IReadOnlyAppAggregateQueryResult>> AppAggregateQuery { get; }
+    protected IQuery<IEnumerable<IReadOnlyMedalAggregateQueryResult>> MedalAggregateQuery { get; }
     protected UserGroupService UserGroupService { get; }
     protected LocaleService LocaleService { get; }
     protected ICache Cache { get; }
@@ -51,6 +52,7 @@ public abstract class AppBaseLayout : BaseLayout
     public IReadOnlyAppTheme CurrentReadOnlyAppTheme { get; private set; } = null!;
     public OsuUser? CurrentOsuUser { get; private set; }
     public bool Mobile { get; private set; }
+    public bool Experimental { get; private set; }
     
     public virtual bool ShowNavbar => true;
 
@@ -61,8 +63,8 @@ public abstract class AppBaseLayout : BaseLayout
         IAdapter<IReadOnlyMedalAggregateQueryResult, AppBaseLayoutMedal> appBaseLayoutMedalAdapter, 
         IAdapter<IReadOnlyUserGroup, AppBaseLayoutUserGroup> appBaseLayoutUserGroupAdapter,
         IAdapter<IReadOnlyAppAggregateQueryResult, AppBaseLayoutApp> appBaseLayoutAppAdapter,
-        IQuery<IReadOnlyAppAggregateQueryResult> appAggregateQuery,
-        IQuery<IReadOnlyMedalAggregateQueryResult> medalAggregateQuery,
+        IQuery<IEnumerable<IReadOnlyAppAggregateQueryResult>> appAggregateQuery,
+        IQuery<IEnumerable<IReadOnlyMedalAggregateQueryResult>> medalAggregateQuery,
         ICache cache,
         UserGroupService userGroupService,
         LocaleService localeService,
@@ -152,8 +154,10 @@ public abstract class AppBaseLayout : BaseLayout
             CurrentOsuUser = await OsuApiV2Interface.MeAsync(CurrentSession, cancellationToken: cancellationToken);
 
         if (MobileUserAgentMatcher.IsMatch(HttpContext.Request.Headers.UserAgent.ToString()))
-            Mobile = true;    
+            Mobile = true;
 
+        Experimental = true;
+        
         return Page();
     }
 }

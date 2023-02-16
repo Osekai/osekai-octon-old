@@ -2,7 +2,7 @@
 using Osekai.Octon.Localization;
 using Osekai.Octon.Models;
 using Osekai.Octon.OsuApi.Payloads;
-using Osekai.Octon.Persistence.QueryResults;
+using Osekai.Octon.Query.QueryResults;
 using Osekai.Octon.WebServer.Presentation.AppBaseLayout;
 
 namespace Osekai.Octon.WebServer.Pages.Partials;
@@ -14,18 +14,21 @@ public class NavbarPartial: PageModel
     public IReadOnlyDictionary<int, IReadOnlyAppAggregateQueryResult> Apps { get; }
     public IReadOnlyDictionary<string, AppBaseLayoutApp> AppBaseLayoutApps { get; }
     public OsuUser? AuthenticatedUser { get; }
+    public bool Experimental { get; }
 
     public NavbarPartial(
         ILocalizator localizator, 
         IReadOnlyApp app, 
         IReadOnlyDictionary<int, IReadOnlyAppAggregateQueryResult> apps,
-        IReadOnlyDictionary<string, AppBaseLayoutApp> appBaseLayoutApps, 
-        OsuUser? authenticatedUser)
+        IReadOnlyDictionary<string, AppBaseLayoutApp> appBaseLayoutApps,
+        OsuUser? authenticatedUser,
+        bool experimental)
     {
         Localizator = localizator;
         App = app;
         Apps = apps;
         AppBaseLayoutApps = appBaseLayoutApps;
         AuthenticatedUser = authenticatedUser;
+        Experimental = experimental;
     }
 }

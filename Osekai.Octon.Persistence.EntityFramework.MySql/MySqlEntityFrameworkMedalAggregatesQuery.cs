@@ -2,15 +2,16 @@
 using Osekai.Octon.Models;
 using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
 using Osekai.Octon.Persistence.EntityFramework.MySql.Entities;
-using Osekai.Octon.Persistence.QueryResults;
+using Osekai.Octon.Query;
+using Osekai.Octon.Query.QueryResults;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql;
 
-public class MySqlEntityFrameworkMedalAggregateQuery: IQuery<IReadOnlyMedalAggregateQueryResult>
+public class MySqlEntityFrameworkMedalAggregatesQuery: IQuery<IEnumerable<IReadOnlyMedalAggregateQueryResult>>
 {
     protected MySqlOsekaiDbContext Context { get; }
 
-    public MySqlEntityFrameworkMedalAggregateQuery(MySqlOsekaiDbContext context)
+    public MySqlEntityFrameworkMedalAggregatesQuery(MySqlOsekaiDbContext context)
     {
         Context = context;
     }

@@ -163,8 +163,25 @@ public class UserDto
 
     [JsonPropertyName("rank_history")]
     public UserDtoRankHistory RankHistory { get; set; }
+    
+    [JsonPropertyName("usergroups")]
+    public UserDtoUserGroup[] UserGroups { get; set; }
 }
 
+public readonly struct UserDtoUserGroup
+{
+    [JsonPropertyName("UserId")]
+    public int UserId { get; }
+    
+    [JsonPropertyName("GroupId")]
+    public int GroupId { get; }
+    
+    public UserDtoUserGroup(int userId, int groupId)
+    {
+        UserId = userId;
+        GroupId = groupId;
+    }
+}
 
 public partial class UserDtoBadge
 {

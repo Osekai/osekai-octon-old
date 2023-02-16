@@ -1,20 +1,17 @@
-﻿using System.Collections.Concurrent;
-using Nito.AsyncEx;
-
-namespace Osekai.Octon.Caching;
+﻿namespace Osekai.Octon.Caching;
 
 public class InMemoryCache: ICache
 {
     private readonly struct Entry
     {
-        public Entry(object value, DateTimeOffset expiresAt)
+        public Entry(object? value, DateTimeOffset expiresAt)
         {
             ExpiresAt = expiresAt;
             Value = value;
         }
         
         public DateTimeOffset ExpiresAt { get; }
-        public object Value { get; }
+        public object? Value { get; }
     }
 
     private readonly ReaderWriterLockSlim _dictionaryRwLock;
@@ -118,7 +115,7 @@ public class InMemoryCache: ICache
         return Task.FromResult<T?>(null);
     }
 
-    public Task SetAsync<T>(string name, T data, long expiresAfter = 3600, CancellationToken cancellationToken = default) where T : class
+    public Task SetAsync<T>(string name, T data, long expiresAfter = 3600, CancellationToken cancellationToken = default) where T : class?
     {
         try
         {

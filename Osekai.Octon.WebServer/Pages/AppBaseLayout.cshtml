@@ -35,7 +35,7 @@
     }
     </style>
     
-    @Html.Partial("Partials/Tippy")
+    @await Html.PartialAsync("Partials/Tippy")
 
     <style id="custom_theme_container"></style>
     <script>    
@@ -50,7 +50,7 @@
         const currentlyApp = "@(Model.CurrentApp.SimpleName)";
         const apps = @(Json.Serialize(Model.AppBaseLayoutApps));
         const medalAmount = medals.length;
-        const experimental = false;
+        const experimental = @(Model.Experimental ? "true" : "false");
         const locales = @(Json.Serialize(Model.AppBaseLayoutLocales));
         const sourcesNames = ["groups","report","apps","badges","comments","faq","general","home","medals","navbar","profiles","rankings","snapshots","donate","contact","misc/translators","misc/groups","misc/global"];
         const currentLocale = locales["@(Model.CurrentLocale.LanguageCode)"];
@@ -66,7 +66,10 @@
     @if (Model.ShowNavbar)
     {
         @await Html.PartialAsync("Partials/Navbar", 
-            new NavbarPartial(Model.CurrentLocale.Localizator, Model.CurrentApp, Model.Apps, Model.AppBaseLayoutApps, Model.CurrentOsuUser))
+            new NavbarPartial(
+                Model.CurrentLocale.Localizator, Model.CurrentApp, Model.Apps, 
+                Model.AppBaseLayoutApps, Model.CurrentOsuUser,
+                Model.Experimental))
     }
 </body>
 

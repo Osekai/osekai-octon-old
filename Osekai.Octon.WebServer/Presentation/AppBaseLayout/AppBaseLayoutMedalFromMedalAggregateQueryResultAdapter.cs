@@ -3,7 +3,7 @@ using System.Text;
 using Microsoft.Extensions.ObjectPool;
 using Osekai.Octon.Enums;
 using Osekai.Octon.Models;
-using Osekai.Octon.Persistence.QueryResults;
+using Osekai.Octon.Query.QueryResults;
 
 namespace Osekai.Octon.WebServer.Presentation.AppBaseLayout;
 

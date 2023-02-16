@@ -17,7 +17,9 @@ using Osekai.Octon.Persistence.EntityFramework.MySql;
 using Osekai.Octon.Options;
 using Osekai.Octon.OsuApi.Payloads;
 using Osekai.Octon.Persistence;
-using Osekai.Octon.Persistence.QueryResults;
+using Osekai.Octon.Query;
+using Osekai.Octon.Query.QueryParams;
+using Osekai.Octon.Query.QueryResults;
 using Osekai.Octon.Services;
 using Osekai.Octon.WebServer.API.V1.Dtos.UserController;
 using Osekai.Octon.WebServer.Presentation;
@@ -45,7 +47,7 @@ builder.Services.AddSingleton<RecyclableMemoryStreamManager>();
 builder.Services.AddSingleton<ICache, InMemoryCache>();
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<OsuApiV2Interface>();
-builder.Services.AddScoped<IAuthenticatedOsuApiV2Interface, AuthenticatedOsuApiV2Interface>();
+builder.Services.AddSingleton<IAuthenticatedOsuApiV2Interface, AuthenticatedOsuApiV2Interface>();
 builder.Services.AddScoped<CachedAuthenticatedOsuApiV2Interface>();
 builder.Services.AddScoped<AuthenticatedOsuApiV2Interface>();
 builder.Services.AddScoped<CurrentSession>();
@@ -53,12 +55,13 @@ builder.Services.AddScoped<AppService>();
 builder.Services.AddScoped<IOsuApiV2SessionProvider>(provider => provider.GetRequiredService<CurrentSession>());
 builder.Services.AddScoped<ITokenGenerator, RandomBytes128BitTokenGenerator>();
 builder.Services.AddSingleton<StaticUrlGenerator>();
-builder.Services.AddScoped<IQuery<IReadOnlyMedalAggregateQueryResult>, MySqlEntityFrameworkMedalAggregateQuery>();
-builder.Services.AddScoped<IQuery<IReadOnlyAppAggregateQueryResult>, MySqlEntityFrameworkAppAggregateQuery>();
+builder.Services.AddScoped<IQuery<IEnumerable<IReadOnlyMedalAggregateQueryResult>>, MySqlEntityFrameworkMedalAggregatesQuery>();
+builder.Services.AddScoped<IQuery<IEnumerable<IReadOnlyAppAggregateQueryResult>>, MySqlEntityFrameworkAppAggregatesQuery>();
+builder.Services.AddScoped<IParameterizedQuery<IReadOnlyUserAggregateQueryResult, UserAggregateParam>, MySqlEntityFrameworkUserAggregateQuery>();
 builder.Services.AddScoped<IAdapter<IReadOnlyAppAggregateQueryResult, AppBaseLayoutApp>, AppBaseLayoutAppFromAppAggregateQueryResultAdapter>();
-builder.Services.AddScoped<IAdapter<IReadOnlyMedalAggregateQueryResult, AppBaseLayoutMedal>, AppBaseLayoutMedalFromMedalAggregateQueryResultAdapter>();
-builder.Services.AddScoped<IAdapter<IReadOnlyUserGroup, AppBaseLayoutUserGroup>, AppBaseLayoutUserGroupAdapter>();
-builder.Services.AddSingleton<IAdapter<OsuUser, UserDto>, UserDtoFromOsuUserAdapter>();
+builder.Services.AddSingleton<IAdapter<IReadOnlyMedalAggregateQueryResult, AppBaseLayoutMedal>, AppBaseLayoutMedalFromMedalAggregateQueryResultAdapter>();
+builder.Services.AddSingleton<IAdapter<IReadOnlyUserGroup, AppBaseLayoutUserGroup>, AppBaseLayoutUserGroupAdapter>();
+builder.Services.AddSingleton<IAdapter<(OsuUser, IReadOnlyUserAggregateQueryResult), UserDto>, UserDtoFromOsuUserAndAggregateAdapter>();
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<PermissionService>();
 builder.Services.AddScoped<UserGroupService>();
@@ -91,6 +94,13 @@ app.UseStaticFiles(new StaticFileOptions(new SharedOptions
     FileProvider = new PhysicalFileProvider(
         Path.Combine(builder.Environment.ContentRootPath, "../OsekaiOld/global/js")),
     RequestPath = "/static/shared/js"
+}));
+
+app.UseStaticFiles(new StaticFileOptions(new SharedOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "../OsekaiOld/global/fonts")),
+    RequestPath = "/static/shared/fonts"
 }));
 
 app.UseStaticFiles(new StaticFileOptions(new SharedOptions
@@ -143,7 +153,7 @@ app.MapControllers();
 
 using (IServiceScope scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<MySqlOsekaiDbContext>()!;
+    var context = scope.ServiceProvider.GetRequiredService<MySqlOsekaiDbContext>();
     await context.Database.MigrateAsync();
 }
 

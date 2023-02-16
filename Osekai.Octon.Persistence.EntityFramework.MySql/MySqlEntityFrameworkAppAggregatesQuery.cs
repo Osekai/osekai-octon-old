@@ -1,15 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
 using Osekai.Octon.Persistence.EntityFramework.MySql.Entities;
-using Osekai.Octon.Persistence.QueryResults;
+using Osekai.Octon.Query;
+using Osekai.Octon.Query.QueryResults;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql;
 
-public class MySqlEntityFrameworkAppAggregateQuery: IQuery<IReadOnlyAppAggregateQueryResult>
+public class MySqlEntityFrameworkAppAggregatesQuery: IQuery<IEnumerable<IReadOnlyAppAggregateQueryResult>>
 {
     protected MySqlOsekaiDbContext Context { get; }
     
-    public MySqlEntityFrameworkAppAggregateQuery(MySqlOsekaiDbContext context)
+    public MySqlEntityFrameworkAppAggregatesQuery(MySqlOsekaiDbContext context)
     {
         Context = context;
     }

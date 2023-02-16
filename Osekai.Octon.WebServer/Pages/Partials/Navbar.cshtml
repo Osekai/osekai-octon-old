@@ -42,12 +42,12 @@
                 </div>
             </div>
             <div class="osekai__navbar-right">
-                <?php if (loggedin()) { ?>
+                @if (Model.AuthenticatedUser != null) {
                     <div class="osekai__navbar-button tooltip-v2" id="notif__bell__button" tooltip-content="@Html.Raw(await Model.Localizator.GetStringAsync("navbar.tooltip.notifications", new object[] { 0 }))">
                         <i class="fas fa-bell"></i>
                         <div class="osekai__notification-counter hidden" id="NotificationCountIcon">0</div>
                     </div>
-                <?php } ?>
+                }
 
                 <div id="navbar_searchbut" onclick='openSearch(this)' class="osekai__navbar-button tooltip-v2" tooltip-content="@Html.Raw(await Model.Localizator.GetStringAsync("navbar.tooltip.search"))">
                     <i class="fas fa-search"></i>
@@ -324,7 +324,7 @@ foreach ($apps as $a) {
             </div>
         </div>
         <div class="osekai__nav-dropdown-v2-lowerpanel">
-            <?php if (isExperimental()) { ?>
+            @if (Model.Experimental) { 
                 <!-- <div class="osekai__nav-dropdown-user-v2-lowerpanel-warning">
                     <i class="fas fa-exclamation-triangle"></i>
                     <p><?= GetStringRaw("navbar", "profile.experimentalMode"); ?></p>
@@ -339,7 +339,7 @@ foreach ($apps as $a) {
                         Turn Experimental Mode Off
                     </p>
                 </a>
-            <?php } ?>
+            }
             <a class="osekai__nav-dropdown-v2-lowerpanel-button" style="--col: 104, 143, 255" href="/profiles?user=@Model.AuthenticatedUser.Id">
                 <div class="osekai__nav-dropdown-v2-lowerpanel-button-bar"></div>
                 <i class="oif-app-profiles"></i>

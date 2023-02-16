@@ -7,6 +7,6 @@
 
 @section AppHeadExtension
 {
-    @Html.Partial("Partials/Fonts")
-    @Html.Partial("Partials/Stylesheets")
+    @await Html.PartialAsync("Partials/Fonts")
+    @await Html.PartialAsync("Partials/Stylesheets")
 }
