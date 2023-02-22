@@ -19,8 +19,8 @@ public readonly struct MedalSolution
         get => _text;
         init
         {
-            //if (value.Length is < Specifications.MedalSolutionTextMinLength or > Specifications.MedalSolutionTextMaxLength)
-                //throw new ArgumentOutOfRangeException(nameof(value), value.Length, $"Invalid {nameof(Text)} length");
+            if (value.Length is < Specifications.MedalSolutionTextMinLength or > Specifications.MedalSolutionTextMaxLength)
+                throw new ArgumentOutOfRangeException(nameof(value), value.Length, $"Invalid {nameof(Text)} length");
 
             _text = value;
         }

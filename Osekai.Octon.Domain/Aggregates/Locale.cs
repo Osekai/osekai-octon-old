@@ -69,8 +69,8 @@ public class Locale
         get => _flag;
         set
         {
-            //if (value.ToString().Length is < Specifications.LocaleFlagMinLength or > Specifications.LocaleFlagMaxLength)
-                //throw new ArgumentOutOfRangeException(nameof(value), $"Invalid {nameof(Flag)} length");
+            if (value.ToString().Length is < Specifications.LocaleFlagMinLength or > Specifications.LocaleFlagMaxLength)
+                throw new ArgumentOutOfRangeException(nameof(value), $"Invalid {nameof(Flag)} length");
 
             _flag = value;
         }

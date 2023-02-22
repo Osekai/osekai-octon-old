@@ -51,7 +51,7 @@ public static class Specifications
     public const int MedalSolutionSubmittedByMinLength = 1;
     
     public const int MedalSolutionTextMaxLength = 65535;
-    public const int MedalSolutionTextMinLength = 1;
+    public const int MedalSolutionTextMinLength = 0;
     
     public const int GroupNameMaxLength = 100;
     public const int GroupNameMinLength = 1;
@@ -68,7 +68,7 @@ public static class Specifications
     public const int LocaleCodeLength = 5;
     public const int LocaleShortLength = 2;
     public const int LocaleFlagMaxLength = 255;
-    public const int LocaleFlagMinLength = 255;
+    public const int LocaleFlagMinLength = 1;
     public const int LocaleExtraHtmlMaxLength = int.MaxValue;
     public const int LocaleExtraHtmlMinLength = 1;
     public const int LocaleExtraCssMaxLength = int.MaxValue;
