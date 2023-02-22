@@ -1,4 +1,4 @@
-﻿using Osekai.Octon.Enums;
+﻿using Osekai.Octon.Domain.Enums;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql.Entities;
 

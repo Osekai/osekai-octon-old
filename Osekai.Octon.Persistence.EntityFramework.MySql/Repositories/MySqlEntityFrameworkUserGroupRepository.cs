@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Osekai.Octon.Models;
-using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
-using Osekai.Octon.Persistence.EntityFramework.MySql.Entities;
-using Osekai.Octon.Persistence.Repositories;
+using Osekai.Octon.Domain.Aggregates;
+using Osekai.Octon.Domain.Repositories;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql.Repositories;
 
@@ -15,15 +13,15 @@ public class MySqlEntityFrameworkUserGroupRepository: IUserGroupRepository
         Context = context;
     }
     
-    public async Task<IReadOnlyUserGroup?> GetUserGroupByIdAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<UserGroup?> GetUserGroupByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        UserGroup? userGroup = await Context.UserGroups.AsNoTracking().FirstOrDefaultAsync(group => group.Id == id, cancellationToken);
-        return userGroup?.ToDto();
+        Entities.UserGroup? userGroup = await Context.UserGroups.AsNoTracking().FirstOrDefaultAsync(group => group.Id == id, cancellationToken);
+        return userGroup?.ToAggregate();
     }
 
-    public async Task<IEnumerable<IReadOnlyUserGroup>> GetUserGroupsOfUserAsync(int userId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<UserGroup>> GetUserGroupsOfUserAsync(int userId, CancellationToken cancellationToken = default)
     {
-        IEnumerable<UserGroup> userGroups = await Context.UserGroupsForUsers
+        IEnumerable<Entities.UserGroup> userGroups = await Context.UserGroupsForUsers
             .AsNoTracking()
             .Include(e => e.UserGroup)
             .Where(e => e.UserId == userId)
@@ -31,12 +29,12 @@ public class MySqlEntityFrameworkUserGroupRepository: IUserGroupRepository
             .OrderBy(e => e.Order)
             .ToArrayAsync(cancellationToken);
         
-        return userGroups.Select(e => e.ToDto());
+        return userGroups.Select(e => e.ToAggregate());
     }
 
-    public async Task<IEnumerable<IReadOnlyUserGroup>> GetUserGroups(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<UserGroup>> GetUserGroups(CancellationToken cancellationToken = default)
     {
-        IEnumerable<UserGroup> userGroups = await Context.UserGroups.ToArrayAsync(cancellationToken);
-        return userGroups.Select(e => e.ToDto());
+        IEnumerable<Entities.UserGroup> userGroups = await Context.UserGroups.ToArrayAsync(cancellationToken);
+        return userGroups.Select(e => e.ToAggregate());
     }
 }

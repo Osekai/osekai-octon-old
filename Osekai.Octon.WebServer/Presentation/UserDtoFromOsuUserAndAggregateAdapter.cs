@@ -1,14 +1,14 @@
-﻿using Osekai.Octon.OsuApi.Payloads;
-using Osekai.Octon.Query.QueryResults;
+﻿using Osekai.Octon.Domain.Aggregates;
+using Osekai.Octon.OsuApi.Payloads;
 using Osekai.Octon.WebServer.API.V1.Dtos.UserController;
 
 namespace Osekai.Octon.WebServer.Presentation;
 
-public class UserDtoFromOsuUserAndAggregateAdapter: IAdapter<(OsuUser, IReadOnlyUserAggregateQueryResult), UserDto>
+public class UserDtoFromOsuUserAndAggregateAdapter: IAdapter<(OsuUser, IEnumerable<UserGroup>), UserDto>
 {
-    public Task<UserDto> AdaptAsync((OsuUser, IReadOnlyUserAggregateQueryResult) value, CancellationToken cancellationToken = default)
+    public Task<UserDto> AdaptAsync((OsuUser, IEnumerable<UserGroup>) value, CancellationToken cancellationToken = default)
     {
-        var (osuUser, aggregate) = value;
+        var (osuUser, userGroups) = value;
         
         UserDto userDto = new UserDto();
         userDto.AvatarUrl = osuUser.AvatarUrl;
@@ -189,7 +189,7 @@ public class UserDtoFromOsuUserAndAggregateAdapter: IAdapter<(OsuUser, IReadOnly
             Mode = osuUser.RankHistory.Mode
         };
 
-        userDto.UserGroups = aggregate.UserGroups.Select(e => new UserDtoUserGroup(osuUser.Id, e.Id)).ToArray();
+        userDto.UserGroups = userGroups.Select(e => new UserDtoUserGroup(osuUser.Id, e.Id)).ToArray();
         
         return Task.FromResult(userDto);
     }

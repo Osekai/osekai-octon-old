@@ -1,19 +1,19 @@
 ﻿@using System.Drawing
 @using Osekai.Octon.Drawing
+@using Osekai.Octon.Extensions
 @using Osekai.Octon.WebServer
 @using Osekai.Octon.WebServer.Helpers
-@using Osekai.Octon.WebServer.Extensions
 @using Osekai.Octon.WebServer.Pages.Partials
 @model Osekai.Octon.WebServer.Pages.AppBaseLayout
 
 @{
     Layout = "BaseLayout";
-    
-    Color color = Model.AccentOvveride?.Color ?? Model.CurrentReadOnlyAppTheme!.Color;
-    Color darkColor = Model.AccentOvveride?.DarkColor ?? Model.CurrentReadOnlyAppTheme!.DarkColor;
 
-    Hsl colorHsl = color.ToHsl();
-    Hsl darkColorHsl = darkColor.ToHsl();
+    RgbColour color = Model.AccentOvveride?.Color ?? Model.CurrentAppTheme!.Color;
+    RgbColour darkColor = Model.AccentOvveride?.DarkColor ?? Model.CurrentAppTheme!.DarkColor;
+
+    HslColour colorHslColour = color.ToHsl();
+    HslColour darkColorHslColour = darkColor.ToHsl();
 }
  
 @section HeadExtension 
@@ -24,14 +24,14 @@
     html{
         --accentdark: @($"{darkColor.R},{darkColor.G},{darkColor.B}");
         --accent: @($"{color.R},{color.G},{color.B}");
-        --accentdark_hue: @(darkColorHsl.H)deg;
-        --accent_hue: @(colorHsl.H)deg;
-        --accentdark_saturation: @(darkColorHsl.S)%;
-        --accent_saturation: @(colorHsl.S)%;
-        --accentdark_value: @(darkColorHsl.L)%;
-        --accent_value: @(colorHsl.L)%;
-        --accentdark_valueoffset: @(Model.CurrentReadOnlyAppTheme!.DarkHslValueMultiplier);
-        --accent_valueoffset: @(Model.CurrentReadOnlyAppTheme!.HslValueMultiplier);
+        --accentdark_hue: @(darkColorHslColour.H)deg;
+        --accent_hue: @(colorHslColour.H)deg;
+        --accentdark_saturation: @(darkColorHslColour.S)%;
+        --accent_saturation: @(colorHslColour.S)%;
+        --accentdark_value: @(darkColorHslColour.L)%;
+        --accent_value: @(colorHslColour.L)%;
+        --accentdark_valueoffset: @(Model.CurrentAppTheme!.DarkHslValueMultiplier);
+        --accent_valueoffset: @(Model.CurrentAppTheme!.HslValueMultiplier);
     }
     </style>
     

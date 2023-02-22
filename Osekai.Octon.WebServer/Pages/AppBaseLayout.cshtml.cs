@@ -1,11 +1,12 @@
 ﻿using System.Drawing;
 using Microsoft.AspNetCore.Mvc;
-using Osekai.Octon.Models;
-using Osekai.Octon.Persistence;
+using Osekai.Octon.Caching;
+using Osekai.Octon.Domain.Aggregates;
+using Osekai.Octon.Domain.Entities;
+using Osekai.Octon.Drawing;
+using Osekai.Octon.Extensions;
 using Osekai.Octon.OsuApi;
 using Osekai.Octon.OsuApi.Payloads;
-using Osekai.Octon.Query;
-using Osekai.Octon.Query.QueryResults;
 using Osekai.Octon.Services;
 using Osekai.Octon.WebServer.Presentation.AppBaseLayout;
 
@@ -16,25 +17,25 @@ public abstract class AppBaseLayout : BaseLayout
 {
     public readonly struct AccentOverride
     {
-        public AccentOverride(Color color, Color darkColor)
+        public AccentOverride(RgbColour color, RgbColour darkColor)
         {
             Color = color;
             DarkColor = darkColor;
         }
 
-        public Color Color { get; }
-        public Color DarkColor { get; }
+        public RgbColour Color { get; }
+        public RgbColour DarkColor { get; }
     } 
     
     protected int AppId { get; }
-    protected IAdapter<IReadOnlyUserGroup, AppBaseLayoutUserGroup> AppBaseLayoutUserGroupAdapter { get; }
-    protected IAdapter<IReadOnlyMedalAggregateQueryResult, AppBaseLayoutMedal> AppBaseLayoutMedalAdapter { get; }
-    protected IAdapter<IReadOnlyAppAggregateQueryResult, AppBaseLayoutApp> AppBaseLayoutAppAdapter { get; }
+    protected IAdapter<UserGroup, AppBaseLayoutUserGroup> AppBaseLayoutUserGroupAdapter { get; }
+    protected IAdapter<Medal, AppBaseLayoutMedal> AppBaseLayoutMedalAdapter { get; }
+    protected IAdapter<App, AppBaseLayoutApp> AppBaseLayoutAppAdapter { get; }
     protected CachedAuthenticatedOsuApiV2Interface OsuApiV2Interface { get; }
     protected CurrentSession CurrentSession { get; }
-    protected IQuery<IEnumerable<IReadOnlyAppAggregateQueryResult>> AppAggregateQuery { get; }
-    protected IQuery<IEnumerable<IReadOnlyMedalAggregateQueryResult>> MedalAggregateQuery { get; }
     protected UserGroupService UserGroupService { get; }
+    protected MedalService MedalService { get; }
+    protected AppService AppService { get; }
     protected LocaleService LocaleService { get; }
     protected ICache Cache { get; }
     
@@ -45,11 +46,11 @@ public abstract class AppBaseLayout : BaseLayout
     public IReadOnlyDictionary<string, AppBaseLayoutApp> AppBaseLayoutApps { get; private set; } = null!;
     public IReadOnlyDictionary<string, AppBaseLayoutLocale> AppBaseLayoutLocales { get; private set; } = null!;
     public CurrentLocale CurrentLocale { get; }
-    public IReadOnlyDictionary<int, IReadOnlyAppAggregateQueryResult> Apps { get; private set; } = null!;
-    public IReadOnlyCollection<IReadOnlyUserGroup> UserGroups { get; private set; } = null!;
-    public IReadOnlyCollection<IReadOnlyMedalAggregateQueryResult> Medals { get; private set; } = null!;
-    public IReadOnlyApp CurrentApp { get; private set; } = null!;
-    public IReadOnlyAppTheme CurrentReadOnlyAppTheme { get; private set; } = null!;
+    public IReadOnlyDictionary<int, App> Apps { get; private set; } = null!;
+    public IReadOnlyCollection<UserGroup> UserGroups { get; private set; } = null!;
+    public IReadOnlyCollection<Medal> Medals { get; private set; } = null!;
+    public App CurrentApp { get; private set; } = null!;
+    public AppTheme CurrentAppTheme { get; private set; } = null!;
     public OsuUser? CurrentOsuUser { get; private set; }
     public bool Mobile { get; private set; }
     public bool Experimental { get; private set; }
@@ -60,11 +61,11 @@ public abstract class AppBaseLayout : BaseLayout
         CurrentSession currentSession,
         CurrentLocale currentLocale,
         CachedAuthenticatedOsuApiV2Interface cachedAuthenticatedOsuApiV2Interface, 
-        IAdapter<IReadOnlyMedalAggregateQueryResult, AppBaseLayoutMedal> appBaseLayoutMedalAdapter, 
-        IAdapter<IReadOnlyUserGroup, AppBaseLayoutUserGroup> appBaseLayoutUserGroupAdapter,
-        IAdapter<IReadOnlyAppAggregateQueryResult, AppBaseLayoutApp> appBaseLayoutAppAdapter,
-        IQuery<IEnumerable<IReadOnlyAppAggregateQueryResult>> appAggregateQuery,
-        IQuery<IEnumerable<IReadOnlyMedalAggregateQueryResult>> medalAggregateQuery,
+        IAdapter<Medal, AppBaseLayoutMedal> appBaseLayoutMedalAdapter, 
+        IAdapter<UserGroup, AppBaseLayoutUserGroup> appBaseLayoutUserGroupAdapter,
+        IAdapter<App, AppBaseLayoutApp> appBaseLayoutAppAdapter,
+        AppService appService,
+        MedalService medalService,
         ICache cache,
         UserGroupService userGroupService,
         LocaleService localeService,
@@ -72,23 +73,23 @@ public abstract class AppBaseLayout : BaseLayout
     {
         CurrentSession = currentSession;
         OsuApiV2Interface = cachedAuthenticatedOsuApiV2Interface;
-        AppAggregateQuery = appAggregateQuery;
-        MedalAggregateQuery = medalAggregateQuery;
         AppBaseLayoutMedalAdapter = appBaseLayoutMedalAdapter;
         AppBaseLayoutUserGroupAdapter = appBaseLayoutUserGroupAdapter;
         AppBaseLayoutAppAdapter = appBaseLayoutAppAdapter;
         CurrentLocale = currentLocale;
         UserGroupService = userGroupService;
         LocaleService = localeService;
+        AppService = appService;
+        MedalService = medalService;
         AppId = appId;
         Cache = cache;
     }
 
-    private class AppBaseLayoutCacheEntry
+    public class AppBaseLayoutCacheEntry
     {
-        public IReadOnlyDictionary<int, IReadOnlyAppAggregateQueryResult> Apps { get; init; } = null!;
-        public IReadOnlyCollection<IReadOnlyMedalAggregateQueryResult> Medals { get; init; } = null!;
-        public IReadOnlyCollection<IReadOnlyUserGroup> UserGroups { get; init; } = null!;
+        public IReadOnlyDictionary<int, App> Apps { get; init; } = null!;
+        public IReadOnlyCollection<Medal> Medals { get; init; } = null!;
+        public IReadOnlyCollection<UserGroup> UserGroups { get; init; } = null!;
         public IReadOnlyDictionary<string, AppBaseLayoutApp> AppBaseLayoutApps { get; init; } = null!;
         public IReadOnlyCollection<AppBaseLayoutUserGroup> AppBaseLayoutUserGroups { get; init; } = null!;
         public IReadOnlyCollection<AppBaseLayoutMedal> AppBaseLayoutMedals { get; init; } = null!;
@@ -101,17 +102,17 @@ public abstract class AppBaseLayout : BaseLayout
 
         if (appBaseLayoutCacheEntry == null)
         {
-            Apps = (await AppAggregateQuery.ExecuteAsync(cancellationToken)).ToDictionary(k => k.App.Id, e => e);
-            Medals = (await MedalAggregateQuery.ExecuteAsync(cancellationToken)).ToArray();
+            Apps = (await AppService.GetAppsAsync(cancellationToken)).ToDictionary(k => k.Id, e => e);
+            Medals = (await MedalService.GetMedalsAsync(includeBeatmapPacks: true, cancellationToken: cancellationToken)).ToArray();
             UserGroups = (await UserGroupService.GetUserGroupsAsync(cancellationToken)).ToArray();
 
             AppBaseLayoutLocales = (await LocaleService.GetLocalesAsync(cancellationToken))
-                .Select(locale => new AppBaseLayoutLocale(locale.Name, locale.Code, locale.Short, locale.Flag.ToString(),
+                .Select(locale => new AppBaseLayoutLocale(locale.Name, locale.Code, locale.ShortName, locale.Flag.ToString(),
                     locale.Experimental, locale.Wip, locale.Rtl, locale.ExtraHtml, locale.ExtraCss))
                 .ToDictionary(l => l.Code, l => l);
             
             AppBaseLayoutApps = await Apps.ToAsyncEnumerable().ToDictionaryAwaitAsync(
-                k => ValueTask.FromResult(k.Value.App.SimpleName),
+                k => ValueTask.FromResult(k.Value.SimpleName),
                 async v => await AppBaseLayoutAppAdapter.AdaptAsync(v.Value, cancellationToken));
 
             AppBaseLayoutMedals = await Medals.ToAsyncEnumerable()
@@ -144,11 +145,11 @@ public abstract class AppBaseLayout : BaseLayout
             AppBaseLayoutLocales = appBaseLayoutCacheEntry.AppBaseLayoutLocales;
         }
 
-        if (!Apps.TryGetValue(AppId, out IReadOnlyAppAggregateQueryResult? app))
+        if (!Apps.TryGetValue(AppId, out App? app))
             throw new ArgumentException($"The App with Id {AppId} was not found");
         
-        CurrentApp = app.App;
-        CurrentReadOnlyAppTheme = app.AppTheme ?? throw new ArgumentException($"The App with Id {AppId} does not have a theme");
+        CurrentApp = app;
+        CurrentAppTheme = app.AppTheme.Value ?? throw new ArgumentException($"The App with Id {AppId} does not have a theme");
         
         if (!CurrentSession.IsNull())
             CurrentOsuUser = await OsuApiV2Interface.MeAsync(CurrentSession, cancellationToken: cancellationToken);

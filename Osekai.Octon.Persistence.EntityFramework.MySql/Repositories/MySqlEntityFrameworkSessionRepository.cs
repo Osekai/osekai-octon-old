@@ -1,10 +1,8 @@
 ﻿using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using Osekai.Octon.HelperTypes;
-using Osekai.Octon.Models;
-using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
-using Osekai.Octon.Persistence.EntityFramework.MySql.Entities;
-using Osekai.Octon.Persistence.Repositories;
+using Osekai.Octon.Domain.Entities;
+using Osekai.Octon.Domain.Repositories;
+using Session = Osekai.Octon.Domain.Aggregates.Session;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql.Repositories;
 
@@ -17,15 +15,15 @@ public class MySqlEntityFrameworkSessionRepository: ISessionRepository
         Context = context;
     }
 
-    public async Task<IReadOnlySession?> GetSessionByTokenAsync(string token, CancellationToken cancellationToken = default)
+    public async Task<Session?> GetSessionByTokenAsync(string token, CancellationToken cancellationToken = default)
     {
-        Session? session = await Context.Sessions.AsNoTracking().Where(s => s.Token == token && DateTimeOffset.Now < s.ExpiresAt).FirstOrDefaultAsync(cancellationToken);
-        return session?.ToDto();
+        Entities.Session? session = await Context.Sessions.AsNoTracking().Where(s => s.Token == token && DateTimeOffset.Now < s.ExpiresAt).FirstOrDefaultAsync(cancellationToken);
+        return session?.ToAggregate();
     }
 
-    public Task AddSessionAsync(IReadOnlySession session, CancellationToken cancellationToken = default)
+    public Task AddSessionAsync(Session session, CancellationToken cancellationToken = default)
     {
-        Context.Sessions.Add(new Session
+        Context.Sessions.Add(new Entities.Session
         {
             Token = session.Token, 
             ExpiresAt = session.ExpiresAt, 
@@ -35,9 +33,9 @@ public class MySqlEntityFrameworkSessionRepository: ISessionRepository
         return Task.CompletedTask;
     }
 
-    public async Task<bool> SaveSessionAsyncAsync(IReadOnlySession session, CancellationToken cancellationToken = default)
+    public async Task<bool> SaveSessionAsyncAsync(Session session, CancellationToken cancellationToken = default)
     {
-        Session? sessionEntity = await Context.Sessions.FindAsync(new object[] { session.Token }, cancellationToken: cancellationToken);
+        Entities.Session? sessionEntity = await Context.Sessions.FindAsync(new object[] { session.Token }, cancellationToken: cancellationToken);
         if (sessionEntity == null)
             return false;
 
@@ -48,23 +46,23 @@ public class MySqlEntityFrameworkSessionRepository: ISessionRepository
         return true;
     }
 
-    public Task<IReadOnlySession> AddSessionAsync(string token, SessionPayload payload, DateTimeOffset expiresAt, CancellationToken cancellationToken = default)
+    public Task<Session> AddSessionAsync(string token, SessionPayload payload, DateTimeOffset expiresAt, CancellationToken cancellationToken = default)
     {
-        Context.Sessions.Add(new Session
+        Context.Sessions.Add(new Entities.Session
         {
             Token = token, 
             ExpiresAt = expiresAt, 
             Payload = JsonSerializer.Serialize(payload)
         });
         
-        return Task.FromResult<IReadOnlySession>(new SessionDto(token, payload, expiresAt));
+        return Task.FromResult<Session>(new Session(token, payload, expiresAt));
     }
 
     public async Task<bool> UpdateSessionPayloadAsync(
         string token, SessionPayload payload,
         CancellationToken cancellationToken = default)
     {
-        Session? session = await Context.Sessions.FindAsync(new object[] { token }, cancellationToken: cancellationToken);
+        Entities.Session? session = await Context.Sessions.FindAsync(new object[] { token }, cancellationToken: cancellationToken);
         if (session == null)
             return false;
 
@@ -75,7 +73,7 @@ public class MySqlEntityFrameworkSessionRepository: ISessionRepository
     public async Task<bool> UpdateExpirationDateTimeAsync(string token, DateTimeOffset dateTime,
         CancellationToken cancellationToken = default)
     {
-        Session? session = await Context.Sessions.FindAsync(new object[] { token }, cancellationToken: cancellationToken);
+        Entities.Session? session = await Context.Sessions.FindAsync(new object[] { token }, cancellationToken: cancellationToken);
         if (session == null)
             return false;
 
@@ -90,14 +88,14 @@ public class MySqlEntityFrameworkSessionRepository: ISessionRepository
 
     public async Task DeleteSessionByTokenAsync(string token, CancellationToken cancellationToken = default)
     {
-        Session? sessionEntity = await Context.Sessions.FindAsync(new object[] { token }, cancellationToken: cancellationToken);
+        Entities.Session? sessionEntity = await Context.Sessions.FindAsync(new object[] { token }, cancellationToken: cancellationToken);
         if (sessionEntity != null)
             Context.Remove(sessionEntity);
     }
 
-    public async Task DeleteSessionAsync(IReadOnlySession session, CancellationToken cancellationToken = default)
+    public async Task DeleteSessionAsync(Session session, CancellationToken cancellationToken = default)
     {
-        Session? sessionEntity = await Context.Sessions.FindAsync(new object[] { session.Token }, cancellationToken: cancellationToken);
+        Entities.Session? sessionEntity = await Context.Sessions.FindAsync(new object[] { session.Token }, cancellationToken: cancellationToken);
         if (sessionEntity != null)
             Context.Remove(session);
     }

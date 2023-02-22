@@ -1,4 +1,5 @@
-﻿using Osekai.Octon.Models;
+﻿using Osekai.Octon.Domain.Aggregates;
+using Osekai.Octon.Domain.Entities;
 using Osekai.Octon.Persistence;
 
 namespace Osekai.Octon.Services;
@@ -12,6 +13,6 @@ public class LocaleService
         UnitOfWork = unitOfWork;
     }
 
-    public Task<IEnumerable<IReadOnlyLocale>> GetLocalesAsync(CancellationToken cancellationToken = default) =>
+    public Task<IEnumerable<Locale>> GetLocalesAsync(CancellationToken cancellationToken = default) =>
         UnitOfWork.LocaleRepository.GetLocalesAsync(cancellationToken);
 }

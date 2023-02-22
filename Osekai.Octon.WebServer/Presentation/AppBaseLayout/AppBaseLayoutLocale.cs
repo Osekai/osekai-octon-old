@@ -1,7 +1,11 @@
-﻿namespace Osekai.Octon.WebServer.Presentation.AppBaseLayout;
+﻿using System.Text.Json.Serialization;
+
+namespace Osekai.Octon.WebServer.Presentation.AppBaseLayout;
 
 public class AppBaseLayoutLocale
 {
+    public AppBaseLayoutLocale() {}
+    
     public AppBaseLayoutLocale(string name, string code, string s, string flag, bool experimental, bool wip, bool rtl, string? extraHtml, string? extraCss)
     {
         Name = name;
@@ -15,13 +19,13 @@ public class AppBaseLayoutLocale
         ExtraCss = extraCss;
     }
 
-    public string Name { get; }
-    public string Code { get; }
-    public string Short { get; }
-    public string Flag { get; }
-    public bool Experimental { get; }
-    public bool Wip { get; }
-    public bool Rtl { get; }
-    public string? ExtraHtml { get; }
-    public string? ExtraCss { get; }
+    public string Name { get; set; } = null!;
+    public string Code { get; set; } = null!; 
+    public string Short { get; set; }= null!;
+    public string Flag { get; set; }= null!;
+    public bool Experimental { get; set; }
+    public bool Wip { get; set; }
+    public bool Rtl { get; set; }
+    public string? ExtraHtml { get; set; }
+    public string? ExtraCss { get; set; }
 }

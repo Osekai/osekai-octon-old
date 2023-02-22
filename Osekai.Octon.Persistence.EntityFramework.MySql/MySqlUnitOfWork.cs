@@ -1,5 +1,5 @@
-﻿using Osekai.Octon.Persistence.EntityFramework.MySql.Repositories;
-using Osekai.Octon.Persistence.Repositories;
+﻿using Osekai.Octon.Domain.Repositories;
+using Osekai.Octon.Persistence.EntityFramework.MySql.Repositories;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql;
 
@@ -12,10 +12,7 @@ public class MySqlUnitOfWork: EntityFrameworkUnitOfWork<MySqlOsekaiDbContext>
     private IMedalRepository? _medalRepository;
     private IUserGroupRepository? _userGroupRepository;
     private IUserPermissionsOverrideRepository? _userPermissionsOverrideRepository;
-    private IAppThemeRepository? _appThemeRepository;
-    private IMedalSettingsRepository? _medalSettingsRepository;
     private IBeatmapPackRepository? _beatmapPackRepository;
-    private IMedalSolutionRepository? _medalSolutionRepository;
     private ILocaleRepository? _localeRepository;
 
     public override IAppRepository AppRepository => 
@@ -27,17 +24,8 @@ public class MySqlUnitOfWork: EntityFrameworkUnitOfWork<MySqlOsekaiDbContext>
     public override IUserGroupRepository UserGroupRepository =>
         _userGroupRepository ??= new MySqlEntityFrameworkUserGroupRepository(Context);
 
-    public override IAppThemeRepository AppThemeRepository =>
-        _appThemeRepository ??= new MySqlEntityFrameworkAppThemeRepository(Context);
-
     public override IUserPermissionsOverrideRepository UserPermissionsOverrideRepository =>
         _userPermissionsOverrideRepository ??= new MySqlEntityFrameworkUserPermissionsOverrideRepository(Context);
-
-    public override IMedalSettingsRepository MedalSettingsRepository =>
-        _medalSettingsRepository ??= new MySqlEntityFrameworkMedalSettingsRepository(Context);
-
-    public override IMedalSolutionRepository MedalSolutionRepository =>
-        _medalSolutionRepository ??= new MySqlEntityFrameworkMedalSolutionRepository(Context);
 
     public override IBeatmapPackRepository BeatmapPackRepository =>
         _beatmapPackRepository ??= new MySqlEntityFrameworkBeatmapPackRepository(Context);

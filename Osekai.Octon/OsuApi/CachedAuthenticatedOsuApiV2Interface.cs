@@ -1,4 +1,6 @@
-﻿using Osekai.Octon.Exceptions;
+﻿using Osekai.Octon.Caching;
+using Osekai.Octon.Exceptions;
+using Osekai.Octon.Extensions;
 using Osekai.Octon.OsuApi.Payloads;
 
 namespace Osekai.Octon.OsuApi;
@@ -23,7 +25,7 @@ public class CachedAuthenticatedOsuApiV2Interface: IAuthenticatedOsuApiV2Interfa
         if (user == null)
         {
             user = await _authenticatedOsuApiV2Interface.SearchUserAsync(sessionProvider, searchString, mode, cancellationToken);
-            await _cache.SetAsync(entryName, user, cancellationToken: cancellationToken);
+            await _cache.SetAsync<OsuUser?>(entryName, user, cancellationToken: cancellationToken);
         }   
 
         return user;

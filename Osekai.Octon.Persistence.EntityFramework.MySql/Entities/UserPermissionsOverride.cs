@@ -1,5 +1,5 @@
-﻿using Osekai.Octon.Enums;
-using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
+﻿using Osekai.Octon.Domain.Aggregates;
+using Osekai.Octon.Permissions;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql.Entities;
 
@@ -14,8 +14,8 @@ internal sealed class UserPermissionsOverride
     public int UserId { get; set; }
     public IDictionary<string, PermissionActionType> Permissions { get; set; }
 
-    public UserPermissionsOverrideDto ToDto()
+    public Domain.Aggregates.UserPermissionsOverride ToDto()
     {
-        return new UserPermissionsOverrideDto(UserId, Permissions);
+        return new Domain.Aggregates.UserPermissionsOverride(UserId, Permissions);
     }
 }

@@ -1,5 +1,4 @@
-﻿using Osekai.Octon.Enums;
-using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
+﻿using Osekai.Octon.Permissions;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql.Entities;
 
@@ -23,11 +22,11 @@ internal sealed class UserGroup
 
     public ICollection<UserGroupsForUsers> UserGroupForUsers { get; set; }
     
-    public UserGroupDto ToDto()
+    public Domain.Aggregates.UserGroup ToAggregate()
     {
-        return new UserGroupDto(
-            Id, Name, ShortName, Permissions, Description, 
+        return new Domain.Aggregates.UserGroup(
+            Id, Name, ShortName, Description, 
             ColorFormatConversion.GetColorFromString(Colour),
-            Order, Hidden, ForceVisibleInComments);
+            Order, Hidden, ForceVisibleInComments, Permissions);
     }
 }

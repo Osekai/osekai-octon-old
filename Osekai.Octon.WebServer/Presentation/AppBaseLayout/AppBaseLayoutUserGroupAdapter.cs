@@ -1,11 +1,13 @@
 ﻿using System.Drawing;
 using System.Text;
 using Microsoft.Extensions.ObjectPool;
-using Osekai.Octon.Models;
+using Osekai.Octon.Domain.Aggregates;
+using Osekai.Octon.Domain.Entities;
+using Osekai.Octon.Drawing;
 
 namespace Osekai.Octon.WebServer.Presentation.AppBaseLayout;
 
-public class AppBaseLayoutUserGroupAdapter: IAdapter<IReadOnlyUserGroup, AppBaseLayoutUserGroup>
+public class AppBaseLayoutUserGroupAdapter: IAdapter<UserGroup, AppBaseLayoutUserGroup>
 {
     protected ObjectPool<StringBuilder> StringBuilderObjectPool { get; }
     
@@ -14,7 +16,7 @@ public class AppBaseLayoutUserGroupAdapter: IAdapter<IReadOnlyUserGroup, AppBase
         StringBuilderObjectPool = stringBuilderObjectPool;
     }
 
-    private string GetColourString(Color color)
+    private string GetColourString(RgbColour color)
     {
         StringBuilder stringBuilder = StringBuilderObjectPool.Get();
         try
@@ -28,7 +30,7 @@ public class AppBaseLayoutUserGroupAdapter: IAdapter<IReadOnlyUserGroup, AppBase
         }
     }
     
-    public Task<AppBaseLayoutUserGroup> AdaptAsync(IReadOnlyUserGroup e, CancellationToken cancellationToken = default)
+    public Task<AppBaseLayoutUserGroup> AdaptAsync(UserGroup e, CancellationToken cancellationToken = default)
     {
         return Task.FromResult(new AppBaseLayoutUserGroup
         {

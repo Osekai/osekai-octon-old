@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Osekai.Octon.Enums;
-using Osekai.Octon.Models;
-using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
+using Osekai.Octon.Domain.Enums;
+using Osekai.Octon.Domain.Repositories;
 using Osekai.Octon.Persistence.EntityFramework.MySql.Entities;
-using Osekai.Octon.Persistence.Repositories;
+using BeatmapPack = Osekai.Octon.Domain.Aggregates.BeatmapPack;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql.Repositories;
 
@@ -16,7 +15,7 @@ public class MySqlEntityFrameworkBeatmapPackRepository: IBeatmapPackRepository
         Context = context;
     }
     
-    public async Task<IReadOnlyDictionary<OsuGamemode, IReadOnlyBeatmapPack>?> GetBeatmapPacksByMedalId(int medalId, CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyDictionary<OsuGamemode, BeatmapPack>?> GetBeatmapPacksByMedalId(int medalId, CancellationToken cancellationToken = default)
     {
         Medal? medal = await Context.Medals
             .Include(b => b.BeatmapPacksForMedal).ThenInclude(b => b.BeatmapPack)
@@ -26,6 +25,6 @@ public class MySqlEntityFrameworkBeatmapPackRepository: IBeatmapPackRepository
         if (medal == null)
             return null;
 
-        return medal.BeatmapPacksForMedal.ToDictionary(e => e.Gamemode, e => (IReadOnlyBeatmapPack)e.BeatmapPack.ToDto());
+        return medal.BeatmapPacksForMedal.ToDictionary(e => e.Gamemode, e => (BeatmapPack)e.BeatmapPack.ToAggregate());
     }
 }

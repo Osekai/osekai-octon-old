@@ -1,6 +1,4 @@
-﻿using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
-
-namespace Osekai.Octon.Persistence.EntityFramework.MySql.Entities;
+﻿namespace Osekai.Octon.Persistence.EntityFramework.MySql.Entities;
 
 public class Locale
 {
@@ -14,8 +12,8 @@ public class Locale
     public string? ExtraHtml { get; set; } = null!;
     public string? ExtraCss { get; set; } = null!;
 
-    public LocaleDto ToDto()
+    public Domain.Aggregates.Locale ToAggregate()
     {
-        return new LocaleDto(Name, Code, Short, new Uri(Flag), Experimental, Wip, Rtl, ExtraHtml, ExtraCss);
+        return new Domain.Aggregates.Locale(Name, Code, Short, new Uri(Flag), ExtraHtml, ExtraCss, Experimental, Wip, Rtl);
     }
 }

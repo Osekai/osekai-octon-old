@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Osekai.Octon.Domain\Osekai.Octon.Domain.csproj" />
       <ProjectReference Include="..\Osekai.Octon.Exceptions\Osekai.Octon.Exceptions.csproj" />
       <ProjectReference Include="..\Osekai.Octon\Osekai.Octon.csproj" />
     </ItemGroup>

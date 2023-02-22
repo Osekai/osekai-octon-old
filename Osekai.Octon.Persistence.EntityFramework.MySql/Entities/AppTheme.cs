@@ -1,6 +1,4 @@
-﻿using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
-
-namespace Osekai.Octon.Persistence.EntityFramework.MySql.Entities
+﻿namespace Osekai.Octon.Persistence.EntityFramework.MySql.Entities
 {
     internal sealed class AppTheme
     {
@@ -13,13 +11,11 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql.Entities
         public bool HasCover { get; set; }
         public App App { get; set; } = null!;
 
-
-
-        public ReadOnlyAppThemeDto ToDto()
+        public Domain.Entities.AppTheme ToEntity()
         {
-            return new ReadOnlyAppThemeDto(Id, 
-                ColorFormatConversion.GetColorFromString(Color), ColorFormatConversion.GetColorFromString(DarkColor), HasCover, 
-                HslValueMultiplier, DarkHslValueMultiplier);
+            return new Domain.Entities.AppTheme(Id, 
+                ColorFormatConversion.GetColorFromString(Color), ColorFormatConversion.GetColorFromString(DarkColor), 
+                HslValueMultiplier, DarkHslValueMultiplier, HasCover);
         }
     }
 }

@@ -1,5 +1,6 @@
-﻿using Osekai.Octon.Models;
-using Osekai.Octon.Persistence.Repositories;
+﻿using Osekai.Octon.Domain.Aggregates;
+using Osekai.Octon.Domain.Entities;
+using Osekai.Octon.Domain.Repositories;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql.Repositories;
 
@@ -12,6 +13,6 @@ public class MySqlEntityFrameworkLocaleRepository: ILocaleRepository
         Context = context;
     }
     
-    public async Task<IEnumerable<IReadOnlyLocale>> GetLocalesAsync(CancellationToken cancellationToken = default) =>
-        await Context.Locales.ToAsyncEnumerable().Select(s => s.ToDto()).ToArrayAsync(cancellationToken);
+    public async Task<IEnumerable<Locale>> GetLocalesAsync(CancellationToken cancellationToken = default) =>
+        await Context.Locales.ToAsyncEnumerable().Select(s => s.ToAggregate()).ToArrayAsync(cancellationToken);
 }

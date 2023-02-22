@@ -1,8 +1,6 @@
-﻿using Osekai.Octon.Models;
-using Osekai.Octon.Persistence;
+﻿using Osekai.Octon.Caching;
+using Osekai.Octon.Domain.Aggregates;
 using Osekai.Octon.OsuApi;
-using Osekai.Octon.Query;
-using Osekai.Octon.Query.QueryResults;
 using Osekai.Octon.Services;
 using Osekai.Octon.WebServer.Presentation.AppBaseLayout;
 
@@ -15,8 +13,8 @@ public class Home : AppBaseLayout
     public override string MetadataThemeColor => "#353d55";
     public override string MetadataUrl => "https://osekai.net/home";
 
-    public Home(CurrentSession currentSession, CurrentLocale currentLocale, CachedAuthenticatedOsuApiV2Interface cachedAuthenticatedOsuApiV2Interface, IAdapter<IReadOnlyMedalAggregateQueryResult, AppBaseLayoutMedal> appBaseLayoutMedalAdapter, IAdapter<IReadOnlyUserGroup, AppBaseLayoutUserGroup> appBaseLayoutUserGroupAdapter, IAdapter<IReadOnlyAppAggregateQueryResult, AppBaseLayoutApp> appBaseLayoutAppAdapter, IQuery<IEnumerable<IReadOnlyAppAggregateQueryResult>> appAggregateQuery, IQuery<IEnumerable<IReadOnlyMedalAggregateQueryResult>> medalAggregateQuery, ICache cache, UserGroupService userGroupService, LocaleService localeService) 
-        : base(currentSession, currentLocale, cachedAuthenticatedOsuApiV2Interface, appBaseLayoutMedalAdapter, appBaseLayoutUserGroupAdapter, appBaseLayoutAppAdapter, appAggregateQuery, medalAggregateQuery, cache, userGroupService, localeService, -1)
+    public Home(CurrentSession currentSession, CurrentLocale currentLocale, CachedAuthenticatedOsuApiV2Interface cachedAuthenticatedOsuApiV2Interface, IAdapter<Medal, AppBaseLayoutMedal> appBaseLayoutMedalAdapter, IAdapter<UserGroup, AppBaseLayoutUserGroup> appBaseLayoutUserGroupAdapter, IAdapter<App, AppBaseLayoutApp> appBaseLayoutAppAdapter, AppService appService, MedalService medalService, ICache cache, UserGroupService userGroupService, LocaleService localeService) 
+        : base(currentSession, currentLocale, cachedAuthenticatedOsuApiV2Interface, appBaseLayoutMedalAdapter, appBaseLayoutUserGroupAdapter, appBaseLayoutAppAdapter, appService, medalService, cache, userGroupService, localeService, -1)
     {
     }
 }

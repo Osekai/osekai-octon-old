@@ -1,6 +1,5 @@
-﻿using Osekai.Octon.Persistence;
-using Osekai.Octon.RichModels;
-using Osekai.Octon.RichModels.Extensions;
+﻿using Osekai.Octon.Domain.Aggregates;
+using Osekai.Octon.Persistence;
 
 namespace Osekai.Octon.Services;
 
@@ -14,10 +13,8 @@ public class AppService
     }
 
     public Task<App?> GetAppByIdAsync(int id, CancellationToken cancellationToken = default)
-        => UnitOfWork.AppRepository.GetAppByIdAsync(id, cancellationToken)
-            .ContinueWith(t => t.Result?.ToRichModel(UnitOfWork));
+        => UnitOfWork.AppRepository.GetAppByIdAsync(id, cancellationToken);
 
     public Task<IEnumerable<App>> GetAppsAsync(CancellationToken cancellationToken = default) =>
-        UnitOfWork.AppRepository.GetAppsAsync(cancellationToken)
-            .ContinueWith(t => t.Result.Select(d => d.ToRichModel(UnitOfWork)));
+        UnitOfWork.AppRepository.GetAppsAsync(cancellationToken);
 }

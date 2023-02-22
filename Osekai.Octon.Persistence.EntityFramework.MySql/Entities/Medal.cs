@@ -1,6 +1,4 @@
-﻿using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
-
-namespace Osekai.Octon.Persistence.EntityFramework.MySql.Entities;
+﻿namespace Osekai.Octon.Persistence.EntityFramework.MySql.Entities;
 
 internal sealed class Medal
 {
@@ -24,9 +22,8 @@ internal sealed class Medal
     public string? FirstAchievedBy { get; set; }
 
     
-    public MedalDto ToDto()
+    public Domain.Aggregates.Medal ToAggregate()
     {
-        return new MedalDto(Id, Name, Link, Description, Grouping, Ordering,
-            Restriction, Instructions, Video, Date, FirstAchievedDate, FirstAchievedBy, Rarity?.Frequency ?? 0, Rarity?.Count ?? 0);
+        return new Domain.Aggregates.Medal(Id, Name, Link, Description, Restriction, Grouping, Instructions, Ordering, Video, Date, Rarity?.Frequency ?? 0, Rarity?.Count ?? 0);
     }
 }

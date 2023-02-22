@@ -1,6 +1,4 @@
-﻿using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
-
-namespace Osekai.Octon.Persistence.EntityFramework.MySql.Entities
+﻿namespace Osekai.Octon.Persistence.EntityFramework.MySql.Entities
 {
     internal sealed class App
     {
@@ -13,7 +11,10 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql.Entities
 
         public AppTheme? AppTheme { get; set; }
 
-        public AppDto ToDto() =>
-            new AppDto(Id, Order, Name, SimpleName, Visible, Experimental, AppTheme?.ToDto());
+        public Domain.Aggregates.App ToAggregate(bool includeObjects = false)
+        {
+            Domain.Aggregates.App app = new Domain.Aggregates.App(Name, SimpleName, Id, Order, Visible, Experimental);
+            return app;
+        }
     }
 }

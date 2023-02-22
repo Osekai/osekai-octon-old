@@ -1,12 +1,11 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Osekai.Octon.Domain;
+using Osekai.Octon.Domain.Entities;
 using Osekai.Octon.Exceptions;
-using Osekai.Octon.HelperTypes;
-using Osekai.Octon.Models;
 using Osekai.Octon.OsuApi;
 using Osekai.Octon.OsuApi.Payloads;
 using Osekai.Octon.Persistence;
-using Osekai.Octon.RichModels;
-using Osekai.Octon.RichModels.Extensions;
+using Session = Osekai.Octon.Domain.Aggregates.Session;
 
 namespace Osekai.Octon.Services;
 
@@ -54,7 +53,7 @@ public class AuthenticationService
             var (authenticationResultPayload, user, responseTime) = await _osuApiV2Interface.RefreshTokenAsync(refreshToken, cancellationToken);
             DateTimeOffset expiresAt = responseTime.AddSeconds(authenticationResultPayload.ExpiresIn);
 
-            Session? session = (await unitOfWork.SessionRepository.GetSessionByTokenAsync(_token, cancellationToken))?.ToRichModel(unitOfWork);
+            Session? session = (await unitOfWork.SessionRepository.GetSessionByTokenAsync(_token, cancellationToken));
 
             if (session == null)
                 throw new InvalidOperationException("Invalid session");
@@ -64,7 +63,7 @@ public class AuthenticationService
             session.Payload.OsuUserId = user.Id;
             session.Payload.ExpiresAt = expiresAt.UtcDateTime;
 
-            await session.PublishChangesAsync(cancellationToken);
+            await unitOfWork.SessionRepository.SaveSessionAsyncAsync(session, cancellationToken);
             await unitOfWork.SaveChangesAsync(cancellationToken);
             
             return (authenticationResultPayload.Token, authenticationResultPayload.RefreshToken, expiresAt);
@@ -84,7 +83,7 @@ public class AuthenticationService
     
     public async Task<LogInWithCodeResult> LogInWithTokenAsync(string token, CancellationToken cancellationToken = default)
     {
-        IReadOnlySession? session = await UnitOfWork.SessionRepository.GetSessionByTokenAsync(token, cancellationToken);
+        Session? session = await UnitOfWork.SessionRepository.GetSessionByTokenAsync(token, cancellationToken);
         
         if (session == null)
             throw new InvalidSessionTokenException(token);
@@ -138,8 +137,7 @@ public class AuthenticationService
         Session session = new Session(generatedToken, 
             new SessionPayload(payload.Token, payload.RefreshToken, 
                 responseDateTime.AddSeconds(payload.ExpiresIn).UtcDateTime, user.Id), 
-            DateTimeOffset.Now.AddSeconds(Specifications.SessionTokenMaxAgeInSeconds), 
-            UnitOfWork);
+            DateTimeOffset.Now.AddSeconds(Specifications.SessionTokenMaxAgeInSeconds));
         
         await UnitOfWork.SessionRepository.AddSessionAsync(session, cancellationToken);
         

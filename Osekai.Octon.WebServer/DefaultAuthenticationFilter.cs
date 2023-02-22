@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Osekai.Octon.Domain;
 using Osekai.Octon.Exceptions;
 using Osekai.Octon.Permissions;
 using Osekai.Octon.Services;

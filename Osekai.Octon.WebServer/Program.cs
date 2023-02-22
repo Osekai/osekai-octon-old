@@ -2,24 +2,23 @@
 using System.Text;
 using Microsoft.AspNetCore.StaticFiles.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.ObjectPool;
 using Microsoft.IO;
 using Osekai.Octon.WebServer;
 using Osekai.Octon;
 using Osekai.Octon.Caching;
-using Osekai.Octon.Caching.MsgPack;
+using Osekai.Octon.Caching.Codecs.MsgPack;
+using Osekai.Octon.Caching.Storages.MicrosoftInMemoryCache;
+using Osekai.Octon.Domain.Aggregates;
 using Osekai.Octon.Localization;
 using Osekai.Octon.Localization.File;
-using Osekai.Octon.Models;
 using Osekai.Octon.OsuApi;
 using Osekai.Octon.Persistence.EntityFramework.MySql;
 using Osekai.Octon.Options;
 using Osekai.Octon.OsuApi.Payloads;
 using Osekai.Octon.Persistence;
-using Osekai.Octon.Query;
-using Osekai.Octon.Query.QueryParams;
-using Osekai.Octon.Query.QueryResults;
 using Osekai.Octon.Services;
 using Osekai.Octon.WebServer.API.V1.Dtos.UserController;
 using Osekai.Octon.WebServer.Presentation;
@@ -43,8 +42,14 @@ builder.Services.AddSingleton<ObjectPool<StringBuilder>>(serviceProvider =>
     return provider.Create(policy);
 });
 
+builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<RecyclableMemoryStreamManager>();
-builder.Services.AddSingleton<ICache, InMemoryCache>();
+
+builder.Services.AddSingleton<ICache, ConfigurableCache>(p => 
+    new ConfigurableCache(p.GetRequiredService<RecyclableMemoryStreamManager>(), 
+        new MicrosoftInMemoryCacheStorage(p.GetRequiredService<IMemoryCache>()),
+        new MsgPackCacheCodec()));
+
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<OsuApiV2Interface>();
 builder.Services.AddSingleton<IAuthenticatedOsuApiV2Interface, AuthenticatedOsuApiV2Interface>();
@@ -55,16 +60,14 @@ builder.Services.AddScoped<AppService>();
 builder.Services.AddScoped<IOsuApiV2SessionProvider>(provider => provider.GetRequiredService<CurrentSession>());
 builder.Services.AddScoped<ITokenGenerator, RandomBytes128BitTokenGenerator>();
 builder.Services.AddSingleton<StaticUrlGenerator>();
-builder.Services.AddScoped<IQuery<IEnumerable<IReadOnlyMedalAggregateQueryResult>>, MySqlEntityFrameworkMedalAggregatesQuery>();
-builder.Services.AddScoped<IQuery<IEnumerable<IReadOnlyAppAggregateQueryResult>>, MySqlEntityFrameworkAppAggregatesQuery>();
-builder.Services.AddScoped<IParameterizedQuery<IReadOnlyUserAggregateQueryResult, UserAggregateParam>, MySqlEntityFrameworkUserAggregateQuery>();
-builder.Services.AddScoped<IAdapter<IReadOnlyAppAggregateQueryResult, AppBaseLayoutApp>, AppBaseLayoutAppFromAppAggregateQueryResultAdapter>();
-builder.Services.AddSingleton<IAdapter<IReadOnlyMedalAggregateQueryResult, AppBaseLayoutMedal>, AppBaseLayoutMedalFromMedalAggregateQueryResultAdapter>();
-builder.Services.AddSingleton<IAdapter<IReadOnlyUserGroup, AppBaseLayoutUserGroup>, AppBaseLayoutUserGroupAdapter>();
-builder.Services.AddSingleton<IAdapter<(OsuUser, IReadOnlyUserAggregateQueryResult), UserDto>, UserDtoFromOsuUserAndAggregateAdapter>();
+builder.Services.AddScoped<IAdapter<App, AppBaseLayoutApp>, AppBaseLayoutAppFromAppAdapter>();
+builder.Services.AddSingleton<IAdapter<Medal, AppBaseLayoutMedal>, AppBaseLayoutMedalFromMedalAdapter>();
+builder.Services.AddSingleton<IAdapter<UserGroup, AppBaseLayoutUserGroup>, AppBaseLayoutUserGroupAdapter>();
+builder.Services.AddSingleton<IAdapter<(OsuUser, IEnumerable<UserGroup>), UserDto>, UserDtoFromOsuUserAndAggregateAdapter>();
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<PermissionService>();
 builder.Services.AddScoped<UserGroupService>();
+builder.Services.AddScoped<MedalService>();
 builder.Services.AddScoped<LocaleService>();
 builder.Services.AddScoped<CurrentLocale>();
 

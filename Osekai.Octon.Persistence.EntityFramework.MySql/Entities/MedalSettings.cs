@@ -1,6 +1,4 @@
-﻿using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
-
-namespace Osekai.Octon.Persistence.EntityFramework.MySql.Entities;
+﻿namespace Osekai.Octon.Persistence.EntityFramework.MySql.Entities;
 
 internal sealed class MedalSettings
 {
@@ -9,8 +7,8 @@ internal sealed class MedalSettings
     public Medal Medal { get; set; } = null!;
     public bool Locked { get; set; }
 
-    public MedalSettingsDto ToDto()
+    public Domain.Entities.MedalSettings ToEntity()
     {
-        return new MedalSettingsDto(Locked);
+        return new Domain.Entities.MedalSettings(Locked);
     }
 }

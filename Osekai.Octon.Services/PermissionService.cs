@@ -1,5 +1,5 @@
-﻿using Osekai.Octon.Enums;
-using Osekai.Octon.Models;
+﻿using Osekai.Octon.Domain.Aggregates;
+using Osekai.Octon.Domain.Entities;
 using Osekai.Octon.Permissions;
 using Osekai.Octon.Permissions.PermissionStores;
 using Osekai.Octon.Persistence;
@@ -17,8 +17,8 @@ public class PermissionService
     
     public async Task<IPermissionStore> GetPermissionStoreAsync(int userId, CancellationToken cancellationToken = default)
     {
-        IEnumerable<IReadOnlyUserGroup> userGroups = await UnitOfWork.UserGroupRepository.GetUserGroupsOfUserAsync(userId, cancellationToken);
-        IReadOnlyUserPermissionOverride? permissionsOverrideDto = await UnitOfWork.UserPermissionsOverrideRepository.GetUserPermissionOverrideByUserId(userId, cancellationToken);
+        IEnumerable<UserGroup> userGroups = await UnitOfWork.UserGroupRepository.GetUserGroupsOfUserAsync(userId, cancellationToken);
+        UserPermissionsOverride? permissionsOverrideDto = await UnitOfWork.UserPermissionsOverrideRepository.GetUserPermissionOverrideByUserId(userId, cancellationToken);
 
         IEnumerable<IReadOnlyDictionary<string, PermissionActionType>> permissionDictionaries = userGroups.Select(u => u.Permissions);
 

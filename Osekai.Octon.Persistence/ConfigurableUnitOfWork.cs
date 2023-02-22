@@ -1,5 +1,5 @@
 ﻿using System.Data;
-using Osekai.Octon.Persistence.Repositories;
+using Osekai.Octon.Domain.Repositories;
 
 namespace Osekai.Octon.Persistence;
 
@@ -11,10 +11,7 @@ public class ConfigurableUnitOfWork: IUnitOfWork, IDisposable, IAsyncDisposable
         private ISessionRepository? _sessionRepository;
         private IMedalRepository? _medalRepository;
         private IUserGroupRepository? _userGroupRepository;
-        private IAppThemeRepository? _appThemeRepository;
         private IUserPermissionsOverrideRepository? _userPermissionsOverrideRepository;
-        private IMedalSettingsRepository? _medalSettingsRepository;
-        private IMedalSolutionRepository? _medalSolutionRepository;
         private IBeatmapPackRepository? _beatmapPackRepository;
         private ILocaleRepository? _localeRepository;
 
@@ -49,27 +46,9 @@ public class ConfigurableUnitOfWork: IUnitOfWork, IDisposable, IAsyncDisposable
             return this;
         }
         
-        public Builder WithAppThemeRepository<T>(T appThemeRepository) where T : IAppThemeRepository
-        {
-            _appThemeRepository = appThemeRepository;
-            return this;
-        }
-        
         public Builder WithUserPermissionOverrideRepository<T>(T userPermissionsOverrideRepository) where T : IUserPermissionsOverrideRepository
         {
             _userPermissionsOverrideRepository = userPermissionsOverrideRepository;
-            return this;
-        }
-        
-        public Builder WithMedalSettings<T>(T medalSettingsRepository) where T : IMedalSettingsRepository
-        {
-            _medalSettingsRepository = medalSettingsRepository;
-            return this;
-        }
-        
-        public Builder WithMedalSolution<T>(T medalSolutionRepository) where T : IMedalSolutionRepository
-        {
-            _medalSolutionRepository = medalSolutionRepository;
             return this;
         }
         
@@ -96,10 +75,7 @@ public class ConfigurableUnitOfWork: IUnitOfWork, IDisposable, IAsyncDisposable
         public ConfigurableUnitOfWork Build()
         {
             IAppRepository appRepository = _appRepository ?? throw new InvalidOperationException();
-            IAppThemeRepository appThemeRepository = _appThemeRepository ?? throw new InvalidOperationException();
             IMedalRepository medalRepository = _medalRepository ?? throw new InvalidOperationException();
-            IMedalSettingsRepository medalSettingsRepository = _medalSettingsRepository ?? throw new InvalidOperationException();
-            IMedalSolutionRepository medalSolutionRepository = _medalSolutionRepository ?? throw new InvalidOperationException();
             ISessionRepository sessionRepository = _sessionRepository ?? throw new InvalidOperationException();
             IUserGroupRepository userGroupRepository = _userGroupRepository ?? throw new InvalidOperationException();
             IBeatmapPackRepository beatmapPackRepository = _beatmapPackRepository ?? throw new InvalidOperationException();
@@ -111,10 +87,7 @@ public class ConfigurableUnitOfWork: IUnitOfWork, IDisposable, IAsyncDisposable
                 sessionRepository,
                 medalRepository,
                 userGroupRepository,
-                appThemeRepository,
                 userPermissionsOverrideRepository,
-                medalSettingsRepository,
-                medalSolutionRepository,
                 beatmapPackRepository,
                 _saveStrategies,
                 localeRepository);
@@ -126,10 +99,7 @@ public class ConfigurableUnitOfWork: IUnitOfWork, IDisposable, IAsyncDisposable
         ISessionRepository sessionRepository,
         IMedalRepository medalRepository, 
         IUserGroupRepository userGroupRepository,
-        IAppThemeRepository appThemeRepository,
         IUserPermissionsOverrideRepository userPermissionsOverrideRepository,
-        IMedalSettingsRepository medalSettingsRepository, 
-        IMedalSolutionRepository medalSolutionRepository, 
         IBeatmapPackRepository beatmapPackRepository,
         IEnumerable<ISaveStrategy> saveStrategies, ILocaleRepository localeRepository)
     {
@@ -137,10 +107,7 @@ public class ConfigurableUnitOfWork: IUnitOfWork, IDisposable, IAsyncDisposable
         SessionRepository = sessionRepository;
         MedalRepository = medalRepository;
         UserGroupRepository = userGroupRepository;
-        AppThemeRepository = appThemeRepository;
         UserPermissionsOverrideRepository = userPermissionsOverrideRepository;
-        MedalSettingsRepository = medalSettingsRepository;
-        MedalSolutionRepository = medalSolutionRepository;
         BeatmapPackRepository = beatmapPackRepository;
         LocaleRepository = localeRepository;
         _saveStrategies = saveStrategies.ToList();
@@ -176,10 +143,7 @@ public class ConfigurableUnitOfWork: IUnitOfWork, IDisposable, IAsyncDisposable
     public ISessionRepository SessionRepository { get; }
     public IMedalRepository MedalRepository { get; }
     public IUserGroupRepository UserGroupRepository { get; }
-    public IAppThemeRepository AppThemeRepository { get; } 
     public IUserPermissionsOverrideRepository UserPermissionsOverrideRepository { get; }
-    public IMedalSettingsRepository MedalSettingsRepository { get; }
-    public IMedalSolutionRepository MedalSolutionRepository { get; } 
     public IBeatmapPackRepository BeatmapPackRepository { get; }
     public ILocaleRepository LocaleRepository { get; }
 

@@ -14,7 +14,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Osekai.Octon.Caching.MsgPack\Osekai.Octon.Caching.MsgPack.csproj" />
+      <ProjectReference Include="..\Osekai.Octon.Caching.Codecs.MsgPack\Osekai.Octon.Caching.Codecs.MsgPack.csproj" />
+      <ProjectReference Include="..\Osekai.Octon.Caching.Storages.MicrosoftInMemoryCache\Osekai.Octon.Caching.Storages.MicrosoftInMemoryCache.csproj" />
       <ProjectReference Include="..\Osekai.Octon.Persistence.EntityFramework.MySql.Migrations\Osekai.Octon.Persistence.EntityFramework.MySql.Migrations.csproj" />
       <ProjectReference Include="..\Osekai.Octon.Persistence.EntityFramework.MySql\Osekai.Octon.Persistence.EntityFramework.MySql.csproj" />
       <ProjectReference Include="..\Osekai.Octon.Persistence.EntityFramework\Osekai.Octon.Persistence.EntityFramework.csproj" />
@@ -35,6 +36,11 @@
     <ItemGroup>
       <_ContentIncludedByDefault Remove="Pages\Components\Metadata\Default.cshtml" />
       <_ContentIncludedByDefault Remove="Pages\Components\Style\Default.cshtml" />
+    </ItemGroup>
+    
+    
+    <ItemGroup>
+      <Folder Include="Extensions" />
     </ItemGroup>
 
 </Project>

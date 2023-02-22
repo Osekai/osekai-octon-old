@@ -1,6 +1,4 @@
-﻿using Osekai.Octon.Enums;
-
-namespace Osekai.Octon.Permissions;
+﻿namespace Osekai.Octon.Permissions;
 
 public interface IPermissionStore
 {

@@ -1,5 +1,4 @@
-﻿using Osekai.Octon.HelperTypes;
-using Osekai.Octon.Models;
+﻿using Osekai.Octon.Domain.Entities;
 
 namespace Osekai.Octon.Services;
 

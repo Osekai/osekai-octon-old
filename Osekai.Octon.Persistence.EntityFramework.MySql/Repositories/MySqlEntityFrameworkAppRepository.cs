@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Osekai.Octon.Models;
-using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
-using Osekai.Octon.Persistence.EntityFramework.MySql.Entities;
-using Osekai.Octon.Persistence.Repositories;
+using Osekai.Octon.Domain.Entities;
+using Osekai.Octon.Domain.Repositories;
+using App = Osekai.Octon.Domain.Aggregates.App;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql.Repositories;
 
@@ -14,16 +13,23 @@ public class MySqlEntityFrameworkAppRepository: IAppRepository
         Context = context;
     }
 
-    public async Task<IReadOnlyApp?> GetAppByIdAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<App?> GetAppByIdAsync(int id, CancellationToken cancellationToken = default)
     {
-        App? app = await Context.Apps.FindAsync(new object[] {id}, cancellationToken);
-        
-        return app?.ToDto();
+        Entities.App? app = await Context.Apps.Include(a => a.AppTheme).FirstOrDefaultAsync(e => e.Id == id, cancellationToken);
+     
+        if (app != null)
+        {
+            App appAggregate = app.ToAggregate();
+            appAggregate.AppTheme = new Ref<AppTheme?>(app.AppTheme?.ToEntity());
+            return appAggregate;
+        }
+        else
+            return null;
     }
 
-    public async Task<bool> SaveAppAsync(IReadOnlyApp app, CancellationToken cancellationToken = default)
+    public async Task<bool> SaveAppAsync(App app, CancellationToken cancellationToken = default)
     {
-        App? appEntity = await Context.Apps.FindAsync(new object?[] { app.Id }, cancellationToken);
+        Entities.App? appEntity = await Context.Apps.FindAsync(new object?[] { app.Id }, cancellationToken);
         if (appEntity == null)
             return false;
         
@@ -32,13 +38,19 @@ public class MySqlEntityFrameworkAppRepository: IAppRepository
         appEntity.Order = app.Order;
         appEntity.Visible = app.Visible;
         appEntity.Experimental = app.Experimental;
-        
+
         return true;
     }
 
-    public async Task<IEnumerable<IReadOnlyApp>> GetAppsAsync(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<App>> GetAppsAsync(CancellationToken cancellationToken = default)
     {
-        IEnumerable<App> app = await Context.Apps.ToArrayAsync(cancellationToken);
-        return app.Select(app => app.ToDto());
+        IEnumerable<Entities.App> apps = await Context.Apps.Include(app => app.AppTheme).ToArrayAsync(cancellationToken);
+        return apps.Select(a =>
+        {
+            App appAggregate = a.ToAggregate();
+            appAggregate.AppTheme = new Ref<AppTheme?>(a.AppTheme?.ToEntity());
+            
+            return appAggregate;
+        });
     }
 }

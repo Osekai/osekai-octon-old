@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Osekai.Octon.Domain;
 using Osekai.Octon.Persistence.EntityFramework.MySql.Entities;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql

@@ -1,7 +1,5 @@
-﻿using Osekai.Octon.Models;
-using Osekai.Octon.Persistence;
-using Osekai.Octon.RichModels;
-using Osekai.Octon.RichModels.Extensions;
+﻿using Osekai.Octon.Persistence;
+using UserGroup = Osekai.Octon.Domain.Aggregates.UserGroup;
 
 namespace Osekai.Octon.Services;
 
@@ -14,9 +12,9 @@ public class UserGroupService
         UnitOfWork = unitOfWork;
     }
 
-    public async Task<IEnumerable<UserGroup>> GetUserGroupsAsync(CancellationToken cancellationToken = default)
-    {
-        IEnumerable<IReadOnlyUserGroup> userGroupDtos = await UnitOfWork.UserGroupRepository.GetUserGroups(cancellationToken);
-        return userGroupDtos.Select(e => e.ToRichModel(UnitOfWork));
-    }
+    public Task<IEnumerable<UserGroup>> GetUserGroupsAsync(CancellationToken cancellationToken = default)
+        => UnitOfWork.UserGroupRepository.GetUserGroups(cancellationToken);
+
+    public Task<IEnumerable<UserGroup>> GetUserGroupsOfUserAsync(int userId, CancellationToken cancellationToken = default)
+        => UnitOfWork.UserGroupRepository.GetUserGroupsOfUserAsync(userId, cancellationToken);
 }

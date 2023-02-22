@@ -1,5 +1,4 @@
-﻿using Osekai.Octon.Enums;
-using Osekai.Octon.Persistence.EntityFramework.MySql.Dtos;
+﻿using Osekai.Octon.Domain.Enums;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql.Entities;
 
@@ -14,8 +13,8 @@ internal sealed class MedalSolution
     public string SubmittedBy { get; set; } = null!;
     public OsuMod Mods { get; set; }
 
-    public MedalSolutionDto ToDto()
+    public Domain.ValueObjects.MedalSolution ToValueObject()
     {
-        return new MedalSolutionDto(Text, SubmittedBy, Mods);
+        return new Domain.ValueObjects.MedalSolution(Text, SubmittedBy, Mods);
     }
 }

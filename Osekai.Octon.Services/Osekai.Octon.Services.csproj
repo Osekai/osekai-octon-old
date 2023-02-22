@@ -9,7 +9,6 @@
     <ItemGroup>
       <ProjectReference Include="..\Osekai.Octon.Persistence\Osekai.Octon.Persistence.csproj" />
       <ProjectReference Include="..\Osekai.Octon.Exceptions\Osekai.Octon.Exceptions.csproj" />
-      <ProjectReference Include="..\Osekai.Octon.RichModels\Osekai.Octon.RichModels.csproj" />
       <ProjectReference Include="..\Osekai.Octon\Osekai.Octon.csproj" />
     </ItemGroup>
 

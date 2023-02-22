@@ -1,5 +1,4 @@
 ﻿using Osekai.Octon.DataStructures.Trie;
-using Osekai.Octon.Enums;
 
 namespace Osekai.Octon.Permissions.PermissionStores;
 

@@ -18,9 +18,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Options", "Ose
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon", "Osekai.Octon\Osekai.Octon.csproj", "{0409D951-088F-4196-A52A-41D8F994E66C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Caching.MsgPack", "Osekai.Octon.Caching.MsgPack\Osekai.Octon.Caching.MsgPack.csproj", "{0668BB68-E3FE-413F-9DFB-B16D3B71A8F2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Caching.Codecs.MsgPack", "Osekai.Octon.Caching.Codecs.MsgPack\Osekai.Octon.Caching.Codecs.MsgPack.csproj", "{0668BB68-E3FE-413F-9DFB-B16D3B71A8F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.RichModels", "Osekai.Octon.RichModels\Osekai.Octon.RichModels.csproj", "{D67643D0-A9C3-4E9B-A4C8-7102B278EECC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Caching.Storages.MicrosoftInMemoryCache", "Osekai.Octon.Caching.Storages.MicrosoftInMemoryCache\Osekai.Octon.Caching.Storages.MicrosoftInMemoryCache.csproj", "{5876A607-E659-4FC1-962D-8ADE81BA34A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Domain", "Osekai.Octon.Domain\Osekai.Octon.Domain.csproj", "{53B5C5D5-82A1-4A1C-85A4-2F83EEA71B89}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -68,9 +70,13 @@ Global
 		{0668BB68-E3FE-413F-9DFB-B16D3B71A8F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0668BB68-E3FE-413F-9DFB-B16D3B71A8F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0668BB68-E3FE-413F-9DFB-B16D3B71A8F2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D67643D0-A9C3-4E9B-A4C8-7102B278EECC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D67643D0-A9C3-4E9B-A4C8-7102B278EECC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D67643D0-A9C3-4E9B-A4C8-7102B278EECC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D67643D0-A9C3-4E9B-A4C8-7102B278EECC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5876A607-E659-4FC1-962D-8ADE81BA34A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5876A607-E659-4FC1-962D-8ADE81BA34A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5876A607-E659-4FC1-962D-8ADE81BA34A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5876A607-E659-4FC1-962D-8ADE81BA34A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53B5C5D5-82A1-4A1C-85A4-2F83EEA71B89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53B5C5D5-82A1-4A1C-85A4-2F83EEA71B89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53B5C5D5-82A1-4A1C-85A4-2F83EEA71B89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53B5C5D5-82A1-4A1C-85A4-2F83EEA71B89}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

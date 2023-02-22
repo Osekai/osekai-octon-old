@@ -1,5 +1,5 @@
 ﻿using System.Data;
-using Osekai.Octon.Persistence.Repositories;
+using Osekai.Octon.Domain.Repositories;
 
 namespace Osekai.Octon.Persistence;
 
@@ -9,10 +9,7 @@ public interface IUnitOfWork
     ISessionRepository SessionRepository { get; }
     IMedalRepository MedalRepository { get; }
     IUserGroupRepository UserGroupRepository { get; }
-    IAppThemeRepository AppThemeRepository { get; }
     IUserPermissionsOverrideRepository UserPermissionsOverrideRepository { get; }
-    IMedalSettingsRepository MedalSettingsRepository { get; }
-    IMedalSolutionRepository MedalSolutionRepository { get; }
     IBeatmapPackRepository BeatmapPackRepository { get; }
     ILocaleRepository LocaleRepository { get; }
     Task SaveChangesAsync(CancellationToken cancellationToken = default);

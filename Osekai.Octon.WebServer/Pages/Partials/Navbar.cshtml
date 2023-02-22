@@ -5,7 +5,7 @@
 
 @{
     AppBaseLayoutApp currentAppBaseLayoutApp = Model.AppBaseLayoutApps[Model.App.SimpleName];
-    IEnumerable<AppBaseLayoutApp> orderedVisibleApps = Model.Apps.Values.Where(a => a.App.Visible).Select(a => Model.AppBaseLayoutApps[a.App.SimpleName]).ToArray();
+    IEnumerable<AppBaseLayoutApp> orderedVisibleApps = Model.Apps.Values.Where(a => a.Visible).Select(a => Model.AppBaseLayoutApps[a.SimpleName]).ToArray();
 }
 
 <img src="https://osu.ppy.sh/assets/images/mod_hidden.cfc32448.png?t=@DateTimeOffset.Now.ToUnixTimeSeconds()" onerror="cantContactOsu()" hidden class="hidden">
