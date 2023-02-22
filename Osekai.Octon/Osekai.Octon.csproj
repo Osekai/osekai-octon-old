@@ -19,8 +19,4 @@
       <ProjectReference Include="..\Osekai.Octon.Options\Osekai.Octon.Options.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="HelperTypes" />
-    </ItemGroup>
-
 </Project>
