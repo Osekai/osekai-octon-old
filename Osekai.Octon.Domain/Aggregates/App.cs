@@ -13,6 +13,7 @@ public class App
         Visible = visible;
         Experimental = experimental;
         AppTheme = new Ref<AppTheme?>();
+        Faqs = new Ref<IReadOnlyList<HomeFaq>>();
     }
     
     public int Id { get; }
@@ -54,4 +55,6 @@ public class App
     public bool Visible { get; set; }
     public bool Experimental { get; set; }
     public Ref<AppTheme?> AppTheme { get; set; }
+    
+    public Ref<IReadOnlyList<HomeFaq>> Faqs { get; set; }
 }

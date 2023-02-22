@@ -89,8 +89,8 @@ public class ConfigurableUnitOfWork: IUnitOfWork, IDisposable, IAsyncDisposable
                 userGroupRepository,
                 userPermissionsOverrideRepository,
                 beatmapPackRepository,
-                _saveStrategies,
-                localeRepository);
+                localeRepository,
+                _saveStrategies);
         }
     }
     
@@ -101,7 +101,8 @@ public class ConfigurableUnitOfWork: IUnitOfWork, IDisposable, IAsyncDisposable
         IUserGroupRepository userGroupRepository,
         IUserPermissionsOverrideRepository userPermissionsOverrideRepository,
         IBeatmapPackRepository beatmapPackRepository,
-        IEnumerable<ISaveStrategy> saveStrategies, ILocaleRepository localeRepository)
+        ILocaleRepository localeRepository,
+        IEnumerable<ISaveStrategy> saveStrategies)
     {
         AppRepository = appRepository;
         SessionRepository = sessionRepository;

@@ -16,5 +16,7 @@
             Domain.Aggregates.App app = new Domain.Aggregates.App(Name, SimpleName, Id, Order, Visible, Experimental);
             return app;
         }
+
+        public IList<HomeFaq> Faqs { get; } = null!;
     }
 }

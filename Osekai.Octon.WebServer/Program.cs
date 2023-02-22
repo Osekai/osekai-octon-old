@@ -20,6 +20,7 @@ using Osekai.Octon.Options;
 using Osekai.Octon.OsuApi.Payloads;
 using Osekai.Octon.Persistence;
 using Osekai.Octon.Services;
+using Osekai.Octon.WebServer.API.V1.Dtos.AppFaqController;
 using Osekai.Octon.WebServer.API.V1.Dtos.UserController;
 using Osekai.Octon.WebServer.Presentation;
 using Osekai.Octon.WebServer.Presentation.AppBaseLayout;
@@ -63,6 +64,7 @@ builder.Services.AddSingleton<StaticUrlGenerator>();
 builder.Services.AddScoped<IAdapter<App, AppBaseLayoutApp>, AppBaseLayoutAppFromAppAdapter>();
 builder.Services.AddSingleton<IAdapter<Medal, AppBaseLayoutMedal>, AppBaseLayoutMedalFromMedalAdapter>();
 builder.Services.AddSingleton<IAdapter<UserGroup, AppBaseLayoutUserGroup>, AppBaseLayoutUserGroupAdapter>();
+builder.Services.AddScoped<IAdapter<App, AppWithFaqDto>, AppWithFaqDtoFromAppAdapter>();
 builder.Services.AddSingleton<IAdapter<(OsuUser, IEnumerable<UserGroup>), UserDto>, UserDtoFromOsuUserAndAggregateAdapter>();
 builder.Services.AddScoped<AuthenticationService>();
 builder.Services.AddScoped<PermissionService>();
@@ -147,6 +149,28 @@ app.UseStaticFiles(new StaticFileOptions(new SharedOptions
     FileProvider = new PhysicalFileProvider(
         Path.Combine(builder.Environment.ContentRootPath, "../OsekaiOld/global/lang")),
     RequestPath = "/global/lang"
+}));
+
+app.UseStaticFiles(new StaticFileOptions(new SharedOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "../OsekaiOld/home/img")),
+    RequestPath = "/home/img"
+}));
+
+
+app.UseStaticFiles(new StaticFileOptions(new SharedOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "../OsekaiOld/home/js")),
+    RequestPath = "/home/js"
+}));
+
+app.UseStaticFiles(new StaticFileOptions(new SharedOptions
+{
+    FileProvider = new PhysicalFileProvider(
+        Path.Combine(builder.Environment.ContentRootPath, "../OsekaiOld/home/css")),
+    RequestPath = "/home/css"
 }));
 
 app.UseRouting();

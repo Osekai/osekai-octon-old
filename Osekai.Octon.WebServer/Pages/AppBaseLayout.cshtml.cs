@@ -102,7 +102,7 @@ public abstract class AppBaseLayout : BaseLayout
 
         if (appBaseLayoutCacheEntry == null)
         {
-            Apps = (await AppService.GetAppsAsync(cancellationToken)).ToDictionary(k => k.Id, e => e);
+            Apps = (await AppService.GetAppsAsync(cancellationToken: cancellationToken)).ToDictionary(k => k.Id, e => e);
             Medals = (await MedalService.GetMedalsAsync(includeBeatmapPacks: true, cancellationToken: cancellationToken)).ToArray();
             UserGroups = (await UserGroupService.GetUserGroupsAsync(cancellationToken)).ToArray();
 

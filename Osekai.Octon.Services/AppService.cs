@@ -12,9 +12,9 @@ public class AppService
         UnitOfWork = unitOfWork;
     }
 
-    public Task<App?> GetAppByIdAsync(int id, CancellationToken cancellationToken = default)
-        => UnitOfWork.AppRepository.GetAppByIdAsync(id, cancellationToken);
+    public Task<App?> GetAppByIdAsync(int id, bool includeFaqs = false, CancellationToken cancellationToken = default)
+        => UnitOfWork.AppRepository.GetAppByIdAsync(id, includeFaqs, cancellationToken);
 
-    public Task<IEnumerable<App>> GetAppsAsync(CancellationToken cancellationToken = default) =>
-        UnitOfWork.AppRepository.GetAppsAsync(cancellationToken);
+    public Task<IEnumerable<App>> GetAppsAsync(bool includeFaqs = false, CancellationToken cancellationToken = default) =>
+        UnitOfWork.AppRepository.GetAppsAsync(includeFaqs, cancellationToken);
 }

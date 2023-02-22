@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Osekai.Octon.Persistence.EntityFramework.MySql;
 
@@ -10,9 +11,11 @@ using Osekai.Octon.Persistence.EntityFramework.MySql;
 namespace Osekai.Octon.Persistence.EntityFramework.MySql.Migrations
 {
     [DbContext(typeof(MySqlOsekaiDbContext))]
-    partial class MySqlOsekaiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230222104346_AddAppIdToHomeFaq")]
+    partial class AddAppIdToHomeFaq
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,8 +190,6 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql.Migrations
                         .HasColumnType("tinytext");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("AppId");
 
                     b.ToTable("HomeFaqs", (string)null);
 
@@ -499,17 +500,6 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql.Migrations
                     b.Navigation("Medal");
                 });
 
-            modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.HomeFaq", b =>
-                {
-                    b.HasOne("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.App", "App")
-                        .WithMany("Faqs")
-                        .HasForeignKey("AppId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("App");
-                });
-
             modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.MedalRarity", b =>
                 {
                     b.HasOne("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.Medal", "Medal")
@@ -557,8 +547,6 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql.Migrations
             modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.App", b =>
                 {
                     b.Navigation("AppTheme");
-
-                    b.Navigation("Faqs");
                 });
 
             modelBuilder.Entity("Osekai.Octon.Persistence.EntityFramework.MySql.Entities.BeatmapPack", b =>

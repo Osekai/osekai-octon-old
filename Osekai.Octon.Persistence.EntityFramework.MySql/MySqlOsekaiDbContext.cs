@@ -79,6 +79,10 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql
                     .UseCollation("ascii_general_ci")
                     .HasCharSet("ascii");
 
+                entity.HasOne(e => e.App).WithMany(e => e.Faqs)
+                    .HasForeignKey(e => e.AppId)
+                    .OnDelete(DeleteBehavior.Cascade);
+
                 entity.Property(e => e.Title).HasColumnType("tinytext");
             });
             
