@@ -30,9 +30,9 @@ public class AppBaseLayoutUserGroupAdapter: IAdapter<UserGroup, AppBaseLayoutUse
         }
     }
     
-    public Task<AppBaseLayoutUserGroup> AdaptAsync(UserGroup e, CancellationToken cancellationToken = default)
+    public ValueTask<AppBaseLayoutUserGroup> AdaptAsync(UserGroup e, CancellationToken cancellationToken = default)
     {
-        return Task.FromResult(new AppBaseLayoutUserGroup
+        return ValueTask.FromResult(new AppBaseLayoutUserGroup
         {
             Colour = GetColourString(e.Colour),
             Description = e.Description,

@@ -6,7 +6,7 @@ namespace Osekai.Octon.WebServer.Presentation;
 
 public class UserDtoFromOsuUserAndAggregateAdapter: IAdapter<(OsuUser, IEnumerable<UserGroup>), UserDto>
 {
-    public Task<UserDto> AdaptAsync((OsuUser, IEnumerable<UserGroup>) value, CancellationToken cancellationToken = default)
+    public ValueTask<UserDto> AdaptAsync((OsuUser, IEnumerable<UserGroup>) value, CancellationToken cancellationToken = default)
     {
         var (osuUser, userGroups) = value;
         
@@ -191,6 +191,6 @@ public class UserDtoFromOsuUserAndAggregateAdapter: IAdapter<(OsuUser, IEnumerab
 
         userDto.UserGroups = userGroups.Select(e => new UserDtoUserGroup(osuUser.Id, e.Id)).ToArray();
         
-        return Task.FromResult(userDto);
+        return ValueTask.FromResult(userDto);
     }
 }

@@ -67,7 +67,7 @@ public class AppWithFaqDtoFromAppAdapter: IAdapter<App, AppWithFaqDto>
         }
     }
 
-    public async Task<AppWithFaqDto> AdaptAsync(App e, CancellationToken cancellationToken = default)
+    public async ValueTask<AppWithFaqDto> AdaptAsync(App e, CancellationToken cancellationToken = default)
     {
         return new AppWithFaqDto
         {

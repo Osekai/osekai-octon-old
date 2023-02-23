@@ -92,9 +92,9 @@ public class AppBaseLayoutMedalFromMedalAdapter: IAdapter<Medal, AppBaseLayoutMe
         }
     }
     
-    public Task<AppBaseLayoutMedal> AdaptAsync(Medal m, CancellationToken cancellationToken)
+    public ValueTask<AppBaseLayoutMedal> AdaptAsync(Medal m, CancellationToken cancellationToken)
     {
-        return Task.FromResult(new AppBaseLayoutMedal
+        return ValueTask.FromResult(new AppBaseLayoutMedal
         {
             Date = m.Date?.UtcDateTime.ToShortDateString(),
             Description = m.Description,

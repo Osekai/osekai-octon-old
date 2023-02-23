@@ -67,7 +67,7 @@ public class AppBaseLayoutAppFromAppAdapter: IAdapter<App, AppBaseLayoutApp>
         }
     }
     
-    public async Task<AppBaseLayoutApp> AdaptAsync(App e, CancellationToken cancellationToken = default)
+    public async ValueTask<AppBaseLayoutApp> AdaptAsync(App e, CancellationToken cancellationToken = default)
     {
         return new AppBaseLayoutApp
         {
