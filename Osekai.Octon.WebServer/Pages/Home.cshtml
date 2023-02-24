@@ -132,6 +132,11 @@
                 <div id="home__faq-answer-answer" class="home__faq-answer-answer">@Html.Raw(await localizator.GetStringAsync("home.faq.welcome.intro"))</div>
             </div>
         </div>
+        <div class="home__panel home__team">
+            <h1>@Html.Raw(await localizator.GetStringAsync("home.team.title"))</h1>
+            <div class="home__team-grid" id="team_grid">
+            </div>
+        </div>
     </div>
 </div>
 <script src="@StringWithVersionQueryHtmlContent.Create("/home/js/main.js")"></script>
