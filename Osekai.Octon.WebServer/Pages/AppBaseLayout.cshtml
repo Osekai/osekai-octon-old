@@ -36,7 +36,7 @@
     </style>
     
     @await Html.PartialAsync("Partials/Tippy")
-
+    <script src="@StringWithVersionQueryHtmlContent.Create("/global/js/localization.js")"></script>
     <style id="custom_theme_container"></style>
     <script>    
         const christmas = "0";
@@ -54,6 +54,9 @@
         const locales = @(Json.Serialize(Model.AppBaseLayoutLocales));
         const sourcesNames = ["groups","report","apps","badges","comments","faq","general","home","medals","navbar","profiles","rankings","snapshots","donate","contact","misc/translators","misc/groups","misc/global"];
         const currentLocale = locales["@(Model.CurrentLocale.LanguageCode)"];
+        
+        loadSource("@Model.CurrentApp.SimpleName");
+        loadSource("general");
     </script>
     
     @if (IsSectionDefined("AppHeadExtension"))
