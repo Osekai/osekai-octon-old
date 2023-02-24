@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Osekai.Octon.Domain.Aggregates;
-using Osekai.Octon.Domain.Entities;
 using Osekai.Octon.Domain.Repositories;
-using App = Osekai.Octon.Domain.Aggregates.App;
+using Osekai.Octon.Domain.ValueObjects;
+using App = Osekai.Octon.Domain.AggregateRoots.App;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql.Repositories;
 
@@ -20,8 +19,8 @@ public class MySqlEntityFrameworkAppRepository: IAppRepository
      
         if (app != null)
         {
-            App appAggregate = app.ToAggregate();
-            appAggregate.AppTheme = new Ref<AppTheme?>(app.AppTheme?.ToEntity());
+            App appAggregate = app.ToAggregateRoot();
+            appAggregate.AppTheme = app.AppTheme?.ToValueObject();
             return appAggregate;
         }
         else
@@ -53,19 +52,19 @@ public class MySqlEntityFrameworkAppRepository: IAppRepository
         IAsyncEnumerable<Entities.HomeFaq> faqs = Context.Faqs.ToAsyncEnumerable();
 
         var appsFaqs = await faqs.GroupBy(e => e.AppId, e => e)
-            .ToDictionaryAwaitAsync(e => ValueTask.FromResult(e.Key), async e => await e.OrderBy(a => a.Id).ToArrayAsync());
+            .ToDictionaryAwaitAsync(e => ValueTask.FromResult(e.Key), async e => await e.OrderBy(a => a.Id).ToArrayAsync(cancellationToken), cancellationToken);
 
         return apps.Select(a =>
         {
-            App appAggregate = a.ToAggregate();
-            appAggregate.AppTheme = new Ref<AppTheme?>(a.AppTheme?.ToEntity());
+            App appAggregate = a.ToAggregateRoot();
+            appAggregate.AppTheme = a.AppTheme?.ToValueObject();
 
             if (includeFaqs)
             {
                 if (appsFaqs.TryGetValue(appAggregate.Id, out Entities.HomeFaq[]? appFaqs))
-                    appAggregate.Faqs = new Ref<IReadOnlyList<HomeFaq>>(appFaqs.Select(s => s.ToValueObject()).ToArray());
+                    appAggregate.Faqs = appFaqs.Select(s => s.ToValueObject()).ToArray();
                 else
-                    appAggregate.Faqs = new Ref<IReadOnlyList<HomeFaq>>(Array.Empty<HomeFaq>());
+                    appAggregate.Faqs = Array.Empty<HomeFaq>();
             }
             
             return appAggregate;

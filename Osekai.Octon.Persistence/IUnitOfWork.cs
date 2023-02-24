@@ -12,5 +12,6 @@ public interface IUnitOfWork
     IUserPermissionsOverrideRepository UserPermissionsOverrideRepository { get; }
     IBeatmapPackRepository BeatmapPackRepository { get; }
     ILocaleRepository LocaleRepository { get; }
+    ITeamMemberRepository TeamMemberRepository { get; }
     Task SaveChangesAsync(CancellationToken cancellationToken = default);
 }

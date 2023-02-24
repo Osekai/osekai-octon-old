@@ -1,4 +1,4 @@
-﻿using Osekai.Octon.Domain.Aggregates;
+﻿using Osekai.Octon.Domain.AggregateRoots;
 using Osekai.Octon.OsuApi.Payloads;
 using Osekai.Octon.WebServer.API.V1.Dtos.UserController;
 

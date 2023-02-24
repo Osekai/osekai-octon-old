@@ -14,6 +14,7 @@ public class ConfigurableUnitOfWork: IUnitOfWork, IDisposable, IAsyncDisposable
         private IUserPermissionsOverrideRepository? _userPermissionsOverrideRepository;
         private IBeatmapPackRepository? _beatmapPackRepository;
         private ILocaleRepository? _localeRepository;
+        private ITeamMemberRepository? _teamMemberRepository;
 
         private readonly List<ISaveStrategy> _saveStrategies;
         
@@ -63,6 +64,13 @@ public class ConfigurableUnitOfWork: IUnitOfWork, IDisposable, IAsyncDisposable
             _localeRepository = localeRepository;
             return this;
         }
+        
+        public Builder WithTeamMemberRepository<T>(T teamMemberRepository) where T : ITeamMemberRepository
+        {
+            _teamMemberRepository = teamMemberRepository;
+            return this;
+        }
+
 
         public Builder AddSaveStrategy<T>(T saveStrategy) where T : ISaveStrategy
         {
@@ -81,7 +89,8 @@ public class ConfigurableUnitOfWork: IUnitOfWork, IDisposable, IAsyncDisposable
             IBeatmapPackRepository beatmapPackRepository = _beatmapPackRepository ?? throw new InvalidOperationException();
             IUserPermissionsOverrideRepository userPermissionsOverrideRepository = _userPermissionsOverrideRepository ?? throw new InvalidOperationException();
             ILocaleRepository localeRepository = _localeRepository ?? throw new InvalidOperationException();
-
+            ITeamMemberRepository teamMemberRepository = _teamMemberRepository ?? throw new InvalidOperationException();
+            
             return new ConfigurableUnitOfWork(
                 appRepository,
                 sessionRepository,
@@ -90,6 +99,7 @@ public class ConfigurableUnitOfWork: IUnitOfWork, IDisposable, IAsyncDisposable
                 userPermissionsOverrideRepository,
                 beatmapPackRepository,
                 localeRepository,
+                teamMemberRepository,
                 _saveStrategies);
         }
     }
@@ -102,6 +112,7 @@ public class ConfigurableUnitOfWork: IUnitOfWork, IDisposable, IAsyncDisposable
         IUserPermissionsOverrideRepository userPermissionsOverrideRepository,
         IBeatmapPackRepository beatmapPackRepository,
         ILocaleRepository localeRepository,
+        ITeamMemberRepository teamMemberRepository,
         IEnumerable<ISaveStrategy> saveStrategies)
     {
         AppRepository = appRepository;
@@ -111,6 +122,7 @@ public class ConfigurableUnitOfWork: IUnitOfWork, IDisposable, IAsyncDisposable
         UserPermissionsOverrideRepository = userPermissionsOverrideRepository;
         BeatmapPackRepository = beatmapPackRepository;
         LocaleRepository = localeRepository;
+        TeamMemberRepository = teamMemberRepository;
         _saveStrategies = saveStrategies.ToList();
     }
     
@@ -147,6 +159,7 @@ public class ConfigurableUnitOfWork: IUnitOfWork, IDisposable, IAsyncDisposable
     public IUserPermissionsOverrideRepository UserPermissionsOverrideRepository { get; }
     public IBeatmapPackRepository BeatmapPackRepository { get; }
     public ILocaleRepository LocaleRepository { get; }
+    public ITeamMemberRepository TeamMemberRepository { get; }
 
     public async Task SaveChangesAsync(CancellationToken cancellationToken = default)
     {

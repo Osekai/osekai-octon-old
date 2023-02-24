@@ -11,9 +11,9 @@
         public bool HasCover { get; set; }
         public App App { get; set; } = null!;
 
-        public Domain.Entities.AppTheme ToEntity()
+        public Domain.ValueObjects.AppTheme ToValueObject()
         {
-            return new Domain.Entities.AppTheme(Id, 
+            return new Domain.ValueObjects.AppTheme(
                 ColorFormatConversion.GetColorFromString(Color), ColorFormatConversion.GetColorFromString(DarkColor), 
                 HslValueMultiplier, DarkHslValueMultiplier, HasCover);
         }

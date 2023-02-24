@@ -1,5 +1,5 @@
-﻿using Osekai.Octon.Domain.Aggregates;
-using Osekai.Octon.Domain.Entities;
+﻿using Osekai.Octon.Domain.AggregateRoots;
+using Osekai.Octon.Domain.AggregateRoots;
 
 namespace Osekai.Octon.Domain.Repositories;
 

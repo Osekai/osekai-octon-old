@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Osekai.Octon.Domain.Aggregates;
+using Osekai.Octon.Domain.AggregateRoots;
 using Osekai.Octon.Domain.Repositories;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql.Repositories;
@@ -16,7 +16,7 @@ public class MySqlEntityFrameworkUserGroupRepository: IUserGroupRepository
     public async Task<UserGroup?> GetUserGroupByIdAsync(int id, CancellationToken cancellationToken = default)
     {
         Entities.UserGroup? userGroup = await Context.UserGroups.AsNoTracking().FirstOrDefaultAsync(group => group.Id == id, cancellationToken);
-        return userGroup?.ToAggregate();
+        return userGroup?.ToAggregateRoot();
     }
 
     public async Task<IEnumerable<UserGroup>> GetUserGroupsOfUserAsync(int userId, CancellationToken cancellationToken = default)
@@ -29,12 +29,12 @@ public class MySqlEntityFrameworkUserGroupRepository: IUserGroupRepository
             .OrderBy(e => e.Order)
             .ToArrayAsync(cancellationToken);
         
-        return userGroups.Select(e => e.ToAggregate());
+        return userGroups.Select(e => e.ToAggregateRoot());
     }
 
     public async Task<IEnumerable<UserGroup>> GetUserGroups(CancellationToken cancellationToken = default)
     {
         IEnumerable<Entities.UserGroup> userGroups = await Context.UserGroups.ToArrayAsync(cancellationToken);
-        return userGroups.Select(e => e.ToAggregate());
+        return userGroups.Select(e => e.ToAggregateRoot());
     }
 }

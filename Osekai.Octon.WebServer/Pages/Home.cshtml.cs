@@ -1,5 +1,5 @@
 ﻿using Osekai.Octon.Caching;
-using Osekai.Octon.Domain.Aggregates;
+using Osekai.Octon.Domain.AggregateRoots;
 using Osekai.Octon.OsuApi;
 using Osekai.Octon.Services;
 using Osekai.Octon.WebServer.Presentation.AppBaseLayout;

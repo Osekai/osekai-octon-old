@@ -7,8 +7,8 @@ internal sealed class BeatmapPack
 
     public ICollection<BeatmapPackForMedal> MedalsForBeatmapPack { get; set; } = null!;
 
-    public Domain.Aggregates.BeatmapPack ToAggregate()
+    public Domain.AggregateRoots.BeatmapPack ToAggregateRoot()
     {
-        return new Domain.Aggregates.BeatmapPack(Id, BeatmapCount);
+        return new Domain.AggregateRoots.BeatmapPack(Id, BeatmapCount);
     }
 }

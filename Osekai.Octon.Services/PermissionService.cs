@@ -1,5 +1,4 @@
-﻿using Osekai.Octon.Domain.Aggregates;
-using Osekai.Octon.Domain.Entities;
+﻿using Osekai.Octon.Domain.AggregateRoots;
 using Osekai.Octon.Permissions;
 using Osekai.Octon.Permissions.PermissionStores;
 using Osekai.Octon.Persistence;
@@ -27,4 +26,4 @@ public class PermissionService
 
         return new InMemoryPermissionStore(permissionDictionaries);
     }
-} 
+}

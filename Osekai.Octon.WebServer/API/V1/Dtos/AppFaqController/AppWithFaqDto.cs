@@ -64,7 +64,7 @@ public readonly struct FaqDto
     [JsonPropertyName("Title")]
     public string Title { get; init; }
 
-    [JsonPropertyName("Content")]
+    [JsonPropertyName("Content")]   
     public string Content { get; init; }
     
     [JsonPropertyName("LocalizationPrefix")]

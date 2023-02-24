@@ -12,8 +12,8 @@ public class Locale
     public string? ExtraHtml { get; set; } = null!;
     public string? ExtraCss { get; set; } = null!;
 
-    public Domain.Aggregates.Locale ToAggregate()
+    public Domain.AggregateRoots.Locale ToAggregateRoot()
     {
-        return new Domain.Aggregates.Locale(Name, Code, Short, new Uri(Flag), ExtraHtml, ExtraCss, Experimental, Wip, Rtl);
+        return new Domain.AggregateRoots.Locale(Name, Code, Short, new Uri(Flag), ExtraHtml, ExtraCss, Experimental, Wip, Rtl);
     }
 }

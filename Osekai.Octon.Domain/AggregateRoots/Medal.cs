@@ -1,8 +1,7 @@
-﻿using Osekai.Octon.Domain.Entities;
-using Osekai.Octon.Domain.Enums;
+﻿using Osekai.Octon.Domain.Enums;
 using Osekai.Octon.Domain.ValueObjects;
 
-namespace Osekai.Octon.Domain.Aggregates;
+namespace Osekai.Octon.Domain.AggregateRoots;
 
 public class Medal
 {
@@ -21,10 +20,6 @@ public class Medal
         Date = date;
         Rarity = rarity;
         TimesOwned = timesOwned;
-        FirstAchievement = new Ref<FirstAchievement?>();
-        MedalSolution = new Ref<MedalSolution?>();
-        MedalSettings = new Ref<MedalSettings?>();
-        BeatmapPacks = new Ref<IReadOnlyDictionary<OsuGamemode, BeatmapPack>>();
     }
 
     private string _name = null!;
@@ -146,13 +141,13 @@ public class Medal
     }
     public DateTimeOffset? Date { get; set; }
     
-    public Ref<FirstAchievement?> FirstAchievement { get; set; }
+    public Ref<FirstAchievement?>? FirstAchievement { get; set; }
     
-    public Ref<MedalSolution?> MedalSolution { get; set; }
+    public Ref<MedalSolution?>? MedalSolution { get; set; }
     
-    public Ref<MedalSettings?> MedalSettings { get; set; }
+    public Ref<MedalSettings?>? MedalSettings { get; set; }
 
-    public Ref<IReadOnlyDictionary<OsuGamemode, BeatmapPack>> BeatmapPacks { get; set; }
+    public Ref<IReadOnlyDictionary<OsuGamemode, BeatmapPack>>? BeatmapPacks { get; set; }
 
     public float Rarity { get; set; }
     public int TimesOwned { get; set; }

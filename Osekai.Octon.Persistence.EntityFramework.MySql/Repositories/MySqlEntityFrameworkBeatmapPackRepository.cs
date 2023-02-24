@@ -2,7 +2,7 @@
 using Osekai.Octon.Domain.Enums;
 using Osekai.Octon.Domain.Repositories;
 using Osekai.Octon.Persistence.EntityFramework.MySql.Entities;
-using BeatmapPack = Osekai.Octon.Domain.Aggregates.BeatmapPack;
+using BeatmapPack = Osekai.Octon.Domain.AggregateRoots.BeatmapPack;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql.Repositories;
 
@@ -25,6 +25,6 @@ public class MySqlEntityFrameworkBeatmapPackRepository: IBeatmapPackRepository
         if (medal == null)
             return null;
 
-        return medal.BeatmapPacksForMedal.ToDictionary(e => e.Gamemode, e => (BeatmapPack)e.BeatmapPack.ToAggregate());
+        return medal.BeatmapPacksForMedal.ToDictionary(e => e.Gamemode, e => (BeatmapPack)e.BeatmapPack.ToAggregateRoot());
     }
 }

@@ -1,4 +1,4 @@
-﻿using Osekai.Octon.Domain.Aggregates;
+﻿using Osekai.Octon.Domain.AggregateRoots;
 
 namespace Osekai.Octon.Domain.Repositories;
 

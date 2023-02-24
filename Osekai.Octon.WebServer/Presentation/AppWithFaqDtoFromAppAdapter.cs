@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using System.Text;
 using Microsoft.Extensions.ObjectPool;
-using Osekai.Octon.Domain.Aggregates;
+using Osekai.Octon.Domain.AggregateRoots;
 using Osekai.Octon.Drawing;
 using Osekai.Octon.WebServer.API.V1.Dtos.AppFaqController;
 
@@ -74,7 +74,7 @@ public class AppWithFaqDtoFromAppAdapter: IAdapter<App, AppWithFaqDto>
             Color = GetColourString(e.AppTheme.Value?.Color ?? new RgbColour(53, 61, 85)),
             Cover = GetCoverString(e.SimpleName),
             Experimental = e.Experimental ? "1" : "0",
-            Id = e.Name.ToString(),
+            Id = e.Id.ToString(),
             ColourLogo = GetColouredLogo(e.SimpleName),
             Logo = GetLogo(e.SimpleName),
             Name = e.Name,

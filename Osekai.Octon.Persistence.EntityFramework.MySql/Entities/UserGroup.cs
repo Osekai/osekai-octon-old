@@ -21,10 +21,10 @@ internal sealed class UserGroup
     public IDictionary<string, PermissionActionType> Permissions { get; set; }
 
     public ICollection<UserGroupsForUsers> UserGroupForUsers { get; set; }
-    
-    public Domain.Aggregates.UserGroup ToAggregate()
+
+    public Domain.AggregateRoots.UserGroup ToAggregateRoot()
     {
-        return new Domain.Aggregates.UserGroup(
+        return new Domain.AggregateRoots.UserGroup(
             Id, Name, ShortName, Description, 
             ColorFormatConversion.GetColorFromString(Colour),
             Order, Hidden, ForceVisibleInComments, Permissions);

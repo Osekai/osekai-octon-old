@@ -10,9 +10,9 @@
 
         public App App { get; set; } = null!;
 
-        public Domain.Aggregates.HomeFaq ToValueObject()
+        public Domain.ValueObjects.HomeFaq ToValueObject()
         {
-            return new Domain.Aggregates.HomeFaq(Id, AppId, Title, Content, LocalizationPrefix);
+            return new Domain.ValueObjects.HomeFaq(Id, AppId, Title, Content, LocalizationPrefix);
         }
     }
 }

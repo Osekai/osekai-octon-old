@@ -1,5 +1,5 @@
 ﻿using Osekai.Octon.Persistence;
-using UserGroup = Osekai.Octon.Domain.Aggregates.UserGroup;
+using UserGroup = Osekai.Octon.Domain.AggregateRoots.UserGroup;
 
 namespace Osekai.Octon.Services;
 

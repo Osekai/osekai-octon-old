@@ -22,6 +22,7 @@ public abstract class EntityFrameworkUnitOfWork<T>: IUnitOfWork where T: DbConte
     public abstract IUserPermissionsOverrideRepository UserPermissionsOverrideRepository { get; }
     public abstract IBeatmapPackRepository BeatmapPackRepository { get; }
     public abstract ILocaleRepository LocaleRepository { get; }
+    public abstract ITeamMemberRepository TeamMemberRepository { get; }
 
     public virtual async Task SaveChangesAsync(CancellationToken cancellationToken)
     {

@@ -1,8 +1,8 @@
 ﻿using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using Osekai.Octon.Domain.Entities;
 using Osekai.Octon.Domain.Repositories;
-using Session = Osekai.Octon.Domain.Aggregates.Session;
+using Osekai.Octon.Domain.ValueObjects;
+using Session = Osekai.Octon.Domain.AggregateRoots.Session;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql.Repositories;
 
@@ -18,7 +18,7 @@ public class MySqlEntityFrameworkSessionRepository: ISessionRepository
     public async Task<Session?> GetSessionByTokenAsync(string token, CancellationToken cancellationToken = default)
     {
         Entities.Session? session = await Context.Sessions.AsNoTracking().Where(s => s.Token == token && DateTimeOffset.Now < s.ExpiresAt).FirstOrDefaultAsync(cancellationToken);
-        return session?.ToAggregate();
+        return session?.ToAggregateRoot();
     }
 
     public Task AddSessionAsync(Session session, CancellationToken cancellationToken = default)

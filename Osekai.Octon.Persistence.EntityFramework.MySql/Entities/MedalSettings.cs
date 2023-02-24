@@ -7,8 +7,8 @@ internal sealed class MedalSettings
     public Medal Medal { get; set; } = null!;
     public bool Locked { get; set; }
 
-    public Domain.Entities.MedalSettings ToEntity()
+    public Domain.ValueObjects.MedalSettings ToValueObject()
     {
-        return new Domain.Entities.MedalSettings(Locked);
+        return new Domain.ValueObjects.MedalSettings(Locked);
     }
 }

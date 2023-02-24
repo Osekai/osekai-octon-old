@@ -1,6 +1,6 @@
-﻿using Osekai.Octon.Domain.Entities;
+﻿using Osekai.Octon.Domain.ValueObjects;
 
-namespace Osekai.Octon.Domain.Aggregates;
+namespace Osekai.Octon.Domain.AggregateRoots;
 
 public class App
 {
@@ -12,8 +12,6 @@ public class App
         Order = order;
         Visible = visible;
         Experimental = experimental;
-        AppTheme = new Ref<AppTheme?>();
-        Faqs = new Ref<IReadOnlyList<HomeFaq>>();
     }
     
     public int Id { get; }

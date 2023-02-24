@@ -22,8 +22,8 @@ internal sealed class Medal
     public string? FirstAchievedBy { get; set; }
 
     
-    public Domain.Aggregates.Medal ToAggregate()
+    public Domain.AggregateRoots.Medal ToAggregateRoot()
     {
-        return new Domain.Aggregates.Medal(Id, Name, Link, Description, Restriction, Grouping, Instructions, Ordering, Video, Date, Rarity?.Frequency ?? 0, Rarity?.Count ?? 0);
+        return new Domain.AggregateRoots.Medal(Id, Name, Link, Description, Restriction, Grouping, Instructions, Ordering, Video, Date, Rarity?.Frequency ?? 0, Rarity?.Count ?? 0);
     }
 }

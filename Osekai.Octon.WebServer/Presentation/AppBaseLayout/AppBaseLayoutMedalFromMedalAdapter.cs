@@ -1,7 +1,7 @@
 ﻿using System.Collections.Immutable;
 using System.Text;
 using Microsoft.Extensions.ObjectPool;
-using Osekai.Octon.Domain.Aggregates;
+using Osekai.Octon.Domain.AggregateRoots;
 using Osekai.Octon.Domain.Enums;
 
 namespace Osekai.Octon.WebServer.Presentation.AppBaseLayout;
@@ -101,8 +101,8 @@ public class AppBaseLayoutMedalFromMedalAdapter: IAdapter<Medal, AppBaseLayoutMe
             Grouping = m.Grouping,
             Instructions = m.Instructions,
             Link = m.Link,
-            Locked = (m.MedalSettings.Value?.Locked ?? false) ? 1 : 0,
-            Mods = GetModStringShortName(m.MedalSolution.Value?.Mods ?? OsuMod.None),
+            Locked = (m.MedalSettings!.Value.Value?.Locked ?? false) ? 1 : 0,
+            Mods = GetModStringShortName(m.MedalSolution!.Value.Value?.Mods ?? OsuMod.None),
             ModeOrder = m.Restriction switch
             {
                 "osu" => 2,
@@ -112,15 +112,15 @@ public class AppBaseLayoutMedalFromMedalAdapter: IAdapter<Medal, AppBaseLayoutMe
                 _ => 1
             },
             Rarity = m.Rarity,
-            FirstAchievedBy = m.FirstAchievement.Value?.FirstAchievedBy,
-            FirstAchievedDate = m.FirstAchievement.Value?.FirstAchievedDate.UtcDateTime.ToShortDateString(),
+            FirstAchievedBy = m.FirstAchievement!.Value.Value?.FirstAchievedBy,
+            FirstAchievedDate = m.FirstAchievement!.Value.Value?.FirstAchievedDate.UtcDateTime.ToShortDateString(),
             Name = m.Name,
             Ordering = m.Ordering,
             Restriction = m.Restriction,
-            Solution = m.MedalSolution.Value?.Text,
+            Solution = m.MedalSolution.Value.Value?.Text,
             Video = m.Video,
             MedalId = m.Id,
-            PackId = GetPackIdString(m.BeatmapPacks.Value),
+            PackId = GetPackIdString(m.BeatmapPacks!.Value.Value),
         });
     }
 }

@@ -67,10 +67,31 @@ public static class Specifications
     
     public const int LocaleCodeLength = 5;
     public const int LocaleShortLength = 2;
+    
     public const int LocaleFlagMaxLength = 255;
     public const int LocaleFlagMinLength = 1;
+    
     public const int LocaleExtraHtmlMaxLength = int.MaxValue;
     public const int LocaleExtraHtmlMinLength = 1;
+    
     public const int LocaleExtraCssMaxLength = int.MaxValue;
     public const int LocaleExtraCssMinLength = 1;
+
+    public const int SocialNameMaxLength = 50;
+    public const int SocialNameMinLength = 1;
+
+    public const int SocialLinkMaxLength = 255;
+    public const int SocialLinkMinLength = 1;
+    
+    public const int SocialIconMaxLength = 50;
+    public const int SocialIconMinLength = 1;
+
+    public const int TeamMemberRoleMaxLength = 100;
+    public const int TeamMemberRoleMinLength = 1;
+
+    public const int TeamMemberNameMaxLength = 100;
+    public const int TeamMemberNameMinLength = 1;
+    
+    public const int TeamMemberNameAltMaxLength = 100;
+    public const int TeamMemberNameAltMinLength = 1;
 }

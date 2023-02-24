@@ -42,10 +42,7 @@ public class TimeThrottlerPerSecond
     
         lock (_lock)
         {
-            while (DateTime.Now <= _nextSecondCheckpoint)
-            {
-                // Spin wait
-            }
+            SpinWait.SpinUntil(() => DateTime.Now <= _nextSecondCheckpoint);
             
             UpdateCheckpoints();
             

@@ -1,11 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Osekai.Octon.Domain;
-using Osekai.Octon.Domain.Entities;
+using Osekai.Octon.Domain.Repositories;
+using Osekai.Octon.Domain.ValueObjects;
 using Osekai.Octon.Exceptions;
 using Osekai.Octon.OsuApi;
 using Osekai.Octon.OsuApi.Payloads;
 using Osekai.Octon.Persistence;
-using Session = Osekai.Octon.Domain.Aggregates.Session;
+using Session = Osekai.Octon.Domain.AggregateRoots.Session;
 
 namespace Osekai.Octon.Services;
 
@@ -58,11 +59,10 @@ public class AuthenticationService
             if (session == null)
                 throw new InvalidOperationException("Invalid session");
 
-            session.Payload.OsuApiV2Token = authenticationResultPayload.Token;
-            session.Payload.OsuApiV2RefreshToken = authenticationResultPayload.RefreshToken;
-            session.Payload.OsuUserId = user.Id;
-            session.Payload.ExpiresAt = expiresAt.UtcDateTime;
-
+            session.Payload = new SessionPayload(
+                authenticationResultPayload.Token, authenticationResultPayload.RefreshToken,
+                expiresAt.UtcDateTime, user.Id);
+            
             await unitOfWork.SessionRepository.SaveSessionAsyncAsync(session, cancellationToken);
             await unitOfWork.SaveChangesAsync(cancellationToken);
             
@@ -89,9 +89,9 @@ public class AuthenticationService
             throw new InvalidSessionTokenException(token);
 
         var osuSessionContainer = new OsuSessionContainer(
-             session.Payload.OsuUserId, session.Payload.OsuApiV2Token, 
-             session.Payload.OsuApiV2RefreshToken, 
-             session.Payload.ExpiresAt,
+             session.Payload!.Value.Value.OsuUserId, session.Payload!.Value.Value.OsuApiV2Token, 
+             session.Payload!.Value.Value.OsuApiV2RefreshToken, 
+             session.Payload!.Value.Value.ExpiresAt,
              new LocalOsuApiV2TokenUpdater(ServiceScopeFactory, OsuApiV2Interface, session.Token));
 
         OsuUser user = await AuthenticatedOsuApiV2Interface.MeAsync(osuSessionContainer, cancellationToken: cancellationToken);
@@ -143,7 +143,7 @@ public class AuthenticationService
         
         return new SignInWithCodeResult(
             new OsuSessionContainer(
-                user.Id, session.Payload.OsuApiV2Token, session.Payload.OsuApiV2RefreshToken, session.Payload.ExpiresAt, 
+                user.Id, session.Payload!.Value.Value.OsuApiV2Token, session.Payload.Value.Value.OsuApiV2RefreshToken, session.Payload.Value.Value.ExpiresAt, 
                 new LocalOsuApiV2TokenUpdater(ServiceScopeFactory, OsuApiV2Interface, session.Token)), 
             session.Token,
             session.ExpiresAt);

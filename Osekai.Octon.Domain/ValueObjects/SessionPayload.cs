@@ -1,6 +1,6 @@
-﻿namespace Osekai.Octon.Domain.Entities;
+﻿namespace Osekai.Octon.Domain.ValueObjects;
 
-public class SessionPayload
+public readonly struct SessionPayload
 {
     public SessionPayload(string osuApiV2Token, string osuApiV2RefreshToken, DateTime expiresAt, int osuUserId)
     {
@@ -10,8 +10,8 @@ public class SessionPayload
         OsuUserId = osuUserId;
     }
     
-    public string OsuApiV2Token { get; set; }
-    public string OsuApiV2RefreshToken { get; set; }
-    public int OsuUserId { get; set; }
-    public DateTime ExpiresAt { get; set; }
+    public string OsuApiV2Token { get; }
+    public string OsuApiV2RefreshToken { get; }
+    public int OsuUserId { get; }
+    public DateTime ExpiresAt { get; }
 }

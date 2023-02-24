@@ -1,8 +1,8 @@
 ﻿using System.Drawing;
 using Microsoft.AspNetCore.Mvc;
 using Osekai.Octon.Caching;
-using Osekai.Octon.Domain.Aggregates;
-using Osekai.Octon.Domain.Entities;
+using Osekai.Octon.Domain.AggregateRoots;
+using Osekai.Octon.Domain.ValueObjects;
 using Osekai.Octon.Drawing;
 using Osekai.Octon.Extensions;
 using Osekai.Octon.OsuApi;
@@ -50,7 +50,7 @@ public abstract class AppBaseLayout : BaseLayout
     public IReadOnlyCollection<UserGroup> UserGroups { get; private set; } = null!;
     public IReadOnlyCollection<Medal> Medals { get; private set; } = null!;
     public App CurrentApp { get; private set; } = null!;
-    public AppTheme CurrentAppTheme { get; private set; } = null!;
+    public AppTheme CurrentAppTheme { get; private set; } 
     public OsuUser? CurrentOsuUser { get; private set; }
     public bool Mobile { get; private set; }
     public bool Experimental { get; private set; }

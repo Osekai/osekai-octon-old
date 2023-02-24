@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.RazorPages;
-using Osekai.Octon.Domain.Aggregates;
+using Osekai.Octon.Domain.AggregateRoots;
 using Osekai.Octon.Localization;
 using Osekai.Octon.OsuApi.Payloads;
 using Osekai.Octon.WebServer.Presentation.AppBaseLayout;

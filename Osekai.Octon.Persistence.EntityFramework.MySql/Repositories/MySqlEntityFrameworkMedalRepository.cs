@@ -3,7 +3,7 @@ using Osekai.Octon.Domain.Enums;
 using Osekai.Octon.Domain.Repositories;
 using Osekai.Octon.Domain.ValueObjects;
 using Osekai.Octon.Persistence.EntityFramework.MySql.Entities;
-using BeatmapPack = Osekai.Octon.Domain.Aggregates.BeatmapPack;
+using BeatmapPack = Osekai.Octon.Domain.AggregateRoots.BeatmapPack;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql.Repositories;
 
@@ -16,7 +16,7 @@ public class MySqlEntityFrameworkMedalRepository: IMedalRepository
         Context = context;
     }
     
-    public async Task<IEnumerable<Domain.Aggregates.Medal>> GetMedalsAsync(
+    public async Task<IEnumerable<Domain.AggregateRoots.Medal>> GetMedalsAsync(
         IMedalRepository.MedalFilter filter = default,
         int offset  = 0, 
         int limit = int.MaxValue,
@@ -46,29 +46,31 @@ public class MySqlEntityFrameworkMedalRepository: IMedalRepository
             .Select(e => new { e.MedalId, e.BeatmapPack, e.Gamemode })
             .ToArrayAsync(cancellationToken);
 
-        var packsByMedal = packs.GroupBy(e => e.MedalId, e => e).ToDictionary(e => e.Key, e => e.ToDictionary(l => l.Gamemode, l => l.BeatmapPack));
+        var packsByMedal = packs.GroupBy(
+            e => e.MedalId, e => e).ToDictionary(e => e.Key, e => e.ToDictionary(l => l.Gamemode, l => l.BeatmapPack));
 
         return medals.Select(medal =>
         {
-            Domain.Aggregates.Medal medalOut = medal.ToAggregate();
+            Domain.AggregateRoots.Medal medalOut = medal.ToAggregateRoot();
 
             medalOut.FirstAchievement = new Ref<FirstAchievement?>(
                 medal.FirstAchievedBy == null ? null :
-                new FirstAchievement(medal.FirstAchievedBy, medal.FirstAchievedDate!.Value));
+                    new FirstAchievement(medal.FirstAchievedBy, medal.FirstAchievedDate!.Value)
+            );
 
-            medalOut.MedalSolution = new Ref<Domain.ValueObjects.MedalSolution?>(medal.Solution?.ToValueObject());
-            medalOut.MedalSettings = new Ref<Domain.Entities.MedalSettings?>(medal.Settings?.ToEntity());
+            medalOut.MedalSolution = medal.Solution?.ToValueObject();
+            medalOut.MedalSettings = medal.Settings?.ToValueObject();
 
             if (includeBeatmapPacks && packsByMedal.TryGetValue(medalOut.Id, out var medalBeatmapPacks))
-                medalOut.BeatmapPacks = new Ref<IReadOnlyDictionary<OsuGamemode, BeatmapPack>>(medalBeatmapPacks.ToDictionary(e => e.Key, e => e.Value.ToAggregate()));
+                medalOut.BeatmapPacks = medalBeatmapPacks.ToDictionary(e => e.Key, e => e.Value.ToAggregateRoot());
             else
-                medalOut.BeatmapPacks = new Ref<IReadOnlyDictionary<OsuGamemode, BeatmapPack>>(new Dictionary<OsuGamemode, BeatmapPack>());
+                medalOut.BeatmapPacks = new Dictionary<OsuGamemode, BeatmapPack>();
 
             return medalOut;
         });
     }
 
-    public async Task<IEnumerable<Domain.Aggregates.Medal>> GetMedalsByBeatmapPackIdAsync(int beatmapPackId, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<Domain.AggregateRoots.Medal>> GetMedalsByBeatmapPackIdAsync(int beatmapPackId, CancellationToken cancellationToken = default)
     {
         IEnumerable<Medal> medal = await Context.BeatmapPacksForMedals
             .Include(e => e.Medal)
@@ -79,14 +81,15 @@ public class MySqlEntityFrameworkMedalRepository: IMedalRepository
         
         return medal.Select(m =>
         {
-            Domain.Aggregates.Medal medalOut = m.ToAggregate();
+            Domain.AggregateRoots.Medal medalOut = m.ToAggregateRoot();
             
-            medalOut.FirstAchievement = new Ref<FirstAchievement?>(
-                m.FirstAchievedBy == null ? null :
-                    new FirstAchievement(m.FirstAchievedBy, m.FirstAchievedDate!.Value));
+            medalOut.FirstAchievement =new Ref<FirstAchievement?>(
+                    m.FirstAchievedBy == null ? null :
+                        new FirstAchievement(m.FirstAchievedBy, m.FirstAchievedDate!.Value)
+                );
 
-            medalOut.MedalSolution = new Ref<Domain.ValueObjects.MedalSolution?>(m.Solution?.ToValueObject());
-            medalOut.MedalSettings = new Ref<Domain.Entities.MedalSettings?>(m.Settings?.ToEntity());
+            medalOut.MedalSolution = m.Solution?.ToValueObject();
+            medalOut.MedalSettings = m.Settings?.ToValueObject();
 
             return medalOut;
         });

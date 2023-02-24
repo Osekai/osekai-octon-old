@@ -1,4 +1,4 @@
-﻿using Osekai.Octon.Domain.Aggregates;
+﻿using Osekai.Octon.Domain.AggregateRoots;
 using Osekai.Octon.Persistence;
 
 namespace Osekai.Octon.Services;

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Mvc;
-using Osekai.Octon.Domain.Aggregates;
+using Osekai.Octon.Domain.AggregateRoots;
 using Osekai.Octon.OsuApi;
 using Osekai.Octon.OsuApi.Payloads;
 using Osekai.Octon.Services;

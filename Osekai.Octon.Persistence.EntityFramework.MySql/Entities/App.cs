@@ -11,9 +11,9 @@
 
         public AppTheme? AppTheme { get; set; }
 
-        public Domain.Aggregates.App ToAggregate(bool includeObjects = false)
+        public Domain.AggregateRoots.App ToAggregateRoot(bool includeObjects = false)
         {
-            Domain.Aggregates.App app = new Domain.Aggregates.App(Name, SimpleName, Id, Order, Visible, Experimental);
+            Domain.AggregateRoots.App app = new Domain.AggregateRoots.App(Name, SimpleName, Id, Order, Visible, Experimental);
             return app;
         }
 

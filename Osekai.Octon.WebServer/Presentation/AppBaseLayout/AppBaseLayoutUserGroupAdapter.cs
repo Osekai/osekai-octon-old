@@ -1,8 +1,7 @@
 ﻿using System.Drawing;
 using System.Text;
 using Microsoft.Extensions.ObjectPool;
-using Osekai.Octon.Domain.Aggregates;
-using Osekai.Octon.Domain.Entities;
+using Osekai.Octon.Domain.AggregateRoots;
 using Osekai.Octon.Drawing;
 
 namespace Osekai.Octon.WebServer.Presentation.AppBaseLayout;

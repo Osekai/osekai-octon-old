@@ -1,4 +1,4 @@
-﻿namespace Osekai.Octon.Domain.Aggregates;
+﻿namespace Osekai.Octon.Domain.AggregateRoots;
 
 public class BeatmapPack
 {

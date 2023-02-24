@@ -10,4 +10,9 @@
       <ProjectReference Include="..\Osekai.Octon\Osekai.Octon.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Entities" />
+      <Folder Include="Services" />
+    </ItemGroup>
+
 </Project>

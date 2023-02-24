@@ -1,8 +1,7 @@
-﻿using System.Drawing;
-using Osekai.Octon.Drawing;
+﻿using Osekai.Octon.Drawing;
 using Osekai.Octon.Permissions;
 
-namespace Osekai.Octon.Domain.Aggregates;
+namespace Osekai.Octon.Domain.AggregateRoots;
 
 public class UserGroup
 {

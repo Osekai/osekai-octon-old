@@ -21,6 +21,7 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql
         internal DbSet<UserGroupsForUsers> UserGroupsForUsers { get; set; } = null!;
         internal DbSet<UserPermissionsOverride> UserPermissionsOverrides { get; set; } = null!;
         internal DbSet<Locale> Locales { get; set; } = null!;
+        internal DbSet<TeamMember> TeamMembers { get; set; } = null!;
 
         public MySqlOsekaiDbContext(DbContextOptions options) : base(options) {}
         
@@ -84,6 +85,20 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql
                     .OnDelete(DeleteBehavior.Cascade);
 
                 entity.Property(e => e.Title).HasColumnType("tinytext");
+            });
+
+            modelBuilder.Entity<TeamMember>(entity =>
+            {
+                entity.HasKey(e => e.UserId);
+                entity.ToTable("TeamMembers");
+                
+                entity.UseCollation("utf8mb4_general_ci");
+
+                entity.Property(e => e.Name).HasMaxLength(Specifications.TeamMemberNameMaxLength);
+                entity.Property(e => e.NameAlt).HasMaxLength(Specifications.TeamMemberNameMaxLength);
+                entity.Property(e => e.Role).HasMaxLength(Specifications.TeamMemberRoleMaxLength);
+                
+                entity.Property(e => e.Socials).HasColumnType("json");
             });
             
             modelBuilder.Entity<Session>(entity =>
