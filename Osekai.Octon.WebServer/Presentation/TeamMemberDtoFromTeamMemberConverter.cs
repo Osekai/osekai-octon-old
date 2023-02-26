@@ -5,7 +5,7 @@ namespace Osekai.Octon.WebServer.Presentation;
 
 public class TeamMemberDtoFromTeamMemberConverter: IConverter<TeamMember, TeamMemberDto>
 {
-    public ValueTask<TeamMemberDto> AdaptAsync(TeamMember value, CancellationToken cancellationToken = default)
+    public ValueTask<TeamMemberDto> ConvertAsync(TeamMember value, CancellationToken cancellationToken = default)
     {
         return ValueTask.FromResult(new TeamMemberDto
         {

@@ -109,14 +109,14 @@ public abstract class AppBaseLayout : BaseLayout
             
             AppBaseLayoutApps = await Apps.ToAsyncEnumerable().ToDictionaryAwaitAsync(
                 k => ValueTask.FromResult(k.Value.SimpleName),
-                async v => await AppBaseLayoutAppConverter.AdaptAsync(v.Value, cancellationToken));
+                async v => await AppBaseLayoutAppConverter.ConvertAsync(v.Value, cancellationToken));
 
             AppBaseLayoutMedals = await Medals.ToAsyncEnumerable()
-                .SelectAwait(async v => await AppBaseLayoutMedalConverter.AdaptAsync(v, cancellationToken))
+                .SelectAwait(async v => await AppBaseLayoutMedalConverter.ConvertAsync(v, cancellationToken))
                 .ToArrayAsync(cancellationToken);
 
             AppBaseLayoutUserGroups = await UserGroups.ToAsyncEnumerable()
-                .SelectAwait(async v => await AppBaseLayoutUserGroupConverter.AdaptAsync(v, cancellationToken))
+                .SelectAwait(async v => await AppBaseLayoutUserGroupConverter.ConvertAsync(v, cancellationToken))
                 .ToArrayAsync(cancellationToken);
             
             await Cache.SetAsync("app_base_layout_cache_entry", new AppBaseLayoutCacheEntry

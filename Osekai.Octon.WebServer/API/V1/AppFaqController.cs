@@ -22,7 +22,7 @@ public sealed class AppFaqController: Controller
     {
         IEnumerable<App> apps = await _appService.GetAppsAsync(includeFaqs: true, cancellationToken);
         return Ok(await apps.ToAsyncEnumerable()
-            .SelectAwait(async a => await _appWithFaqDtoFromAppConverter.AdaptAsync(a, cancellationToken))
+            .SelectAwait(async a => await _appWithFaqDtoFromAppConverter.ConvertAsync(a, cancellationToken))
             .ToArrayAsync(cancellationToken));
     }
 }

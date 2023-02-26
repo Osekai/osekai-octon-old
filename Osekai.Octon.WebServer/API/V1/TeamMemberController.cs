@@ -23,7 +23,7 @@ public sealed class TeamMemberController: Controller
         IEnumerable<TeamMember> teamMembers = await _teamMemberService.GetTeamMembersAsync(cancellationToken);
         
         return Ok(await teamMembers.ToAsyncEnumerable()
-            .SelectAwait(async t => await _teamMemberDtoConverter.AdaptAsync(t, cancellationToken))
+            .SelectAwait(async t => await _teamMemberDtoConverter.ConvertAsync(t, cancellationToken))
             .ToArrayAsync(cancellationToken));
     }
 }

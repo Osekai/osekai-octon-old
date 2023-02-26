@@ -67,7 +67,7 @@ public class AppBaseLayoutAppFromAppConverter: IConverter<App, AppBaseLayoutApp>
         }
     }
     
-    public async ValueTask<AppBaseLayoutApp> AdaptAsync(App e, CancellationToken cancellationToken = default)
+    public async ValueTask<AppBaseLayoutApp> ConvertAsync(App e, CancellationToken cancellationToken = default)
     {
         return new AppBaseLayoutApp
         {

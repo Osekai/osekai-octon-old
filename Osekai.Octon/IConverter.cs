@@ -2,5 +2,5 @@
 
 public interface IConverter<in TIn, TOut>
 {
-    ValueTask<TOut> AdaptAsync(TIn value, CancellationToken cancellationToken = default);
+    ValueTask<TOut> ConvertAsync(TIn value, CancellationToken cancellationToken = default);
 }

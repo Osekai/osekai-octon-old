@@ -92,7 +92,7 @@ public class AppBaseLayoutMedalFromMedalConverter: IConverter<Medal, AppBaseLayo
         }
     }
     
-    public ValueTask<AppBaseLayoutMedal> AdaptAsync(Medal m, CancellationToken cancellationToken)
+    public ValueTask<AppBaseLayoutMedal> ConvertAsync(Medal m, CancellationToken cancellationToken)
     {
         return ValueTask.FromResult(new AppBaseLayoutMedal
         {

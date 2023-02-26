@@ -45,6 +45,6 @@ public sealed class UserController: Controller
 
         IEnumerable<UserGroup> userGroups = await _userGroupService.GetUserGroupsOfUserAsync(userId, cancellationToken);
         
-        return Ok(await _userDtoFromOsuUserAndGroupsConverter.AdaptAsync((osuUser, userGroups), cancellationToken));
+        return Ok(await _userDtoFromOsuUserAndGroupsConverter.ConvertAsync((osuUser, userGroups), cancellationToken));
     }
 }

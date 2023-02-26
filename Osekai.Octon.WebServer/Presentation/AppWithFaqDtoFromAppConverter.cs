@@ -67,7 +67,7 @@ public class AppWithFaqDtoFromAppConverter: IConverter<App, AppWithFaqDto>
         }
     }
 
-    public async ValueTask<AppWithFaqDto> AdaptAsync(App e, CancellationToken cancellationToken = default)
+    public async ValueTask<AppWithFaqDto> ConvertAsync(App e, CancellationToken cancellationToken = default)
     {
         return new AppWithFaqDto
         {

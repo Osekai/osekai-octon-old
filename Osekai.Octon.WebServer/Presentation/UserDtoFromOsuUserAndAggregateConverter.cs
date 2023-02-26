@@ -6,7 +6,7 @@ namespace Osekai.Octon.WebServer.Presentation;
 
 public class UserDtoFromOsuUserAndAggregateConverter: IConverter<(OsuUser, IEnumerable<UserGroup>), UserDto>
 {
-    public ValueTask<UserDto> AdaptAsync((OsuUser, IEnumerable<UserGroup>) value, CancellationToken cancellationToken = default)
+    public ValueTask<UserDto> ConvertAsync((OsuUser, IEnumerable<UserGroup>) value, CancellationToken cancellationToken = default)
     {
         var (osuUser, userGroups) = value;
         

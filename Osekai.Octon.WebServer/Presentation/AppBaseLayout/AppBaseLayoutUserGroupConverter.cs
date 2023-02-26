@@ -29,7 +29,7 @@ public class AppBaseLayoutUserGroupConverter: IConverter<UserGroup, AppBaseLayou
         }
     }
     
-    public ValueTask<AppBaseLayoutUserGroup> AdaptAsync(UserGroup e, CancellationToken cancellationToken = default)
+    public ValueTask<AppBaseLayoutUserGroup> ConvertAsync(UserGroup e, CancellationToken cancellationToken = default)
     {
         return ValueTask.FromResult(new AppBaseLayoutUserGroup
         {
