@@ -114,7 +114,7 @@ namespace Osekai.Octon.Persistence.EntityFramework.MySql
                     .HasColumnType("char");
 
                 entity.HasKey(e => e.Token);
-                entity.Property(e => e.Payload).HasColumnType("text");
+                entity.Property(e => e.Payload).HasColumnType("json");
 
                 entity.Property(e => e.ExpiresAt).HasDefaultValueSql("CURRENT_TIMESTAMP(6)");
             });

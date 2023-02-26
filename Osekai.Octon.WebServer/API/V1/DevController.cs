@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Osekai.Octon.Domain.Services;
 using Osekai.Octon.Exceptions;
 using Osekai.Octon.Localization;
 using Osekai.Octon.OsuApi;
 using Osekai.Octon.Permissions;
 using Osekai.Octon.Persistence;
-using Osekai.Octon.Services;
 
 namespace Osekai.Octon.WebServer.API.V1;
 
@@ -22,7 +22,6 @@ public sealed class DevController: Controller
     public DevController(StaticUrlGenerator staticUrlGenerator,
         CurrentSession currentSession,
         CachedAuthenticatedOsuApiV2Interface authenticatedOsuApi,
-        PermissionService permissionService,
         ILocalizatorFactory localizatorFactory,
         ITestDataPopulator testDataPopulator)
     {

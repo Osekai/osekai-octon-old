@@ -3,7 +3,7 @@ using Osekai.Octon.WebServer.API.V1.Dtos.TeamMemberController;
 
 namespace Osekai.Octon.WebServer.Presentation;
 
-public class TeamMemberDtoFromTeamMemberAdapter: IAdapter<TeamMember, TeamMemberDto>
+public class TeamMemberDtoFromTeamMemberConverter: IConverter<TeamMember, TeamMemberDto>
 {
     public ValueTask<TeamMemberDto> AdaptAsync(TeamMember value, CancellationToken cancellationToken = default)
     {

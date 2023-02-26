@@ -1,19 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Osekai.Octon.Domain.AggregateRoots;
-using Osekai.Octon.Services;
+using Osekai.Octon.Domain.Services;
 using Osekai.Octon.WebServer.API.V1.Dtos.TeamMemberController;
 
 namespace Osekai.Octon.WebServer.API.V1;
 
 public sealed class TeamMemberController: Controller
 {
-    private readonly TeamMemberService _teamMemberService;
-    private readonly IAdapter<TeamMember, TeamMemberDto> _teamMemberDtoAdapter;
+    private readonly ITeamMemberService _teamMemberService;
+    private readonly IConverter<TeamMember, TeamMemberDto> _teamMemberDtoConverter;
     
-    public TeamMemberController(TeamMemberService teamMemberService, IAdapter<TeamMember, TeamMemberDto> teamMemberDtoAdapter)
+    public TeamMemberController(ITeamMemberService teamMemberService, IConverter<TeamMember, TeamMemberDto> teamMemberDtoConverter)
     {
         _teamMemberService = teamMemberService;
-        _teamMemberDtoAdapter = teamMemberDtoAdapter;
+        _teamMemberDtoConverter = teamMemberDtoConverter;
     }
 
     [HttpGet("/api/v1/team/")]
@@ -23,7 +23,7 @@ public sealed class TeamMemberController: Controller
         IEnumerable<TeamMember> teamMembers = await _teamMemberService.GetTeamMembersAsync(cancellationToken);
         
         return Ok(await teamMembers.ToAsyncEnumerable()
-            .SelectAwait(async t => await _teamMemberDtoAdapter.AdaptAsync(t, cancellationToken))
+            .SelectAwait(async t => await _teamMemberDtoConverter.AdaptAsync(t, cancellationToken))
             .ToArrayAsync(cancellationToken));
     }
 }

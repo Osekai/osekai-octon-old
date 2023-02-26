@@ -1,9 +1,11 @@
 ﻿using Osekai.Octon.Domain.AggregateRoots;
+using Osekai.Octon.Domain.Services;
 using Osekai.Octon.Persistence;
 
-namespace Osekai.Octon.Services;
+namespace Osekai.Octon.Domain.Services.Default;
 
-public class AppService
+
+public class AppService : IAppService
 {
     protected IUnitOfWork UnitOfWork { get; }
     

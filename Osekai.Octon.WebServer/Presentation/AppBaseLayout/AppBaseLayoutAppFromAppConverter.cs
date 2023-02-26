@@ -7,13 +7,13 @@ using Osekai.Octon.Drawing;
 
 namespace Osekai.Octon.WebServer.Presentation.AppBaseLayout;
 
-public class AppBaseLayoutAppFromAppAdapter: IAdapter<App, AppBaseLayoutApp>
+public class AppBaseLayoutAppFromAppConverter: IConverter<App, AppBaseLayoutApp>
 {
     protected ObjectPool<StringBuilder> StringBuilderObjectPool { get; }
 
     protected CurrentLocale CurrentLocale { get; }
     
-    public AppBaseLayoutAppFromAppAdapter(CurrentLocale currentLocale,
+    public AppBaseLayoutAppFromAppConverter(CurrentLocale currentLocale,
         ObjectPool<StringBuilder> stringBuilderObjectPool)
     {
         CurrentLocale = currentLocale;

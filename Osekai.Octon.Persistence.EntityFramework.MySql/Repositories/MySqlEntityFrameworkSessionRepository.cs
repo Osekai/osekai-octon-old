@@ -1,7 +1,7 @@
-﻿using System.Text.Json;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Osekai.Octon.Domain.Repositories;
 using Osekai.Octon.Domain.ValueObjects;
+using Osekai.Octon.Persistence.EntityFramework.MySql.Serializables;
 using Session = Osekai.Octon.Domain.AggregateRoots.Session;
 
 namespace Osekai.Octon.Persistence.EntityFramework.MySql.Repositories;
@@ -18,16 +18,27 @@ public class MySqlEntityFrameworkSessionRepository: ISessionRepository
     public async Task<Session?> GetSessionByTokenAsync(string token, CancellationToken cancellationToken = default)
     {
         Entities.Session? session = await Context.Sessions.AsNoTracking().Where(s => s.Token == token && DateTimeOffset.Now < s.ExpiresAt).FirstOrDefaultAsync(cancellationToken);
-        return session?.ToAggregateRoot();
+        if (session == null)
+            return null;
+        
+        Session sessionAggregateRoot = session.ToAggregateRoot();
+        
+        sessionAggregateRoot.Payload = new SessionPayload(
+            session.Payload.OsuApiV2Token, session.Payload.OsuApiV2RefreshToken, 
+            session.Payload.OsuUserId, session.Payload.ExpiresAt);
+
+        return sessionAggregateRoot;
     }
 
     public Task AddSessionAsync(Session session, CancellationToken cancellationToken = default)
     {
+        SessionPayload payload = session.Payload?.Value ?? new SessionPayload();
+        
         Context.Sessions.Add(new Entities.Session
         {
             Token = session.Token, 
             ExpiresAt = session.ExpiresAt, 
-            Payload = JsonSerializer.Serialize(session.Payload)
+            Payload = new SerializableSessionPayload(payload.OsuApiV2Token, payload.OsuApiV2RefreshToken, payload.OsuUserId, payload.ExpiresAt)
         });
         
         return Task.CompletedTask;
@@ -39,45 +50,12 @@ public class MySqlEntityFrameworkSessionRepository: ISessionRepository
         if (sessionEntity == null)
             return false;
 
-        sessionEntity.Payload = JsonSerializer.Serialize(session.Payload);
+        SessionPayload payload = session.Payload?.Value ?? new SessionPayload();
+
+        sessionEntity.Payload = new SerializableSessionPayload(payload.OsuApiV2Token, payload.OsuApiV2RefreshToken, payload.OsuUserId, payload.ExpiresAt);
         sessionEntity.Token = session.Token;
         sessionEntity.ExpiresAt = session.ExpiresAt;
         
-        return true;
-    }
-
-    public Task<Session> AddSessionAsync(string token, SessionPayload payload, DateTimeOffset expiresAt, CancellationToken cancellationToken = default)
-    {
-        Context.Sessions.Add(new Entities.Session
-        {
-            Token = token, 
-            ExpiresAt = expiresAt, 
-            Payload = JsonSerializer.Serialize(payload)
-        });
-        
-        return Task.FromResult<Session>(new Session(token, payload, expiresAt));
-    }
-
-    public async Task<bool> UpdateSessionPayloadAsync(
-        string token, SessionPayload payload,
-        CancellationToken cancellationToken = default)
-    {
-        Entities.Session? session = await Context.Sessions.FindAsync(new object[] { token }, cancellationToken: cancellationToken);
-        if (session == null)
-            return false;
-
-        session.Payload = JsonSerializer.Serialize(payload);
-        return true;
-    }
-
-    public async Task<bool> UpdateExpirationDateTimeAsync(string token, DateTimeOffset dateTime,
-        CancellationToken cancellationToken = default)
-    {
-        Entities.Session? session = await Context.Sessions.FindAsync(new object[] { token }, cancellationToken: cancellationToken);
-        if (session == null)
-            return false;
-
-        session.ExpiresAt = dateTime;
         return true;
     }
 

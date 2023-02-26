@@ -6,11 +6,11 @@ using Osekai.Octon.Drawing;
 
 namespace Osekai.Octon.WebServer.Presentation.AppBaseLayout;
 
-public class AppBaseLayoutUserGroupAdapter: IAdapter<UserGroup, AppBaseLayoutUserGroup>
+public class AppBaseLayoutUserGroupConverter: IConverter<UserGroup, AppBaseLayoutUserGroup>
 {
     protected ObjectPool<StringBuilder> StringBuilderObjectPool { get; }
     
-    public AppBaseLayoutUserGroupAdapter(ObjectPool<StringBuilder> stringBuilderObjectPool)
+    public AppBaseLayoutUserGroupConverter(ObjectPool<StringBuilder> stringBuilderObjectPool)
     {
         StringBuilderObjectPool = stringBuilderObjectPool;
     }

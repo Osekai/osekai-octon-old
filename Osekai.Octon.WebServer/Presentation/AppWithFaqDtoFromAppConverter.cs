@@ -7,13 +7,13 @@ using Osekai.Octon.WebServer.API.V1.Dtos.AppFaqController;
 
 namespace Osekai.Octon.WebServer.Presentation;
 
-public class AppWithFaqDtoFromAppAdapter: IAdapter<App, AppWithFaqDto>
+public class AppWithFaqDtoFromAppConverter: IConverter<App, AppWithFaqDto>
 { 
     protected ObjectPool<StringBuilder> StringBuilderObjectPool { get; }
 
     protected CurrentLocale CurrentLocale { get; }
     
-    public AppWithFaqDtoFromAppAdapter(CurrentLocale currentLocale,
+    public AppWithFaqDtoFromAppConverter(CurrentLocale currentLocale,
         ObjectPool<StringBuilder> stringBuilderObjectPool)
     {
         CurrentLocale = currentLocale;

@@ -10,7 +10,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Persistence.En
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Persistence.EntityFramework", "Osekai.Octon.Persistence.EntityFramework\Osekai.Octon.Persistence.EntityFramework.csproj", "{DE9BFCCB-73FC-43D9-A276-B1D1136DF677}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Services", "Osekai.Octon.Services\Osekai.Octon.Services.csproj", "{F4A6ED15-F580-4F60-9C4D-7B5DA011D066}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Domain.Services.Default", "Osekai.Octon.Domain.Services.Default\Osekai.Octon.Domain.Services.Default.csproj", "{F4A6ED15-F580-4F60-9C4D-7B5DA011D066}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Osekai.Octon.Exceptions", "Osekai.Octon.Exceptions\Osekai.Octon.Exceptions.csproj", "{D7ACB8AF-4A1D-414C-9A8C-52AD661D7B04}"
 EndProject

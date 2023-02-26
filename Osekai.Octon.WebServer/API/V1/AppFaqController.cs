@@ -1,18 +1,18 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Osekai.Octon.Domain.AggregateRoots;
-using Osekai.Octon.Services;
+using Osekai.Octon.Domain.Services;
 using Osekai.Octon.WebServer.API.V1.Dtos.AppFaqController;
 
 namespace Osekai.Octon.WebServer.API.V1;
 
 public sealed class AppFaqController: Controller
 {
-    private readonly AppService _appService;
-    private readonly IAdapter<App, AppWithFaqDto> _appWithFaqDtoFromAppAdapter;
+    private readonly IAppService _appService;
+    private readonly IConverter<App, AppWithFaqDto> _appWithFaqDtoFromAppConverter;
     
-    public AppFaqController(AppService appService, IAdapter<App, AppWithFaqDto> appWithFaqDtoFromAppAdapter)
+    public AppFaqController(IAppService appService, IConverter<App, AppWithFaqDto> appWithFaqDtoFromAppConverter)
     {
-        _appWithFaqDtoFromAppAdapter = appWithFaqDtoFromAppAdapter;
+        _appWithFaqDtoFromAppConverter = appWithFaqDtoFromAppConverter;
         _appService = appService;
     }
 
@@ -22,7 +22,7 @@ public sealed class AppFaqController: Controller
     {
         IEnumerable<App> apps = await _appService.GetAppsAsync(includeFaqs: true, cancellationToken);
         return Ok(await apps.ToAsyncEnumerable()
-            .SelectAwait(async a => await _appWithFaqDtoFromAppAdapter.AdaptAsync(a, cancellationToken))
+            .SelectAwait(async a => await _appWithFaqDtoFromAppConverter.AdaptAsync(a, cancellationToken))
             .ToArrayAsync(cancellationToken));
     }
 }

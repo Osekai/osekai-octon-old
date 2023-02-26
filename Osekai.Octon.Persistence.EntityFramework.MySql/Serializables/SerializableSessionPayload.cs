@@ -1,10 +1,11 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Osekai.Octon.Domain.ValueObjects;
+namespace Osekai.Octon.Persistence.EntityFramework.MySql.Serializables;
 
-public readonly struct SessionPayload
+public struct SerializableSessionPayload
 {
-    public SessionPayload(string osuApiV2Token, string osuApiV2RefreshToken, int osuUserId, DateTime expiresAt)
+    [JsonConstructor]
+    public SerializableSessionPayload(string osuApiV2Token, string osuApiV2RefreshToken, int osuUserId, DateTime expiresAt)
     {
         OsuApiV2Token = osuApiV2Token;
         OsuApiV2RefreshToken = osuApiV2RefreshToken;

@@ -6,11 +6,11 @@ using Osekai.Octon.Domain.Enums;
 
 namespace Osekai.Octon.WebServer.Presentation.AppBaseLayout;
 
-public class AppBaseLayoutMedalFromMedalAdapter: IAdapter<Medal, AppBaseLayoutMedal>
+public class AppBaseLayoutMedalFromMedalConverter: IConverter<Medal, AppBaseLayoutMedal>
 {   
     protected ObjectPool<StringBuilder> StringBuilderObjectPool { get; }
 
-    public AppBaseLayoutMedalFromMedalAdapter(ObjectPool<StringBuilder> stringBuilderObjectPool)
+    public AppBaseLayoutMedalFromMedalConverter(ObjectPool<StringBuilder> stringBuilderObjectPool)
     {
         StringBuilderObjectPool = stringBuilderObjectPool;
     }

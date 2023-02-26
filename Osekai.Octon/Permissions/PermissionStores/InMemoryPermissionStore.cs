@@ -27,14 +27,14 @@ public class InMemoryPermissionStore: IPermissionStore
         Root.AddValueRecursive(path, type);
     }
 
-    public Task<bool> HasPermissionAsync(string path)
-        => Task.FromResult(HasPermission(path));
+    public ValueTask<bool> HasPermissionAsync(string path)
+        => ValueTask.FromResult(HasPermission(path));
 
     public IEnumerable<KeyValuePair<string, PermissionActionType>> GetPermissions()
         => Root;
 
-    public Task<IEnumerable<KeyValuePair<string, PermissionActionType>>> GetPermissionsAsync()
-        => Task.FromResult(GetPermissions());
+    public ValueTask<IEnumerable<KeyValuePair<string, PermissionActionType>>> GetPermissionsAsync()
+        => ValueTask.FromResult(GetPermissions());
 
     private ValueTrie<PermissionActionType> Root { get; }
 

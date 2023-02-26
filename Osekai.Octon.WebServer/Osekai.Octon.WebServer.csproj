@@ -20,12 +20,12 @@
       <ProjectReference Include="..\Osekai.Octon.Persistence.EntityFramework.MySql\Osekai.Octon.Persistence.EntityFramework.MySql.csproj" />
       <ProjectReference Include="..\Osekai.Octon.Persistence.EntityFramework\Osekai.Octon.Persistence.EntityFramework.csproj" />
       <ProjectReference Include="..\Osekai.Octon\Osekai.Octon.csproj" />
-      <ProjectReference Include="..\Osekai.Octon.Services\Osekai.Octon.Services.csproj" />
+      <ProjectReference Include="..\Osekai.Octon.Domain.Services.Default\Osekai.Octon.Domain.Services.Default.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.1" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.1">
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.3" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.3">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
@@ -36,11 +36,6 @@
     <ItemGroup>
       <_ContentIncludedByDefault Remove="Pages\Components\Metadata\Default.cshtml" />
       <_ContentIncludedByDefault Remove="Pages\Components\Style\Default.cshtml" />
-    </ItemGroup>
-    
-    
-    <ItemGroup>
-      <Folder Include="Extensions" />
     </ItemGroup>
 
 </Project>

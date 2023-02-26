@@ -1,9 +1,8 @@
-﻿using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Osekai.Octon.Domain.AggregateRoots;
+using Osekai.Octon.Domain.Services;
 using Osekai.Octon.OsuApi;
 using Osekai.Octon.OsuApi.Payloads;
-using Osekai.Octon.Services;
 using Osekai.Octon.WebServer.API.V1.Dtos.UserController;
 
 namespace Osekai.Octon.WebServer.API.V1;
@@ -14,19 +13,19 @@ public sealed class UserController: Controller
     private readonly IAuthenticatedOsuApiV2Interface _osuApiV2Interface;
     private readonly CachedAuthenticatedOsuApiV2Interface _cachedAuthenticatedOsuApiV2Interface;
     private readonly CurrentSession _currentSession;
-    private readonly IAdapter<(OsuUser, IEnumerable<UserGroup>), UserDto> _userDtoFromOsuUserAndGroupsAdapter;
-    private readonly UserGroupService _userGroupService;
+    private readonly IConverter<(OsuUser, IEnumerable<UserGroup>), UserDto> _userDtoFromOsuUserAndGroupsConverter;
+    private readonly IUserGroupService _userGroupService;
     
     public UserController(CurrentSession currentSession, 
         IAuthenticatedOsuApiV2Interface osuApiV2Interface,
-        UserGroupService userGroupService,
+        IUserGroupService userGroupService,
         CachedAuthenticatedOsuApiV2Interface cachedAuthenticatedOsuApiV2Interface,
-        IAdapter<(OsuUser, IEnumerable<UserGroup>), UserDto> userDtoFromOsuUserAndGroupsAdapter)
+        IConverter<(OsuUser, IEnumerable<UserGroup>), UserDto> userDtoFromOsuUserAndGroupsConverter)
     {
         _userGroupService = userGroupService;
         _osuApiV2Interface = osuApiV2Interface;
         _cachedAuthenticatedOsuApiV2Interface = cachedAuthenticatedOsuApiV2Interface;
-        _userDtoFromOsuUserAndGroupsAdapter = userDtoFromOsuUserAndGroupsAdapter;
+        _userDtoFromOsuUserAndGroupsConverter = userDtoFromOsuUserAndGroupsConverter;
         _currentSession = currentSession;
     }
     
@@ -46,6 +45,6 @@ public sealed class UserController: Controller
 
         IEnumerable<UserGroup> userGroups = await _userGroupService.GetUserGroupsOfUserAsync(userId, cancellationToken);
         
-        return Ok(await _userDtoFromOsuUserAndGroupsAdapter.AdaptAsync((osuUser, userGroups), cancellationToken));
+        return Ok(await _userDtoFromOsuUserAndGroupsConverter.AdaptAsync((osuUser, userGroups), cancellationToken));
     }
 }

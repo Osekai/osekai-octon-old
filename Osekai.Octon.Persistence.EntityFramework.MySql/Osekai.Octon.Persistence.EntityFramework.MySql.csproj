@@ -13,13 +13,13 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.1" />
-      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.1">
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.3" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.3">
         <PrivateAssets>all</PrivateAssets>
         <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       </PackageReference>
-      <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0-silver.1" />
-      <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Json.Microsoft" Version="7.0.0-silver.1" />
+      <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
+      <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Json.Microsoft" Version="7.0.0" />
       <PackageReference Include="System.Linq.Async" Version="6.0.1" />
     </ItemGroup>
 

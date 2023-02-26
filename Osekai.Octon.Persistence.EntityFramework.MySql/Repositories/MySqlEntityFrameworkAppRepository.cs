@@ -49,11 +49,8 @@ public class MySqlEntityFrameworkAppRepository: IAppRepository
             query.Include(app => app.Faqs);
 
         IEnumerable<Entities.App> apps = await query.ToArrayAsync(cancellationToken);
-        IAsyncEnumerable<Entities.HomeFaq> faqs = Context.Faqs.ToAsyncEnumerable();
-
-        var appsFaqs = await faqs.GroupBy(e => e.AppId, e => e)
-            .ToDictionaryAwaitAsync(e => ValueTask.FromResult(e.Key), async e => await e.OrderBy(a => a.Id).ToArrayAsync(cancellationToken), cancellationToken);
-
+        Dictionary<int, Entities.HomeFaq[]> appsFaqs = await Context.Faqs.GroupBy(e => e.AppId).ToDictionaryAsync(e => e.Key, e => e.ToArray(), cancellationToken);
+        
         return apps.Select(a =>
         {
             App appAggregate = a.ToAggregateRoot();

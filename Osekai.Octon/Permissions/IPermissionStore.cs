@@ -2,6 +2,6 @@
 
 public interface IPermissionStore
 {
-    Task<bool> HasPermissionAsync(string path);
-    Task<IEnumerable<KeyValuePair<string, PermissionActionType>>> GetPermissionsAsync();
+    ValueTask<bool> HasPermissionAsync(string path);
+    ValueTask<IEnumerable<KeyValuePair<string, PermissionActionType>>> GetPermissionsAsync();
 }

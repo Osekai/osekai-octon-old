@@ -4,7 +4,7 @@ using Osekai.Octon.WebServer.API.V1.Dtos.UserController;
 
 namespace Osekai.Octon.WebServer.Presentation;
 
-public class UserDtoFromOsuUserAndAggregateAdapter: IAdapter<(OsuUser, IEnumerable<UserGroup>), UserDto>
+public class UserDtoFromOsuUserAndAggregateConverter: IConverter<(OsuUser, IEnumerable<UserGroup>), UserDto>
 {
     public ValueTask<UserDto> AdaptAsync((OsuUser, IEnumerable<UserGroup>) value, CancellationToken cancellationToken = default)
     {

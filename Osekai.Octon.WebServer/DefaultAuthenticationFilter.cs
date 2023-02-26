@@ -1,9 +1,10 @@
 ﻿using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Osekai.Octon.Domain;
+using Osekai.Octon.Domain.Services;
 using Osekai.Octon.Exceptions;
 using Osekai.Octon.Permissions;
-using Osekai.Octon.Services;
+using Osekai.Octon.Domain.Services.Default;
 
 namespace Osekai.Octon.WebServer;
 
@@ -13,7 +14,8 @@ public class DefaultAuthenticationFilter: Attribute, IAsyncAuthorizationFilter
     
     public async Task OnAuthorizationAsync(AuthorizationFilterContext context)
     {
-        AuthenticationService authenticationService = context.HttpContext.RequestServices.GetRequiredService<AuthenticationService>();
+        IAuthenticationService authenticationService = context.HttpContext.RequestServices.GetRequiredService<IAuthenticationService>();
+        ILoggerFactory logger = context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>();
         string? token = null;
 
         try
@@ -24,10 +26,10 @@ public class DefaultAuthenticationFilter: Attribute, IAsyncAuthorizationFilter
 
                 if (match.Success)
                 {
-                    PermissionService permissionService = context.HttpContext.RequestServices.GetRequiredService<PermissionService>();
+                    IPermissionService permissionService = context.HttpContext.RequestServices.GetRequiredService<IPermissionService>();
                     CurrentSession currentSession = context.HttpContext.RequestServices.GetService<CurrentSession>()!;
 
-                    AuthenticationService.LogInWithCodeResult result = await authenticationService.LogInWithTokenAsync(match.Groups[1].Value, context.HttpContext.RequestAborted);
+                    IAuthenticationService.LogInWithCodeResult result = await authenticationService.LogInWithTokenAsync(match.Groups[1].Value, context.HttpContext.RequestAborted);
                     IPermissionStore permissionStore = await permissionService.GetPermissionStoreAsync(result.OsuSessionContainer.UserId);
                     
                     currentSession.Set(result.OsuSessionContainer, permissionStore);
@@ -36,8 +38,9 @@ public class DefaultAuthenticationFilter: Attribute, IAsyncAuthorizationFilter
                     throw new InvalidSessionTokenException(token);
             }
         }
-        catch
+        catch (Exception exception)
         {
+            logger.CreateLogger(nameof(DefaultAuthenticationFilter)).LogError(exception, "Could not authenticate");
             context.HttpContext.Response.Cookies.Append("osekai_session_token", string.Empty, new CookieOptions{Expires = DateTimeOffset.MinValue});
 
             if (token != null)

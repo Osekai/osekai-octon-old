@@ -1,11 +1,12 @@
 ﻿using Osekai.Octon.Domain.AggregateRoots;
+using Osekai.Octon.Domain.Services;
 using Osekai.Octon.Permissions;
 using Osekai.Octon.Permissions.PermissionStores;
 using Osekai.Octon.Persistence;
 
-namespace Osekai.Octon.Services;
+namespace Osekai.Octon.Domain.Services.Default;
 
-public class PermissionService
+public class PermissionService : IPermissionService
 {
     protected IUnitOfWork UnitOfWork { get; }
     

@@ -5,10 +5,9 @@ namespace Osekai.Octon.Domain.AggregateRoots;
 
 public class Session
 {
-    public Session(string token, SessionPayload payload, DateTimeOffset expiresAt)
+    public Session(string token, DateTimeOffset expiresAt)
     {
         Token = token;
-        Payload = payload;
         ExpiresAt = expiresAt;
     }
     

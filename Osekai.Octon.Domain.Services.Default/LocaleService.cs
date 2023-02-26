@@ -1,9 +1,10 @@
 ﻿using Osekai.Octon.Domain.AggregateRoots;
+using Osekai.Octon.Domain.Services;
 using Osekai.Octon.Persistence;
 
-namespace Osekai.Octon.Services;
+namespace Osekai.Octon.Domain.Services.Default;
 
-public class LocaleService
+public class LocaleService : ILocaleService
 {
     protected IUnitOfWork UnitOfWork { get; }
     

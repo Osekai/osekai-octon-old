@@ -1,6 +1,6 @@
 ﻿using Osekai.Octon.OsuApi;
 using Osekai.Octon.Permissions;
-using Osekai.Octon.Services;
+using Osekai.Octon.Domain.Services.Default;
 namespace Osekai.Octon.WebServer;
 
 public class CurrentSession: IOsuApiV2SessionProvider

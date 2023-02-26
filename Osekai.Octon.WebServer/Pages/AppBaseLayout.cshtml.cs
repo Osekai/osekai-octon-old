@@ -1,13 +1,12 @@
-﻿using System.Drawing;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Osekai.Octon.Caching;
 using Osekai.Octon.Domain.AggregateRoots;
+using Osekai.Octon.Domain.Services;
 using Osekai.Octon.Domain.ValueObjects;
 using Osekai.Octon.Drawing;
 using Osekai.Octon.Extensions;
 using Osekai.Octon.OsuApi;
 using Osekai.Octon.OsuApi.Payloads;
-using Osekai.Octon.Services;
 using Osekai.Octon.WebServer.Presentation.AppBaseLayout;
 
 namespace Osekai.Octon.WebServer.Pages;
@@ -27,19 +26,18 @@ public abstract class AppBaseLayout : BaseLayout
         public RgbColour DarkColor { get; }
     } 
     
-    protected int AppId { get; }
-    protected IAdapter<UserGroup, AppBaseLayoutUserGroup> AppBaseLayoutUserGroupAdapter { get; }
-    protected IAdapter<Medal, AppBaseLayoutMedal> AppBaseLayoutMedalAdapter { get; }
-    protected IAdapter<App, AppBaseLayoutApp> AppBaseLayoutAppAdapter { get; }
+    protected abstract int AppId { get; }
+    protected IConverter<UserGroup, AppBaseLayoutUserGroup> AppBaseLayoutUserGroupConverter { get; }
+    protected IConverter<Medal, AppBaseLayoutMedal> AppBaseLayoutMedalConverter { get; }
+    protected IConverter<App, AppBaseLayoutApp> AppBaseLayoutAppConverter { get; }
     protected CachedAuthenticatedOsuApiV2Interface OsuApiV2Interface { get; }
     protected CurrentSession CurrentSession { get; }
-    protected UserGroupService UserGroupService { get; }
-    protected MedalService MedalService { get; }
-    protected AppService AppService { get; }
-    protected LocaleService LocaleService { get; }
+    protected IUserGroupService UserGroupService { get; }
+    protected IMedalService MedalService { get; }
+    protected IAppService AppService { get; }
+    protected ILocaleService LocaleService { get; }
     protected ICache Cache { get; }
     
-
     public virtual AccentOverride? AccentOvveride => null;
     public IReadOnlyCollection<AppBaseLayoutMedal> AppBaseLayoutMedals { get; private set; } = null!;
     public IReadOnlyCollection<AppBaseLayoutUserGroup> AppBaseLayoutUserGroups { get; private set; } = null!;
@@ -61,27 +59,25 @@ public abstract class AppBaseLayout : BaseLayout
         CurrentSession currentSession,
         CurrentLocale currentLocale,
         CachedAuthenticatedOsuApiV2Interface cachedAuthenticatedOsuApiV2Interface, 
-        IAdapter<Medal, AppBaseLayoutMedal> appBaseLayoutMedalAdapter, 
-        IAdapter<UserGroup, AppBaseLayoutUserGroup> appBaseLayoutUserGroupAdapter,
-        IAdapter<App, AppBaseLayoutApp> appBaseLayoutAppAdapter,
-        AppService appService,
-        MedalService medalService,
+        IConverter<Medal, AppBaseLayoutMedal> appBaseLayoutMedalConverter, 
+        IConverter<UserGroup, AppBaseLayoutUserGroup> appBaseLayoutUserGroupConverter,
+        IConverter<App, AppBaseLayoutApp> appBaseLayoutAppConverter,
+        IAppService appService,
+        IMedalService medalService,
         ICache cache,
-        UserGroupService userGroupService,
-        LocaleService localeService,
-        int appId)
+        IUserGroupService userGroupService,
+        ILocaleService localeService)
     {
         CurrentSession = currentSession;
         OsuApiV2Interface = cachedAuthenticatedOsuApiV2Interface;
-        AppBaseLayoutMedalAdapter = appBaseLayoutMedalAdapter;
-        AppBaseLayoutUserGroupAdapter = appBaseLayoutUserGroupAdapter;
-        AppBaseLayoutAppAdapter = appBaseLayoutAppAdapter;
+        AppBaseLayoutMedalConverter = appBaseLayoutMedalConverter;
+        AppBaseLayoutUserGroupConverter = appBaseLayoutUserGroupConverter;
+        AppBaseLayoutAppConverter = appBaseLayoutAppConverter;
         CurrentLocale = currentLocale;
         UserGroupService = userGroupService;
         LocaleService = localeService;
         AppService = appService;
         MedalService = medalService;
-        AppId = appId;
         Cache = cache;
     }
 
@@ -113,14 +109,14 @@ public abstract class AppBaseLayout : BaseLayout
             
             AppBaseLayoutApps = await Apps.ToAsyncEnumerable().ToDictionaryAwaitAsync(
                 k => ValueTask.FromResult(k.Value.SimpleName),
-                async v => await AppBaseLayoutAppAdapter.AdaptAsync(v.Value, cancellationToken));
+                async v => await AppBaseLayoutAppConverter.AdaptAsync(v.Value, cancellationToken));
 
             AppBaseLayoutMedals = await Medals.ToAsyncEnumerable()
-                .SelectAwait(async v => await AppBaseLayoutMedalAdapter.AdaptAsync(v, cancellationToken))
+                .SelectAwait(async v => await AppBaseLayoutMedalConverter.AdaptAsync(v, cancellationToken))
                 .ToArrayAsync(cancellationToken);
 
             AppBaseLayoutUserGroups = await UserGroups.ToAsyncEnumerable()
-                .SelectAwait(async v => await AppBaseLayoutUserGroupAdapter.AdaptAsync(v, cancellationToken))
+                .SelectAwait(async v => await AppBaseLayoutUserGroupConverter.AdaptAsync(v, cancellationToken))
                 .ToArrayAsync(cancellationToken);
             
             await Cache.SetAsync("app_base_layout_cache_entry", new AppBaseLayoutCacheEntry

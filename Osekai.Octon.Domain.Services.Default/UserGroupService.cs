@@ -1,9 +1,9 @@
 ﻿using Osekai.Octon.Persistence;
 using UserGroup = Osekai.Octon.Domain.AggregateRoots.UserGroup;
 
-namespace Osekai.Octon.Services;
+namespace Osekai.Octon.Domain.Services.Default;
 
-public class UserGroupService
+public class UserGroupService : IUserGroupService
 {
     protected IUnitOfWork UnitOfWork { get; }
     

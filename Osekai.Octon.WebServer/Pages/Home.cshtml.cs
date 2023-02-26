@@ -1,7 +1,8 @@
 ﻿using Osekai.Octon.Caching;
 using Osekai.Octon.Domain.AggregateRoots;
+using Osekai.Octon.Domain.Services;
 using Osekai.Octon.OsuApi;
-using Osekai.Octon.Services;
+using Osekai.Octon.Domain.Services.Default;
 using Osekai.Octon.WebServer.Presentation.AppBaseLayout;
 
 namespace Osekai.Octon.WebServer.Pages;
@@ -13,8 +14,9 @@ public class Home : AppBaseLayout
     public override string MetadataThemeColor => "#353d55";
     public override string MetadataUrl => "https://osekai.net/home";
 
-    public Home(CurrentSession currentSession, CurrentLocale currentLocale, CachedAuthenticatedOsuApiV2Interface cachedAuthenticatedOsuApiV2Interface, IAdapter<Medal, AppBaseLayoutMedal> appBaseLayoutMedalAdapter, IAdapter<UserGroup, AppBaseLayoutUserGroup> appBaseLayoutUserGroupAdapter, IAdapter<App, AppBaseLayoutApp> appBaseLayoutAppAdapter, AppService appService, MedalService medalService, ICache cache, UserGroupService userGroupService, LocaleService localeService) 
-        : base(currentSession, currentLocale, cachedAuthenticatedOsuApiV2Interface, appBaseLayoutMedalAdapter, appBaseLayoutUserGroupAdapter, appBaseLayoutAppAdapter, appService, medalService, cache, userGroupService, localeService, -1)
+    public Home(CurrentSession currentSession, CurrentLocale currentLocale, CachedAuthenticatedOsuApiV2Interface cachedAuthenticatedOsuApiV2Interface, IConverter<Medal, AppBaseLayoutMedal> appBaseLayoutMedalConverter, IConverter<UserGroup, AppBaseLayoutUserGroup> appBaseLayoutUserGroupConverter, IConverter<App, AppBaseLayoutApp> appBaseLayoutAppConverter, IAppService appService, IMedalService medalService, ICache cache, IUserGroupService userGroupService, ILocaleService localeService) : base(currentSession, currentLocale, cachedAuthenticatedOsuApiV2Interface, appBaseLayoutMedalConverter, appBaseLayoutUserGroupConverter, appBaseLayoutAppConverter, appService, medalService, cache, userGroupService, localeService)
     {
     }
+
+    protected override int AppId => -1;
 }

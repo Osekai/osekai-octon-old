@@ -36,7 +36,7 @@ public class MySqlEntityFrameworkTeamMemberRepository: ITeamMemberRepository
             else
                 tNew.UserGroups = new Ref<IReadOnlyList<Domain.AggregateRoots.UserGroup>>(Array.Empty<Domain.AggregateRoots.UserGroup>());
 
-            tNew.Socials = new Ref<IReadOnlyList<Social>>(t.Socials.ToArray());
+            tNew.Socials = new Ref<IReadOnlyList<Social>>(t.Socials.Select(s => new Social(s.Name, s.Link, s.Icon)).ToArray());
             
             return tNew;
         });
